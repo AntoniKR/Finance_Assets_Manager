@@ -1,0 +1,42 @@
+﻿@model FinancialAssetsApp.Models.RealEstate
+@{
+    ViewData["Title"] = "Добавить недвижимость";
+}
+<div class="container">
+    <h2> Добавить недвижимость</h2>
+    <form asp-action="Create" method="post">
+        <div>
+            <label asp-for="TypeEstate" class="form-label">Тип недвижимости *</label>
+            <select asp-for="TypeEstate" class="form-control" asp-items="ViewBag.REType">
+                <option value="" disabled selected hidden>- Выберите недвижимость</option>
+            </select>
+            <span asp-validation-for="TypeEstate" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="CityEstate" class="form-label">Расположение недвижимости *</label>
+            <input asp-for="CityEstate" id="CityInput" class="form-control" placeholder="Введите название города, где расположена ваша недвижимость" />
+
+            <span asp-validation-for="TypeEstate" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Price" class="form-label">Цена покупки *</label>
+            <input asp-for="Price" class="form-control"/>
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="AmountEstate" class="form-label">Количество недвижимости*</label>
+            <input asp-for="AmountEstate" class="form-control" />
+            <span asp-validation-for="AmountEstate" class="text-danger"></span>
+
+        </div>
+        <p></p>
+
+        <button type="submit" class="btn btn-primary">Добавить недвижимость</button>
+        <a asp-action="IndexRealEstate" class="btn btn-secondary">Отмена</a>
+
+    </form>
+    <div>
+        * - Обязательные поля для заполнения
+    </div>
+</div>
+

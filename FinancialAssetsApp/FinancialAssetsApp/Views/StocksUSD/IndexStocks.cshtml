@@ -1,0 +1,60 @@
+﻿@model IEnumerable<FinancialAssetsApp.Models.StockUSD>
+@{
+    ViewData["Title"] = "Американские Акции";
+}
+<h2>Мои акции</h2>
+<div class="container">
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Тикер</th>
+                <th>Название компании</th>
+                <th>Цена покупки</th>
+                <th>Количество</th>
+                <th>Стоимость</th>
+                <th>Стоимость в рублях</th>
+                <th>Изменение</th>
+                <th>Текущая стоимость в рублях</th>
+                <th>Дата добавления</th>
+                <th></th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr data-stocksUSD="@item.Ticker">
+                    <td>@item.Ticker</td>
+                    <td>@item.NameCompany</td>
+                    <td>@item.Price $</td>
+                    <td>@item.AmountStock</td>
+                    <td>@item.SumStocks $</td>
+                    <td>@item.SumStocksToRuble.ToString("F2") ₽</td>
+                    <td style="font-weight: bold" class="change-sumRUB">Загрузка...</td>
+                    <td class="current-sumRUB">Загрузка...</td>
+                    <td>@item.DateAddStock.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <!--
+        <a asp-action="FixSums" class="btn btn-secondary">Пересчитать старые суммы</a> // Если добавится новый столбец в БД
+    -->  
+    <a asp-action="Create" class="btn btn-primary">Добавить акцию</a>
+</div>
+
+<h2>Круговая диаграмма распределения российских акций</h2>
+<div class="d-flex justify-content-center align-items-start gap-4">
+    <div class="chart-container">
+        <canvas style="width: 450px; height: 450px" id="TickerPieUSD"></canvas>
+        <h3 class="text-center">По сумме покупки</h3>
+    </div>
+    <div class="chart-container" style="width: 450px; height: 450px">
+        <canvas id="CurrentStocksUSDPie"></canvas>
+        <h3 class="text-center">По текущей цене</h3>
+    </div>
+</div>
+<script src="~/js/site.js" asp-append-version="true"></script>

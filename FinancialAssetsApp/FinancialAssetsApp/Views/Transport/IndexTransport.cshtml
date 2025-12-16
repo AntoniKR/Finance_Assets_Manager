@@ -1,0 +1,54 @@
+﻿@model IEnumerable<FinancialAssetsApp.Models.Transport>
+@{
+    ViewData["Title"] = "Транспорт";
+}
+<h2>Мой транспорт</h2>
+
+<div class="container">
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Тип транспорта</th>
+                <th>Название транспорта</th>
+                <th>Цена покупки</th>                
+                <th>Год выпуска</th>
+                <th>Дата добавления </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.TypeTransport</td>
+                    <td>@item.NameTransport</td>
+                    <td>@item.Price.ToString("N0") ₽</td>
+                    <td>@item.YearOfTransport</td>
+                    <td>@item.DateAddStock.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+    <!--
+        <a asp-action="FixSums" class="btn btn-secondary">Пересчитать старые суммы</a> // Если добавится новый столбец в БД
+    -->
+
+    <a asp-action="Create" class="btn btn-primary">Добавить транспорт</a>
+</div>
+
+<h2 class="text-center mb-4">Круговая диаграмма распределения транспорта</h2>
+<div class="d-flex justify-content-center align-items-start gap-4">
+    <div class="chart-container">
+        <canvas style="width: 450px; height: 450px" id="TypeTransport"></canvas>
+        <h3 class="text-center">По типу транспорта</h3>
+    </div>
+    <div class="chart-container">
+        <canvas style="width: 450px; height: 450px" id="SumOfTransport"></canvas>
+        <h3 class="text-center">По сумме покупки</h3>
+    </div>
+</div>
+<script src="~/js/site.js" asp-append-version="true"></script>

@@ -1,0 +1,13 @@
+﻿@model FinancialAssetsApp.Models.Currency
+@{
+    ViewData["Title"] = "Удалить валюту";
+}
+<h2>Удаление валюты</h2>
+
+<h4>Вы действительно хотите удалить валюту "@Model.CharCode - @Model.NameCurrency"?</h4>
+
+<form asp-action="DeleteCurrency" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Удалить</button>
+    <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+</form>

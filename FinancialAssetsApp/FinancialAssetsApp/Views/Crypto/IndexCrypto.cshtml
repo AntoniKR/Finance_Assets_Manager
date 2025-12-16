@@ -1,0 +1,73 @@
+﻿@model IEnumerable<FinancialAssetsApp.Models.Crypto>
+@{
+    ViewData["Title"] = "Криптовалюта";
+}
+<h2>Моя криптовалюта</h2>
+<p style="font-style: italic; text-align: right">* Данные о текущей цене взяты с Bybit</p>
+<p style="font-style: italic; text-align: right">Если данных нет, то данная криптовалюта не торгуется на Bybit</p>
+<div class="container">
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Тикер</th>
+                <th>Название криптовалюты</th>
+                <th>Цена покупки</th>
+                <th>Изменение</th>
+                <th>Текущая Цена</th>
+                <th>Количество</th>
+                <th>Стоимость покупки</th>
+                <th>Изменение</th>
+                <th>Текущая стоимость</th>
+                <th>Стоимость покупки в рублях</th>
+                <th>Изменение</th>
+                <th>Текущая стоимость в рублях</th>
+                <th>Дата добавления </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr data-cryptos="@item.Ticker">
+                    <td>@item.Ticker</td>
+                    <td>@item.NameCrypto</td>
+                    <td>@item.Price $</td>
+                    <td style="font-weight: bold" class="change-price">Загрузка...</td>
+                    <td class="current-price">Загрузка...</td>
+                    <td>@item.AmountCrypto</td>
+                    <td>@item.SumCrypto.ToString("F3") $</td>
+
+                    <td style="font-weight: bold" class="change-sum">Загрузка...</td>
+                    <td class="current-sum">Загрузка...</td>
+                    <td>@item.SumCryptoToRuble.ToString("F2") ₽</td>
+                    <td style="font-weight: bold" class="change-sumRUB">Загрузка...</td>
+                    <td class="current-sumRUB">Загрузка...</td>
+
+                    <td>@item.DateAddStock.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+    <!--
+        <a asp-action="FixSums" class="btn btn-secondary">Пересчитать старые суммы</a> // Если добавится новый столбец в БД
+    -->
+
+    <a asp-action="Create" class="btn btn-primary">Добавить криптовалюту</a>
+</div>
+
+<h2 class="text-center mb-4">Круговая диаграмма распределения криптовалюты</h2>
+<div class="d-flex justify-content-center align-items-start gap-4">
+    <div class="chart-container">
+        <canvas style="width: 450px; height: 450px" id="CryptoPie"></canvas>
+        <h3 class="text-center">По сумме покупки</h3>
+    </div>
+    <div class="chart-container" style="width: 450px; height: 450px">
+        <canvas id="CurrentCryptoPie"></canvas>
+        <h3 class="text-center">По текущей цене</h3>
+    </div>
+</div>
+<script src="~/js/site.js" asp-append-version="true"></script>

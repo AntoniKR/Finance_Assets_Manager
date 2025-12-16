@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\ant.krasnov\\Desktop\\study\\3 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\Web Cloud\\Krasnov-A.I.-Web-Programming-cloud\\FinancialAssetsApp\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{5BE42407-7391-4E61-B123-8A5C395D948E}|FinancialAssetsApp\\FinancialAssetsApp.csproj|c:\\users\\ant.krasnov\\desktop\\study\\3 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\web cloud\\krasnov-a.i.-web-programming-cloud\\financialassetsapp\\financialassetsapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5BE42407-7391-4E61-B123-8A5C395D948E}|FinancialAssetsApp\\FinancialAssetsApp.csproj|solutionrelative:financialassetsapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5BE42407-7391-4E61-B123-8A5C395D948E}|FinancialAssetsApp\\FinancialAssetsApp.csproj|c:\\users\\ant.krasnov\\desktop\\study\\3 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\web cloud\\krasnov-a.i.-web-programming-cloud\\financialassetsapp\\financialassetsapp\\controllers\\api\\stocksapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5BE42407-7391-4E61-B123-8A5C395D948E}|FinancialAssetsApp\\FinancialAssetsApp.csproj|solutionrelative:financialassetsapp\\controllers\\api\\stocksapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5BE42407-7391-4E61-B123-8A5C395D948E}|FinancialAssetsApp\\FinancialAssetsApp.csproj|c:\\users\\ant.krasnov\\desktop\\study\\3 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\web cloud\\krasnov-a.i.-web-programming-cloud\\financialassetsapp\\financialassetsapp\\controllers\\api\\metalsapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5BE42407-7391-4E61-B123-8A5C395D948E}|FinancialAssetsApp\\FinancialAssetsApp.csproj|solutionrelative:financialassetsapp\\controllers\\api\\metalsapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 57,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "StocksApiController.cs",
+              "DocumentMoniker": "C:\\Users\\ant.krasnov\\Desktop\\study\\3 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\Web Cloud\\Krasnov-A.I.-Web-Programming-cloud\\FinancialAssetsApp\\FinancialAssetsApp\\Controllers\\Api\\StocksApiController.cs",
+              "RelativeDocumentMoniker": "FinancialAssetsApp\\Controllers\\Api\\StocksApiController.cs",
+              "ToolTip": "C:\\Users\\ant.krasnov\\Desktop\\study\\3 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\Web Cloud\\Krasnov-A.I.-Web-Programming-cloud\\FinancialAssetsApp\\FinancialAssetsApp\\Controllers\\Api\\StocksApiController.cs",
+              "RelativeToolTip": "FinancialAssetsApp\\Controllers\\Api\\StocksApiController.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAQwB8AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T07:32:12.356Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\ant.krasnov\\Desktop\\study\\3 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\Web Cloud\\Krasnov-A.I.-Web-Programming-cloud\\FinancialAssetsApp\\FinancialAssetsApp\\Program.cs",
+              "RelativeDocumentMoniker": "FinancialAssetsApp\\Program.cs",
+              "ToolTip": "C:\\Users\\ant.krasnov\\Desktop\\study\\3 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\Web Cloud\\Krasnov-A.I.-Web-Programming-cloud\\FinancialAssetsApp\\FinancialAssetsApp\\Program.cs",
+              "RelativeToolTip": "FinancialAssetsApp\\Program.cs",
+              "ViewState": "AgIAADAAAAAAAAAAAAAgwDkAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T06:58:23.185Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MetalsApiController.cs",
+              "DocumentMoniker": "C:\\Users\\ant.krasnov\\Desktop\\study\\3 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\Web Cloud\\Krasnov-A.I.-Web-Programming-cloud\\FinancialAssetsApp\\FinancialAssetsApp\\Controllers\\Api\\MetalsApiController.cs",
+              "RelativeDocumentMoniker": "FinancialAssetsApp\\Controllers\\Api\\MetalsApiController.cs",
+              "ToolTip": "C:\\Users\\ant.krasnov\\Desktop\\study\\3 \u0441\u0435\u043C\u0435\u0441\u0442\u0440\\Web Cloud\\Krasnov-A.I.-Web-Programming-cloud\\FinancialAssetsApp\\FinancialAssetsApp\\Controllers\\Api\\MetalsApiController.cs",
+              "RelativeToolTip": "FinancialAssetsApp\\Controllers\\Api\\MetalsApiController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T06:56:26.783Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+git add . && add 'ttt' - обновление
+git push origin main - коммит на гитхаб
+
+SELECT * FROM public.""; - просмотр данных в БД
+\i 'C:/Users/ant.krasnov/Downloads/financialassets_plain_2.sql'

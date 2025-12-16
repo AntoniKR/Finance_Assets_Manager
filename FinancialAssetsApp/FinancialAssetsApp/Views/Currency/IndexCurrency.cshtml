@@ -1,0 +1,67 @@
+﻿@model IEnumerable<FinancialAssetsApp.Models.Currency>
+@{
+    ViewData["Title"] = "Валюта";
+}
+<h2>Моя валюта</h2>
+<div class="container">
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Код валюты</th>
+                <th>Название валюты</th>
+                <th>Цена покупки</th>
+                <th>Изменение</th>
+                <th>Текущая цена</th>
+                <th>Сумма валюты</th>
+                <th>Стоимость покупки в рублях</th>
+                <th>Изменение</th>
+                <th>Текущая стоимость в рублях</th>
+                <th>Дата добавления</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr data-currency="@item.CharCode">
+                    <td>@item.CharCode</td>
+                    <td class="nameCurrency">@item.NameCurrency</td>
+                    <td>@item.Price ₽</td>
+
+                    <td style="font-weight: bold" class="change-price">Загрузка...</td>
+                    <td class="current-price">Загрузка...</td>
+
+                    <td>@item.AmountCurrency</td>
+                    <td>@item.SumCurrencyToRuble ₽</td>
+
+                    <td style="font-weight: bold" class="change-sumRUB">Загрузка...</td>
+                    <td class="current-sumRUB">Загрузка...</td>
+
+                    <td>@item.DateAddStock.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <a asp-action="DeleteCurrency" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <!--
+        <a asp-action="FixSums" class="btn btn-secondary">Пересчитать старые суммы</a> // Если добавится новый столбец в БД
+    -->  
+    <a asp-action="CreateCurrency" class="btn btn-primary">Добавить валюту</a>
+</div>
+
+<h2 class="text-center mb-4">Круговая диаграмма распределения валюты</h2>
+<div class="d-flex justify-content-center align-items-start gap-4">
+    <div class="chart-container">
+        <canvas style="width: 450px; height: 450px" id="CurrencyPie"></canvas>
+        <h3 class="text-center">По сумме покупки</h3>
+    </div>
+    <div class="chart-container" style="width: 450px; height: 450px">
+        <canvas id="CurrentCurrencyPie"></canvas>
+        <h3 class="text-center">По текущей цене</h3>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>

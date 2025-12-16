@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Главная";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Финансовый менеджер</h1>
+    <p>Ваш портфель</p>
+</div>
+
+<div class="d-flex justify-content-center align-items-center">
+    <div class="text-center">
+        <canvas style="width: 450px; height: 450px;" id="SummPie"></canvas>
+        <h3>Разделение по активам</h3>
+    </div>
+    <div class="text-center">
+        <canvas style="width: 450px; height: 450px;" id="SummBar"></canvas>
+        <h3>Разделение по активам %</h3>
+    </div>
+    <div class="text-center">
+        <canvas style="width: 450px; height: 450px;" id="EstateTransportPie"></canvas>
+        <h3>Разделение по сумме</h3>
+    </div>
+    <div class="text-center">
+        <canvas style="width: 450px; height: 450px;" id="SumEstateTransport"></canvas>
+        <h3>Разделение недвижимость и транспорт %</h3>
+    </div>
+    
+</div>
+<div class="text-center">
+    <h1><b>Сумма активов</b></h1>
+    <h2><i><div id="Summ"></div></i></h2>
+</div>
+<div class="text-center">
+    <h1><b>Сумма недвижимости и транспорта</b></h1>
+    <h2><i><div id="SummEstTrans"></div></i></h2>
+</div>
+
+<script src="~/js/site.js" asp-append-version="true"></script>

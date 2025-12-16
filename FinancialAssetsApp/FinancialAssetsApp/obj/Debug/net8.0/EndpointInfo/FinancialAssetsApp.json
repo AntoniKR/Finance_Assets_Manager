@@ -1,0 +1,647 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "FinancialAssetsApp",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/MetalsApi/user/{userId}": {
+      "get": {
+        "tags": [
+          "MetalsApi"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/MetalsApi/{id}": {
+      "get": {
+        "tags": [
+          "MetalsApi"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "MetalsApi"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/MetalsApi": {
+      "post": {
+        "tags": [
+          "MetalsApi"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Metal"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Metal"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Metal"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/StocksApi/user/{userId}": {
+      "get": {
+        "tags": [
+          "StocksApi"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/StocksApi/{id}": {
+      "get": {
+        "tags": [
+          "StocksApi"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "StocksApi"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/StocksApi": {
+      "post": {
+        "tags": [
+          "StocksApi"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Stock"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Stock"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Stock"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Crypto": {
+        "required": [
+          "amountCrypto",
+          "price",
+          "ticker",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ticker": {
+            "maxLength": 10,
+            "minLength": 1,
+            "type": "string"
+          },
+          "nameCrypto": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "maximum": 1.7976931348623157E+308,
+            "minimum": 1E-07,
+            "type": "number",
+            "format": "double"
+          },
+          "amountCrypto": {
+            "maximum": 1.7976931348623157E+308,
+            "minimum": 1E-06,
+            "pattern": "^\\d+(\\.\\d+)?$",
+            "type": "number",
+            "format": "double"
+          },
+          "sumCrypto": {
+            "type": "number",
+            "format": "double"
+          },
+          "sumCryptoToRuble": {
+            "type": "number",
+            "format": "double"
+          },
+          "dateAddStock": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Currency": {
+        "required": [
+          "amountCurrency",
+          "nameCurrency",
+          "price",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nameCurrency": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "charCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "maximum": 1.7976931348623157E+308,
+            "minimum": 1E-09,
+            "type": "number",
+            "format": "double"
+          },
+          "amountCurrency": {
+            "maximum": 1.7976931348623157E+308,
+            "minimum": 1,
+            "type": "number",
+            "format": "double"
+          },
+          "sumCurrencyToRuble": {
+            "type": "number",
+            "format": "double"
+          },
+          "dateAddStock": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Metal": {
+        "required": [
+          "amountMetal",
+          "nameMetal",
+          "price",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nameMetal": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "price": {
+            "maximum": 1.7976931348623157E+308,
+            "minimum": 10,
+            "type": "number",
+            "format": "double"
+          },
+          "amountMetal": {
+            "maximum": 1.7976931348623157E+308,
+            "minimum": 0.01,
+            "type": "number",
+            "format": "double"
+          },
+          "sumMetals": {
+            "type": "number",
+            "format": "double"
+          },
+          "dateAddStock": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PlatformStartup": {
+        "required": [
+          "namePlatform",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "namePlatform": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "amountCompanies": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "sumOfStartups": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "dateAddStock": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Startup": {
+        "required": [
+          "amountStock",
+          "nameCompany",
+          "namePlatform",
+          "platformStartupId",
+          "price",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nameCompany": {
+            "maxLength": 20,
+            "minLength": 1,
+            "type": "string"
+          },
+          "namePlatform": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "price": {
+            "maximum": 1.7976931348623157E+308,
+            "minimum": 0.01,
+            "type": "number",
+            "format": "double"
+          },
+          "amountStock": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "sumStocks": {
+            "type": "number",
+            "format": "double"
+          },
+          "dateAddStock": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "platformStartupId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "platformStartup": {
+            "$ref": "#/components/schemas/PlatformStartup"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Stock": {
+        "required": [
+          "amountStock",
+          "price",
+          "ticker",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ticker": {
+            "maxLength": 4,
+            "minLength": 1,
+            "type": "string"
+          },
+          "nameCompany": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "maximum": 1.7976931348623157E+308,
+            "minimum": 0.01,
+            "type": "number",
+            "format": "double"
+          },
+          "amountStock": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "sumStocks": {
+            "type": "number",
+            "format": "double"
+          },
+          "dateAddStock": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        },
+        "additionalProperties": false
+      },
+      "StockUSD": {
+        "required": [
+          "amountStock",
+          "price",
+          "ticker",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ticker": {
+            "maxLength": 4,
+            "minLength": 1,
+            "type": "string"
+          },
+          "nameCompany": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "maximum": 1.7976931348623157E+308,
+            "minimum": 0.01,
+            "type": "number",
+            "format": "double"
+          },
+          "amountStock": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "sumStocks": {
+            "type": "number",
+            "format": "double"
+          },
+          "sumStocksToRuble": {
+            "type": "number",
+            "format": "double"
+          },
+          "dateAddStock": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        },
+        "additionalProperties": false
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "passwordHash": {
+            "type": "string",
+            "nullable": true
+          },
+          "stocks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Stock"
+            },
+            "nullable": true
+          },
+          "cryptos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Crypto"
+            },
+            "nullable": true
+          },
+          "metals": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Metal"
+            },
+            "nullable": true
+          },
+          "stocksUSD": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StockUSD"
+            },
+            "nullable": true
+          },
+          "currencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Currency"
+            },
+            "nullable": true
+          },
+          "startups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Startup"
+            },
+            "nullable": true
+          },
+          "platformStartups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlatformStartup"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "MetalsApi"
+    },
+    {
+      "name": "StocksApi"
+    }
+  ]
+}

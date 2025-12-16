@@ -1,0 +1,181 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = FinancialAssetsApp
+build_property.RootNamespace = FinancialAssetsApp
+build_property.ProjectDir = C:\Users\ant.krasnov\Desktop\study\3 семестр\Web Cloud\Krasnov-A.I.-Web-Programming-cloud\FinancialAssetsApp\FinancialAssetsApp\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\ant.krasnov\Desktop\study\3 семестр\Web Cloud\Krasnov-A.I.-Web-Programming-cloud\FinancialAssetsApp\FinancialAssetsApp
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 8.0
+build_property.EnableCodeStyleSeverity = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Account/ForgotPassword.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxGb3Jnb3RQYXNzd29yZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Account/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Crypto/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3J5cHRvXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Crypto/DeleteCrypto.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3J5cHRvXERlbGV0ZUNyeXB0by5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Crypto/IndexCrypto.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3J5cHRvXEluZGV4Q3J5cHRvLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Currency/CreateCurrency.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VycmVuY3lcQ3JlYXRlQ3VycmVuY3kuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Currency/DeleteCurrency.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VycmVuY3lcRGVsZXRlQ3VycmVuY3kuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Currency/IndexCurrency.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VycmVuY3lcSW5kZXhDdXJyZW5jeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Main/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFpblxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Metals/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWV0YWxzXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Metals/DeleteMetal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWV0YWxzXERlbGV0ZU1ldGFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Metals/IndexMetals.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWV0YWxzXEluZGV4TWV0YWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/PlatformStup/CreatePlatform.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGxhdGZvcm1TdHVwXENyZWF0ZVBsYXRmb3JtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/PlatformStup/DeletePlatform.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGxhdGZvcm1TdHVwXERlbGV0ZVBsYXRmb3JtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/PlatformStup/IndexPlatform.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGxhdGZvcm1TdHVwXEluZGV4UGxhdGZvcm0uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/RealEstate/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVhbEVzdGF0ZVxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/RealEstate/DeleteEstate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVhbEVzdGF0ZVxEZWxldGVFc3RhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/RealEstate/IndexEstate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVhbEVzdGF0ZVxJbmRleEVzdGF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Startups/CreateStartup.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RhcnR1cHNcQ3JlYXRlU3RhcnR1cC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Startups/DeleteStartup.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RhcnR1cHNcRGVsZXRlU3RhcnR1cC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Startups/IndexStartup.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RhcnR1cHNcSW5kZXhTdGFydHVwLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/StocksUSD/CreateStock.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RvY2tzVVNEXENyZWF0ZVN0b2NrLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/StocksUSD/DeleteStock.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RvY2tzVVNEXERlbGV0ZVN0b2NrLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/StocksUSD/IndexStocks.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RvY2tzVVNEXEluZGV4U3RvY2tzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Stocks/CreateStock.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RvY2tzXENyZWF0ZVN0b2NrLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Stocks/DeleteStock.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RvY2tzXERlbGV0ZVN0b2NrLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Stocks/IndexStocks.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RvY2tzXEluZGV4U3RvY2tzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Transport/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhbnNwb3J0XENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Transport/DeleteTransport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhbnNwb3J0XERlbGV0ZVRyYW5zcG9ydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Transport/IndexTransport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhbnNwb3J0XEluZGV4VHJhbnNwb3J0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ant.krasnov/Desktop/study/3 семестр/Web Cloud/Krasnov-A.I.-Web-Programming-cloud/FinancialAssetsApp/FinancialAssetsApp/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-cp6v8x7p8b
