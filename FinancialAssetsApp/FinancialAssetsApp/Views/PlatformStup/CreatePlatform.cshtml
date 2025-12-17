@@ -1,24 +1,29 @@
 ﻿@model FinancialAssetsApp.Models.PlatformStartup
 @{
-    ViewData["Title"] = "Добавить платформу";
+    ViewData["Title"] = "Add Platform";
 }
+
 <div class="container">
-    <h2> Добавить платформу с вашими стартапами</h2>
+    <h2>Add a platform with your startups</h2>
+
     <form asp-action="Create" method="post">
         <div>
-            <label asp-for="NamePlatform" class="form-label">Название платформы *</label>
+            <label asp-for="NamePlatform" class="form-label">Platform name *</label>
             <select asp-for="NamePlatform" class="form-control" asp-items="ViewBag.Platforms">
-                <option value="" disabled selected hidden>- Выберите платформу</option>
+                <option value="" disabled selected hidden>- Select a platform</option>
             </select>
             <span asp-validation-for="NamePlatform" class="text-danger"></span>
         </div>
-        <p></p>
-        <button type="submit" class="btn btn-primary">Добавить платформу</button>
-        <a asp-action="Index" class="btn btn-secondary">Отмена</a>
 
+        <p></p>
+
+        <button type="submit" class="btn btn-primary">Add platform</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
     </form>
+
     <div>
-        * - Обязательные поля для заполнения
+        * - Required fields
     </div>
 </div>
+
 

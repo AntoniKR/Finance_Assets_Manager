@@ -1,23 +1,28 @@
 ﻿@model IEnumerable<FinancialAssetsApp.Models.Startup>
 @{
-    ViewData["Title"] = "Стартапы";
+    ViewData["Title"] = "Startups";
 }
-<h2>Мои стартапы</h2>
-<p style="font-style: italic; text-align: right">Для добавления стартапа нужно добавить платформу, на которой куплены акции</p>
+
+<h2>My Startups</h2>
+
+<p style="font-style: italic; text-align: right">
+    To add a startup, you must first add the platform where the shares were purchased
+</p>
 
 <div class="container">
     <table class="table table-bordered">
         <thead class="table-light">
             <tr>
-                <th>Название компании</th>
-                <th>Название платформы</th>
-                <th>Цена покупки</th>
-                <th>Количество</th>
-                <th>Стоимость</th>
-                <th>Дата добавления</th>
+                <th>Company Name</th>
+                <th>Platform Name</th>
+                <th>Purchase Price</th>
+                <th>Quantity</th>
+                <th>Total Value</th>
+                <th>Date Added</th>
                 <th></th>
             </tr>
         </thead>
+
         <tbody>
             @foreach (var item in Model)
             {
@@ -29,29 +34,40 @@
                     <td>@item.SumStocks ₽</td>
                     <td>@item.DateAddStock.ToString("yyyy-MM-dd")</td>
                     <td>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Удалить</a>
+                        <a asp-action="Delete"
+                           asp-route-id="@item.Id"
+                           class="btn btn-danger btn-sm">
+                            Delete
+                        </a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+
     <!--
-        <a asp-action="FixSums" class="btn btn-secondary">Пересчитать старые суммы</a> // Если добавится новый столбец в БД
-    -->  
-    <a asp-action="Create" class="btn btn-primary">Добавить стартап</a>
+        <a asp-action="FixSums" class="btn btn-secondary">
+            Recalculate old values
+        </a>
+    -->
+
+    <a asp-action="Create" class="btn btn-primary">
+        Add Startup
+    </a>
 </div>
 
-<h2>Круговая диаграмма распределения стартапов</h2>
+<h2>Startup Distribution Pie Chart</h2>
 <div class="d-flex justify-content-center align-items-start gap-4">
     <div class="text-center">
         <canvas style="width: 450px; height: 450px" id="StartupsPie"></canvas>
-        <h3>По сумме</h3>
+        <h3>By Total Value</h3>
     </div>
     <div class="text-center">
         <canvas style="width: 450px; height: 450px" id="StartupCountStocks"></canvas>
-        <h3>По количеству акций</h3>
+        <h3>By Number of Shares</h3>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
+

@@ -1,13 +1,18 @@
 ﻿@model FinancialAssetsApp.Models.RealEstate
 @{
-    ViewData["Title"] = "Удалить недвижимость";
+    ViewData["Title"] = "Delete real estate";
 }
-<h2>Удаление недвижимости</h2>
 
-<h4>Вы действительно хотите удалить недвижимость "@Model.TypeEstate" с расположением в "@Model.CityEstate" ?</h4>
+<h2>Delete real estate</h2>
+
+<h4>
+    Are you sure you want to delete the real estate
+    "@Model.TypeEstate" located in "@Model.CityEstate"?
+</h4>
 
 <form asp-action="Delete" method="post">
     <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">Удалить</button>
-    <a asp-action="IndexEstate" class="btn btn-secondary">Отмена</a>
+
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="IndexEstate" class="btn btn-secondary">Cancel</a>
 </form>

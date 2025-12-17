@@ -1,17 +1,18 @@
 ﻿@model IEnumerable<FinancialAssetsApp.Models.PlatformStartup>
 @{
-    ViewData["Title"] = "Платформы стартапов";
+    ViewData["Title"] = "Startup Platforms";
 }
-<h2>Мои платформы</h2>
+
+<h2>My Platforms</h2>
 
 <div class="container">
     <table class="table table-bordered">
         <thead class="table-light">
             <tr>
-                <th>Название платформы</th>
-                <th>Количество компаний</th>
-                <th>Сумма инвестиций</th>
-                <th>Дата добавления </th>
+                <th>Platform Name</th>
+                <th>Number of Companies</th>
+                <th>Total Investment</th>
+                <th>Date Added</th>
                 <th></th>
             </tr>
         </thead>
@@ -24,29 +25,30 @@
                     <td>@item.SumOfStartups ₽</td>
                     <td>@item.DateAddStock.ToString("yyyy-MM-dd")</td>
                     <td>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Удалить</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
                     </td>
                 </tr>
             }
         </tbody>
-
     </table>
+
     <!--
-        <a asp-action="FixSums" class="btn btn-secondary">Пересчитать старые суммы</a> // Если добавится новый столбец в БД
+        <a asp-action="FixSums" class="btn btn-secondary">Recalculate old sums</a> // If a new column is added in DB
     -->
 
-    <a asp-action="Create" class="btn btn-primary">Добавить платформу</a>
+    <a asp-action="Create" class="btn btn-primary">Add Platform</a>
 </div>
 
-<h2 class="text-center mb-4">Круговая диаграмма распределения по платформам</h2>
+<h2 class="text-center mb-4">Startup Platform Distribution Pie Chart</h2>
 <div class="d-flex justify-content-center align-items-start gap-4">
     <div class="chart-container">
         <canvas style="width: 450px; height: 450px" id="PlatformsPie"></canvas>
-        <h3 class="text-center">По сумме инвестиций</h3>
+        <h3 class="text-center">By Investment Amount</h3>
     </div>
     <div class="chart-container">
         <canvas style="width: 450px; height: 450px" id="PlatformsCount"></canvas>
-        <h3 class="text-center">По количеству компаний</h3>
+        <h3 class="text-center">By Number of Companies</h3>
     </div>
 </div>
+
 <script src="~/js/site.js" asp-append-version="true"></script>

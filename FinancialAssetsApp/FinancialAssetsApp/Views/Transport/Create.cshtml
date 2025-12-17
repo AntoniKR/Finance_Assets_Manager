@@ -1,40 +1,38 @@
 ﻿@model FinancialAssetsApp.Models.Transport
 @{
-    ViewData["Title"] = "Добавить транспорт";
+    ViewData["Title"] = "Add Transport";
 }
 <div class="container">
-    <h2> Добавить транспорт</h2>
+    <h2>Add Transport</h2>
     <form asp-action="Create" method="post">
         <div>
-            <label asp-for="TypeTransport" class="form-label">Тип транспорта *</label>
+            <label asp-for="TypeTransport" class="form-label">Transport Type *</label>
             <select asp-for="TypeTransport" class="form-control" asp-items="ViewBag.TransportType">
-                <option value="" disabled selected hidden>- Выберите транспорт</option>
+                <option value="" disabled selected hidden>- Select Transport -</option>
             </select>
             <span asp-validation-for="TypeTransport" class="text-danger"></span>
         </div>
         <div>
-            <label asp-for="NameTransport" class="form-label">Название транспорта</label>
+            <label asp-for="NameTransport" class="form-label">Transport Name</label>
             <input asp-for="NameTransport" class="form-control" />
             <span asp-validation-for="NameTransport" class="text-danger"></span>
         </div>
         <div>
-            <label asp-for="Price" class="form-label">Цена покупки *</label>
-            <input asp-for="Price" class="form-control"/>
+            <label asp-for="Price" class="form-label">Purchase Price *</label>
+            <input asp-for="Price" class="form-control" />
             <span asp-validation-for="Price" class="text-danger"></span>
         </div>
         <div>
-            <label asp-for="YearOfTransport" class="form-label">Год выпуска</label>
+            <label asp-for="YearOfTransport" class="form-label">Year of Manufacture</label>
             <input asp-for="YearOfTransport" class="form-control" />
             <span asp-validation-for="YearOfTransport" class="text-danger"></span>
         </div>
         <p></p>
 
-        <button type="submit" class="btn btn-primary">Добавить транспорт</button>
-        <a asp-action="IndexTransport" class="btn btn-secondary">Отмена</a>
-
+        <button type="submit" class="btn btn-primary">Add Transport</button>
+        <a asp-action="IndexTransport" class="btn btn-secondary">Cancel</a>
     </form>
     <div>
-        * - Обязательные поля для заполнения
+        * - Required fields
     </div>
 </div>
-

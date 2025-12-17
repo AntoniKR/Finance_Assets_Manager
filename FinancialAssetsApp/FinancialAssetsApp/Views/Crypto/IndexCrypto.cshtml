@@ -1,27 +1,27 @@
 ﻿@model IEnumerable<FinancialAssetsApp.Models.Crypto>
 @{
-    ViewData["Title"] = "Криптовалюта";
+    ViewData["Title"] = "Cryptocurrency";
 }
-<h2>Моя криптовалюта</h2>
-<p style="font-style: italic; text-align: right">* Данные о текущей цене взяты с Bybit</p>
-<p style="font-style: italic; text-align: right">Если данных нет, то данная криптовалюта не торгуется на Bybit</p>
+<h2>My Сryptocurrency</h2>
+<p style="font-style: italic; text-align: right">* Current price data taken from Bybit</p>
+<p style="font-style: italic; text-align: right">If you can't see price data then this cryptocurrency doesn't trade on Bybit</p>
 <div class="container">
     <table class="table table-bordered">
         <thead class="table-light">
             <tr>
-                <th>Тикер</th>
-                <th>Название криптовалюты</th>
-                <th>Цена покупки</th>
-                <th>Изменение</th>
-                <th>Текущая Цена</th>
-                <th>Количество</th>
-                <th>Стоимость покупки</th>
-                <th>Изменение</th>
-                <th>Текущая стоимость</th>
-                <th>Стоимость покупки в рублях</th>
-                <th>Изменение</th>
-                <th>Текущая стоимость в рублях</th>
-                <th>Дата добавления </th>
+                <th>Ticker</th>
+                <th>Name of cryptocurrency</th>
+                <th>Purchase price</th>
+                <th>Change price</th>
+                <th>Current price</th>
+                <th>Quantity</th>
+                <th>Cost purchase</th>
+                <th>Change Cost</th>
+                <th>Current Cost</th>
+                <th>Purchase price in RUB</th>
+                <th>Change Cost in RUB</th>
+                <th>Current Cost in RUB</th>
+                <th>Date</th>
                 <th></th>
             </tr>
         </thead>
@@ -32,20 +32,20 @@
                     <td>@item.Ticker</td>
                     <td>@item.NameCrypto</td>
                     <td>@item.Price $</td>
-                    <td style="font-weight: bold" class="change-price">Загрузка...</td>
-                    <td class="current-price">Загрузка...</td>
+                    <td style="font-weight: bold" class="change-price">Load...</td>
+                    <td class="current-price">Load...</td>
                     <td>@item.AmountCrypto</td>
                     <td>@item.SumCrypto.ToString("F3") $</td>
 
-                    <td style="font-weight: bold" class="change-sum">Загрузка...</td>
-                    <td class="current-sum">Загрузка...</td>
+                    <td style="font-weight: bold" class="change-sum">Load...</td>
+                    <td class="current-sum">Load...</td>
                     <td>@item.SumCryptoToRuble.ToString("F2") ₽</td>
-                    <td style="font-weight: bold" class="change-sumRUB">Загрузка...</td>
-                    <td class="current-sumRUB">Загрузка...</td>
+                    <td style="font-weight: bold" class="change-sumRUB">Load...</td>
+                    <td class="current-sumRUB">Load...</td>
 
                     <td>@item.DateAddStock.ToString("yyyy-MM-dd")</td>
                     <td>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Удалить</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
                     </td>
                 </tr>
             }
@@ -53,21 +53,21 @@
 
     </table>
     <!--
-        <a asp-action="FixSums" class="btn btn-secondary">Пересчитать старые суммы</a> // Если добавится новый столбец в БД
+        <a asp-action="FixSums" class="btn btn-secondary">Fix old sums</a> // If we need to change data rows
     -->
 
-    <a asp-action="Create" class="btn btn-primary">Добавить криптовалюту</a>
+    <a asp-action="Create" class="btn btn-primary">Add cryptocurrency</a>
 </div>
 
-<h2 class="text-center mb-4">Круговая диаграмма распределения криптовалюты</h2>
+<h2 class="text-center mb-4">Cryptocurrency Distribution Pie Chart</h2>
 <div class="d-flex justify-content-center align-items-start gap-4">
     <div class="chart-container">
         <canvas style="width: 450px; height: 450px" id="CryptoPie"></canvas>
-        <h3 class="text-center">По сумме покупки</h3>
+        <h3 class="text-center">By Purchase Sum</h3>
     </div>
     <div class="chart-container" style="width: 450px; height: 450px">
         <canvas id="CurrentCryptoPie"></canvas>
-        <h3 class="text-center">По текущей цене</h3>
+        <h3 class="text-center">By Current Sum</h3>
     </div>
 </div>
 <script src="~/js/site.js" asp-append-version="true"></script>

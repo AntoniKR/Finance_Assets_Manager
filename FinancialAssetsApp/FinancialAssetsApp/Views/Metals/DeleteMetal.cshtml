@@ -1,13 +1,14 @@
 ﻿@model FinancialAssetsApp.Models.Metal
 @{
-    ViewData["Title"] = "Удалить металл";
+    ViewData["Title"] = "Delete metal";
 }
-<h2>Удаление металла</h2>
 
-<h4>Вы действительно хотите удалить металл "@Model.NameMetal" ?</h4>
+<h2>Delete metal</h2>
+
+<h4>Are you sure you want to delete the metal "@Model.NameMetal"?</h4>
 
 <form asp-action="Delete" method="post">
     <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">Удалить</button>
-    <a asp-action="IndexMetals" class="btn btn-secondary">Отмена</a>
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="IndexMetals" class="btn btn-secondary">Cancel</a>
 </form>

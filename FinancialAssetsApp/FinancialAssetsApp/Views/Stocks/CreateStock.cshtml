@@ -1,36 +1,36 @@
 ﻿@model FinancialAssetsApp.Models.Stock
 @{
-    ViewData["Title"] = "Добавить акцию";
+    ViewData["Title"] = "Add Stock";
 }
 <div class="container">
-    <h2> Добавить Российскую Акцию</h2>
+    <h2>Add Russian Stock</h2>
     <form asp-action="Create" method="post">
         <div>
-            <label asp-for="Ticker" class="form-label">Тикер *</label>
-            <input asp-for="Ticker" class="form-control" id="Ticker" autocomplete="off"/>
+            <label asp-for="Ticker" class="form-label">Ticker *</label>
+            <input asp-for="Ticker" class="form-control" id="Ticker" autocomplete="off" />
             <span asp-validation-for="Ticker" class="text-danger"></span>
             <ul id="tickerList" class="list-group mt-1"></ul>
         </div>
         <div>
-            <label asp-for="NameCompany" class="form-label">Название компании</label>
-            <input asp-for="NameCompany" class="form-control"/>
+            <label asp-for="NameCompany" class="form-label">Company Name</label>
+            <input asp-for="NameCompany" class="form-control" />
         </div>
         <div>
-            <label asp-for="Price" class="form-label">Цена покупки *</label>
-            <input asp-for="Price" class="form-control"/>
+            <label asp-for="Price" class="form-label">Purchase Price *</label>
+            <input asp-for="Price" class="form-control" />
             <span asp-validation-for="Price" class="text-danger"></span>
         </div>
         <div>
-            <label asp-for="AmountStock" class="form-label">Количество *</label>
+            <label asp-for="AmountStock" class="form-label">Quantity *</label>
             <input asp-for="AmountStock" class="form-control" />
             <span asp-validation-for="AmountStock" class="text-danger"></span>
         </div>
         <p></p>
 
-        <button type="submit" class="btn btn-primary">Добавить акцию</button>
+        <button type="submit" class="btn btn-primary">Add Stock</button>
     </form>
     <div>
-        * - Обязательные поля для заполнения
+        * - Required fields
     </div>
 </div>
 

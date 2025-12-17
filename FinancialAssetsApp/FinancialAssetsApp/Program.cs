@@ -13,10 +13,10 @@ namespace FinancialAssetsApp
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);  // Поддержка кодировок(для API металлов)
-            builder.Services.AddDbContext<FinanceDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));  // Подключение к POstgres
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);  // Encoding suppport (for API metals)
+            builder.Services.AddDbContext<FinanceDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));  // Connect to PostgreSQL
 
-            // Подключение MVC
+            // Connect MVC
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddHttpClient<IAssetData, AssetData>();
@@ -37,11 +37,11 @@ namespace FinancialAssetsApp
                 {
                     options.MaxModelValidationErrors = 50;
                     options.ModelBindingMessageProvider.SetValueIsInvalidAccessor(
-                        _ => "Необходимо ввести данные!");
+                        _ => "Enter your data!");
                 });
 
             builder.Services.AddDistributedMemoryCache();
-            builder.Services.AddSession(options =>  // Если сессия была без активности 30 минут, то выход
+            builder.Services.AddSession(options =>  // If the session was inactive for 30 minutes, then exit
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.Cookie.HttpOnly = true;
@@ -76,9 +76,9 @@ namespace FinancialAssetsApp
             app.UseStaticFiles();
             app.UseSession();
 
-            /*app.Use(async (context, next) =>    //Автологин, закомментить, если вход с страницы логина
+            app.Use(async (context, next) =>    //Autologin admin, comment if we want see Login page
             {
-                // Если сессия ещё не установлена
+                // If the session is not yet established
                 if (!context.Session.Keys.Contains("User"))
                 {
                     var authService = context.RequestServices.GetRequiredService<IAuthService>();
@@ -94,14 +94,14 @@ namespace FinancialAssetsApp
                 }
 
                 await next.Invoke();
-            });*/
+            });
 
             app.UseRouting();
-            app.UseAuthorization(); // Авторизация юзера
+            app.UseAuthorization(); // Authorization
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Account}/{action=Login}/{id?}");    // Раскомментить, если вход с логина
-                //pattern: "{controller=Home}/{action=Index}/{id?}");         // Закомменить
+                //pattern: "{controller=Account}/{action=Login}/{id?}");    // Uncomment and the page will load under the admin
+                pattern: "{controller=Home}/{action=Index}/{id?}");         // Comment
             app.Run();
         }
     }

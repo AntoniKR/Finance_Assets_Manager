@@ -1,38 +1,40 @@
 ﻿@model FinancialAssetsApp.Models.Metal
 @{
-    ViewData["Title"] = "Добавить металл";
+    ViewData["Title"] = "Add metal";
 }
 <div class="container">
-    <h2> Добавить металл</h2>
+    <h2>Add metal</h2>
+
     <form asp-action="Create" method="post">
         <div>
-            <label asp-for="NameMetal" class="form-label">Название металла *</label>
+            <label asp-for="NameMetal" class="form-label">Metal name *</label>
             <select asp-for="NameMetal" class="form-control" asp-items="ViewBag.Metals">
-                <option value="" disabled selected hidden>- Выберите металл</option>
+                <option value="" disabled selected hidden>- Select metal</option>
             </select>
             <span asp-validation-for="NameMetal" class="text-danger"></span>
-
         </div>
+
         <div>
-            <label asp-for="Price" class="form-label">Цена покупки *</label>
-            <input asp-for="Price" class="form-control"/>
+            <label asp-for="Price" class="form-label">Purchase price *</label>
+            <input asp-for="Price" class="form-control" />
             <span asp-validation-for="Price" class="text-danger"></span>
-
         </div>
+
         <div>
-            <label asp-for="AmountMetal" class="form-label">Количество (в граммах)*</label>
+            <label asp-for="AmountMetal" class="form-label">
+                Quantity (in grams) *
+            </label>
             <input asp-for="AmountMetal" class="form-control" />
             <span asp-validation-for="AmountMetal" class="text-danger"></span>
-
         </div>
+
         <p></p>
 
-        <button type="submit" class="btn btn-primary">Добавить металл</button>
-        <a asp-action="IndexMetals" class="btn btn-secondary">Отмена</a>
-
+        <button type="submit" class="btn btn-primary">Add metal</button>
+        <a asp-action="IndexMetals" class="btn btn-secondary">Cancel</a>
     </form>
+
     <div>
-        * - Обязательные поля для заполнения
+        * — Required fields
     </div>
 </div>
-

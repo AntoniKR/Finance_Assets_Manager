@@ -1,19 +1,20 @@
 ﻿@model IEnumerable<FinancialAssetsApp.Models.RealEstate>
 @{
-    ViewData["Title"] = "Недвижимость";
+    ViewData["Title"] = "Real Estate";
 }
-<h2>Моя недвижимость</h2>
+
+<h2>My Real Estate</h2>
 
 <div class="container">
     <table class="table table-bordered">
         <thead class="table-light">
             <tr>
-                <th>Тип недвижимости</th>
-                <th>Расположение недвижимости</th>
-                <th>Цена покупки</th>                
-                <th>Количество</th>
-                <th>Общая стоимость</th>
-                <th>Дата добавления </th>
+                <th>Property type</th>
+                <th>Property location</th>
+                <th>Purchase price</th>
+                <th>Quantity</th>
+                <th>Total value</th>
+                <th>Date added</th>
                 <th></th>
             </tr>
         </thead>
@@ -26,32 +27,34 @@
                     <td>@item.Price.ToString("N0") ₽</td>
                     <td>@item.AmountEstate</td>
                     <td>@item.SumEstate.ToString("N0") ₽</td>
-
                     <td>@item.DateAddStock.ToString("yyyy-MM-dd")</td>
                     <td>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Удалить</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
                     </td>
                 </tr>
             }
         </tbody>
-
     </table>
+
     <!--
-        <a asp-action="FixSums" class="btn btn-secondary">Пересчитать старые суммы</a> // Если добавится новый столбец в БД
+        <a asp-action="FixSums" class="btn btn-secondary">Recalculate old totals</a> // If a new column is added to the DB
     -->
 
-    <a asp-action="Create" class="btn btn-primary">Добавить недвижимость</a>
+    <a asp-action="Create" class="btn btn-primary">Add real estate</a>
 </div>
 
-<h2 class="text-center mb-4">Круговая диаграмма распределения недвижимости</h2>
+<h2 class="text-center mb-4">Real estate distribution pie chart</h2>
+
 <div class="d-flex justify-content-center align-items-start gap-4">
     <div class="chart-container">
         <canvas style="width: 450px; height: 450px" id="CitiesRealEstates"></canvas>
-        <h3 class="text-center">По городам</h3>
+        <h3 class="text-center">By cities</h3>
     </div>
     <div class="chart-container">
         <canvas style="width: 450px; height: 450px" id="TypeRealEstate"></canvas>
-        <h3 class="text-center">По сумме покупки</h3>
+        <h3 class="text-center">By purchase value</h3>
     </div>
 </div>
+
 <script src="~/js/site.js" asp-append-version="true"></script>
+

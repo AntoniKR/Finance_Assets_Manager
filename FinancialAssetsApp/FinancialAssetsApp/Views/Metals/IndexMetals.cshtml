@@ -1,23 +1,22 @@
 ﻿@model IEnumerable<FinancialAssetsApp.Models.Metal>
 @{
-    ViewData["Title"] = "Металлы";
+    ViewData["Title"] = "Metals";
 }
-<h2>Мои металлы</h2>
+
+<h2>My Metals</h2>
 
 <div class="container">
     <table class="table table-bordered">
         <thead class="table-light">
             <tr>
-                <th>Название металла</th>
-                <th>Цена</th>
-                <th>Текущая Цена</th>
-                <th>Количество</th>
-                <th>Стоимость</th>
-
-                <th>Изменение стоимости</th>
-                <th>Текущая стоимость</th>
-
-                <th>Дата добавления </th>
+                <th>Metal Name</th>
+                <th>Purchase Price</th>
+                <th>Current Price</th>
+                <th>Quantity</th>
+                <th>Purchase Value</th>
+                <th>Value Change</th>
+                <th>Current Value</th>
+                <th>Date Added</th>
                 <th></th>
             </tr>
         </thead>
@@ -27,40 +26,38 @@
                 <tr data-metals="@item.NameMetal">
                     <td>@item.NameMetal</td>
                     <td>@item.Price ₽</td>
-
-                    <td class="current-price">Загрузка...</td>
-
+                    <td class="current-price">Loading...</td>
                     <td>@item.AmountMetal</td>
                     <td>@item.SumMetals ₽</td>
-
-                    <td style="font-weight: bold" class="change-sum">Загрузка...</td>
-                    <td class="current-sum">Загрузка...</td>
-
+                    <td style="font-weight: bold" class="change-sum">Loading...</td>
+                    <td class="current-sum">Loading...</td>
                     <td>@item.DateAddStock.ToString("yyyy-MM-dd")</td>
                     <td>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Удалить</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
                     </td>
                 </tr>
             }
         </tbody>
-
     </table>
+
     <!--
-        <a asp-action="FixSums" class="btn btn-secondary">Пересчитать старые суммы</a> // Если добавится новый столбец в БД
+        <a asp-action="FixSums" class="btn btn-secondary">Recalculate old sums</a> // If a new column is added in DB
     -->
 
-    <a asp-action="Create" class="btn btn-primary">Добавить металл</a>
+    <a asp-action="Create" class="btn btn-primary">Add Metal</a>
 </div>
 
-<h2 class="text-center mb-4">Круговая диаграмма распределения металла</h2>
+<h2 class="text-center mb-4">Metal Distribution Pie Chart</h2>
 <div class="d-flex justify-content-center align-items-start gap-4">
     <div class="chart-container">
         <canvas style="width: 450px; height: 450px" id="PurchasePie"></canvas>
-        <h3 class="text-center">По сумме покупки</h3>
+        <h3 class="text-center">By Purchase Value</h3>
     </div>
     <div class="chart-container" style="width: 450px; height: 450px">
         <canvas id="CurrentPricePie"></canvas>
-        <h3 class="text-center">По текущей цене</h3>
+        <h3 class="text-center">By Current Price</h3>
     </div>
 </div>
+
 <script src="~/js/site.js" asp-append-version="true"></script>
+

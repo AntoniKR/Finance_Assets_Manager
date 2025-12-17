@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FinancialAssetsApp.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class ddd : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -201,6 +201,30 @@ namespace FinancialAssetsApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Transports",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    TypeTransport = table.Column<string>(type: "text", nullable: false),
+                    NameTransport = table.Column<string>(type: "text", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false),
+                    YearOfTransport = table.Column<decimal>(type: "numeric", nullable: true),
+                    DateAddStock = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transports", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Transports_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Startups",
                 columns: table => new
                 {
@@ -276,6 +300,11 @@ namespace FinancialAssetsApp.Migrations
                 name: "IX_StocksUSD_UserId",
                 table: "StocksUSD",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transports_UserId",
+                table: "Transports",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -301,6 +330,9 @@ namespace FinancialAssetsApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "StocksUSD");
+
+            migrationBuilder.DropTable(
+                name: "Transports");
 
             migrationBuilder.DropTable(
                 name: "PlatformStartups");

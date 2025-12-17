@@ -1,13 +1,13 @@
 ﻿@model FinancialAssetsApp.Models.Crypto
 @{
-    ViewData["Title"] = "Удалить криптовалюту";
+    ViewData["Title"] = "Delete cryptocurrency";
 }
-<h2>Удаление криптовалюты</h2>
+<h2>Delete cryptocurrency</h2>
 
-<h4>Вы действительно хотите удалить криптовалюту "@Model.Ticker - @Model.NameCrypto"?</h4>
+<h4>Are you sure you want to delete the cryptocurrency "@Model.Ticker - @Model.NameCrypto"?</h4>
 
 <form asp-action="Delete" method="post">
     <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">Удалить</button>
-    <a asp-action="IndexCrypto" class="btn btn-secondary">Отмена</a>
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="IndexCrypto" class="btn btn-secondary">Cancel</a>
 </form>

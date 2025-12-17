@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FinancialAssetsApp.Migrations
 {
     [DbContext(typeof(FinanceDbContext))]
-    [Migration("20251201103416_NewDBTransportdв")]
-    partial class NewDBTransportdв
+    [Migration("20251216113405_ddd")]
+    partial class ddd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -342,6 +342,7 @@ namespace FinancialAssetsApp.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("NameTransport")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<decimal>("Price")

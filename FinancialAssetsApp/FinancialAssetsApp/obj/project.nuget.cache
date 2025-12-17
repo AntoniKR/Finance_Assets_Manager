@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "kCq+fb0H2c0=",
+  "dgSpecHash": "1/sZocaO+eo=",
   "success": true,
-  "projectFilePath": "C:\\Users\\ant.krasnov\\Desktop\\study\\3 семестр\\Web Cloud\\Krasnov-A.I.-Web-Programming-cloud\\FinancialAssetsApp\\FinancialAssetsApp\\FinancialAssetsApp.csproj",
+  "projectFilePath": "C:\\Users\\ant.krasnov\\Desktop\\My projects\\Finance_Assets_Manager\\FinancialAssetsApp\\FinancialAssetsApp\\FinancialAssetsApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ant.krasnov\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\ant.krasnov\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

@@ -1,18 +1,18 @@
 ﻿@model IEnumerable<FinancialAssetsApp.Models.Transport>
 @{
-    ViewData["Title"] = "Транспорт";
+    ViewData["Title"] = "Transport";
 }
-<h2>Мой транспорт</h2>
+<h2>My Transport</h2>
 
 <div class="container">
     <table class="table table-bordered">
         <thead class="table-light">
             <tr>
-                <th>Тип транспорта</th>
-                <th>Название транспорта</th>
-                <th>Цена покупки</th>                
-                <th>Год выпуска</th>
-                <th>Дата добавления </th>
+                <th>Transport Type</th>
+                <th>Transport Name</th>
+                <th>Purchase Price</th>
+                <th>Year of Manufacture</th>
+                <th>Date Added</th>
                 <th></th>
             </tr>
         </thead>
@@ -26,29 +26,27 @@
                     <td>@item.YearOfTransport</td>
                     <td>@item.DateAddStock.ToString("yyyy-MM-dd")</td>
                     <td>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Удалить</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
                     </td>
                 </tr>
             }
         </tbody>
-
     </table>
     <!--
-        <a asp-action="FixSums" class="btn btn-secondary">Пересчитать старые суммы</a> // Если добавится новый столбец в БД
+        <a asp-action="FixSums" class="btn btn-secondary">Recalculate Old Totals</a> // If a new column is added to the DB
     -->
-
-    <a asp-action="Create" class="btn btn-primary">Добавить транспорт</a>
+    <a asp-action="Create" class="btn btn-primary">Add Transport</a>
 </div>
 
-<h2 class="text-center mb-4">Круговая диаграмма распределения транспорта</h2>
+<h2 class="text-center mb-4">Transport Distribution Pie Chart</h2>
 <div class="d-flex justify-content-center align-items-start gap-4">
     <div class="chart-container">
         <canvas style="width: 450px; height: 450px" id="TypeTransport"></canvas>
-        <h3 class="text-center">По типу транспорта</h3>
+        <h3 class="text-center">By Transport Type</h3>
     </div>
     <div class="chart-container">
         <canvas style="width: 450px; height: 450px" id="SumOfTransport"></canvas>
-        <h3 class="text-center">По сумме покупки</h3>
+        <h3 class="text-center">By Purchase Amount</h3>
     </div>
 </div>
 <script src="~/js/site.js" asp-append-version="true"></script>

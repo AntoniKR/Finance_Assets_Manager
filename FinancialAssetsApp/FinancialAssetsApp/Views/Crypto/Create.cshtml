@@ -1,40 +1,40 @@
 ﻿@model FinancialAssetsApp.Models.Crypto
 @{
-    ViewData["Title"] = "Добавить криптовалюту";
+    ViewData["Title"] = "Add cryptocurrency";
 }
 <div class="container">
-    <h2> Добавить криптовалюту</h2>
+    <h2>Add cryptocurrency</h2>
     <form asp-action="Create" method="post">
         <div>
-            <label asp-for="Ticker" class="form-label">Тикер *</label>
+            <label asp-for="Ticker" class="form-label">Ticker *</label>
             <input asp-for="Ticker" id="TickerInput" class="form-control"/>
             <span asp-validation-for="Ticker" class="text-danger"></span>
 
         </div>
         <div>
-            <label asp-for="NameCrypto" class="form-label">Название криптовалюты</label>
-            <input asp-for="NameCrypto" type="text" pattern="[A-Za-zА-Яа-яЁё\s\-]+" title="Разрешены только буквы" class="form-control" />
+            <label asp-for="NameCrypto" class="form-label">Name cryptocurrency</label>
+            <input asp-for="NameCrypto" type="text" pattern="[A-Za-zА-Яа-яЁё\s\-]+" title="You can enter only letters" class="form-control" />
         </div>
         <div>
-            <label asp-for="Price" class="form-label">Цена покупки *</label>
+            <label asp-for="Price" class="form-label">Purchase price *</label>
             <input asp-for="Price" class="form-control" />
             <span asp-validation-for="Price" class="text-danger"></span>
-
         </div>
         <div>
-            <label asp-for="AmountCrypto" class="form-label">Количество *</label>
+            <label asp-for="AmountCrypto" class="form-label">Quantity *</label>
             <input asp-for="AmountCrypto" type="text" class="form-control" />
             <span asp-validation-for="AmountCrypto" class="text-danger"></span>
-
+        </div>
+        <p></p>
+        <div>
+            * - Required fields
         </div>
         <p></p>
 
-        <button type="submit" class="btn btn-primary">Добавить криптовалюту</button>
-        <a asp-action="IndexCrypto" class="btn btn-secondary">Отмена</a>
+        <button type="submit" class="btn btn-primary">Add cryptocurrency</button>
+        <a asp-action="IndexCrypto" class="btn btn-secondary">Cancel</a>
 
     </form>
-    <div>
-        * - Обязательные поля для заполнения
-    </div>
+    
 </div>
 

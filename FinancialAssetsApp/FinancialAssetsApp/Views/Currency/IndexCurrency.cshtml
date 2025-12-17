@@ -1,22 +1,22 @@
 ﻿@model IEnumerable<FinancialAssetsApp.Models.Currency>
 @{
-    ViewData["Title"] = "Валюта";
+    ViewData["Title"] = "Currency";
 }
-<h2>Моя валюта</h2>
+<h2>My Currency</h2>
 <div class="container">
     <table class="table table-bordered">
         <thead class="table-light">
             <tr>
-                <th>Код валюты</th>
-                <th>Название валюты</th>
-                <th>Цена покупки</th>
-                <th>Изменение</th>
-                <th>Текущая цена</th>
-                <th>Сумма валюты</th>
-                <th>Стоимость покупки в рублях</th>
-                <th>Изменение</th>
-                <th>Текущая стоимость в рублях</th>
-                <th>Дата добавления</th>
+                <th>Code currency</th>
+                <th>Name of cryptocurrency</th>
+                <th>Purchase price</th>
+                <th>Change price</th>
+                <th>Current price</th>
+                <th>Cost</th>
+                <th>Purchase price in RUB</th>
+                <th>Change Cost in RUB</th>
+                <th>Current Cost in RUB</th>
+                <th>Date</th>
                 <th></th>
             </tr>
         </thead>
@@ -28,38 +28,38 @@
                     <td class="nameCurrency">@item.NameCurrency</td>
                     <td>@item.Price ₽</td>
 
-                    <td style="font-weight: bold" class="change-price">Загрузка...</td>
-                    <td class="current-price">Загрузка...</td>
+                    <td style="font-weight: bold" class="change-price">Load...</td>
+                    <td class="current-price">Load...</td>
 
                     <td>@item.AmountCurrency</td>
                     <td>@item.SumCurrencyToRuble ₽</td>
 
-                    <td style="font-weight: bold" class="change-sumRUB">Загрузка...</td>
-                    <td class="current-sumRUB">Загрузка...</td>
+                    <td style="font-weight: bold" class="change-sumRUB">Load...</td>
+                    <td class="current-sumRUB">Load...</td>
 
                     <td>@item.DateAddStock.ToString("yyyy-MM-dd")</td>
                     <td>
-                        <a asp-action="DeleteCurrency" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Удалить</a>
+                        <a asp-action="DeleteCurrency" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
     <!--
-        <a asp-action="FixSums" class="btn btn-secondary">Пересчитать старые суммы</a> // Если добавится новый столбец в БД
+        <a asp-action="FixSums" class="btn btn-secondary">Fix old sums</a> // If we need to change data rows
     -->  
-    <a asp-action="CreateCurrency" class="btn btn-primary">Добавить валюту</a>
+    <a asp-action="CreateCurrency" class="btn btn-primary">Add currency</a>
 </div>
 
-<h2 class="text-center mb-4">Круговая диаграмма распределения валюты</h2>
+<h2 class="text-center mb-4">Currency Distribution Pie Chart</h2>
 <div class="d-flex justify-content-center align-items-start gap-4">
     <div class="chart-container">
         <canvas style="width: 450px; height: 450px" id="CurrencyPie"></canvas>
-        <h3 class="text-center">По сумме покупки</h3>
+        <h3 class="text-center">By Purchase Sum</h3>
     </div>
     <div class="chart-container" style="width: 450px; height: 450px">
         <canvas id="CurrentCurrencyPie"></canvas>
-        <h3 class="text-center">По текущей цене</h3>
+        <h3 class="text-center">By Current Sum</h3>
     </div>
 </div>
 

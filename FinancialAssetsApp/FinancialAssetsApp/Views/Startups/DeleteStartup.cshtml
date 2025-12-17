@@ -1,13 +1,20 @@
 ﻿@model FinancialAssetsApp.Models.Startup
 @{
-    ViewData["Title"] = "Удалить стартап";
+    ViewData["Title"] = "Delete Startup";
 }
-<h2>Удаление стартапа</h2>
 
-<h4>Вы действительно хотите удалить стартап "@Model.NameCompany"?</h4>
+<h2>Delete Startup</h2>
+
+<h4>Are you sure you want to delete the startup "@Model.NameCompany"?</h4>
 
 <form asp-action="Delete" method="post">
     <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">Удалить</button>
-    <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+
+    <button type="submit" class="btn btn-danger">
+        Delete
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Cancel
+    </a>
 </form>

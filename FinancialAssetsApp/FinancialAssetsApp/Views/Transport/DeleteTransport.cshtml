@@ -1,13 +1,13 @@
 ﻿@model FinancialAssetsApp.Models.Transport
 @{
-    ViewData["Title"] = "Удалить транспорт";
+    ViewData["Title"] = "Delete Transport";
 }
-<h2>Удаление недвижимости</h2>
+<h2>Delete Transport</h2>
 
-<h4>Вы действительно хотите удалить транспорт "@Model.TypeTransport" - "@Model.NameTransport"?</h4>
+<h4>Are you sure you want to delete the transport "@Model.TypeTransport" - "@Model.NameTransport"?</h4>
 
 <form asp-action="Delete" method="post">
     <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">Удалить</button>
-    <a asp-action="IndexTransport" class="btn btn-secondary">Отмена</a>
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="IndexTransport" class="btn btn-secondary">Cancel</a>
 </form>

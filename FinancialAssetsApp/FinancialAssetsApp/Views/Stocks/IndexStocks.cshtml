@@ -1,18 +1,18 @@
 ﻿@model IEnumerable<FinancialAssetsApp.Models.Stock>
 @{
-    ViewData["Title"] = "Российские Акции";
+    ViewData["Title"] = "Russian Stocks";
 }
-<h2>Мои акции</h2>
+<h2>My Stocks</h2>
 <div class="container">
     <table class="table table-bordered">
         <thead class="table-light">
             <tr>
-                <th>Тикер</th>
-                <th>Название компании</th>
-                <th>Цена покупки</th>
-                <th>Количество</th>
-                <th>Стоимость</th>
-                <th>Дата добавления</th>
+                <th>Ticker</th>
+                <th>Company Name</th>
+                <th>Purchase Price</th>
+                <th>Quantity</th>
+                <th>Cost</th>
+                <th>Date Added</th>
                 <th></th>
             </tr>
         </thead>
@@ -27,23 +27,23 @@
                     <td>@item.SumStocks ₽</td>
                     <td>@item.DateAddStock.ToString("yyyy-MM-dd")</td>
                     <td>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Удалить</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
     <!--
-        <a asp-action="FixSums" class="btn btn-secondary">Пересчитать старые суммы</a> // Если добавится новый столбец в БД
-    -->  
-    <a asp-action="Create" class="btn btn-primary">Добавить акцию</a>
+        <a asp-action="FixSums" class="btn btn-secondary">Recalculate Old Totals</a> // If a new column is added to the DB
+    -->
+    <a asp-action="Create" class="btn btn-primary">Add Stock</a>
 </div>
 
-<h2>Круговая диаграмма распределения российских акций</h2>
-<div class="d-flex gap-4">
+<h2>Russian Stocks Distribution Pie Chart</h2>
+<div class="d-flex justify-content-center align-items-start gap-4">
     <div class="text-center">
         <canvas style="width: 450px; height: 450px" id="TickerPie"></canvas>
-        <h3>По Компаниям</h3>
+        <h3>By Companies</h3>
     </div>
 </div>
 

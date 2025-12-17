@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ant.krasnov\\Desktop\\study\\3 семестр\\Web Cloud\\Krasnov-A.I.-Web-Programming-cloud\\FinancialAssetsApp\\FinancialAssetsApp\\FinancialAssetsApp.csproj": {}
+    "C:\\Users\\ant.krasnov\\Desktop\\My projects\\Finance_Assets_Manager\\FinancialAssetsApp\\FinancialAssetsApp\\FinancialAssetsApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ant.krasnov\\Desktop\\study\\3 семестр\\Web Cloud\\Krasnov-A.I.-Web-Programming-cloud\\FinancialAssetsApp\\FinancialAssetsApp\\FinancialAssetsApp.csproj": {
+    "C:\\Users\\ant.krasnov\\Desktop\\My projects\\Finance_Assets_Manager\\FinancialAssetsApp\\FinancialAssetsApp\\FinancialAssetsApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ant.krasnov\\Desktop\\study\\3 семестр\\Web Cloud\\Krasnov-A.I.-Web-Programming-cloud\\FinancialAssetsApp\\FinancialAssetsApp\\FinancialAssetsApp.csproj",
+        "projectUniqueName": "C:\\Users\\ant.krasnov\\Desktop\\My projects\\Finance_Assets_Manager\\FinancialAssetsApp\\FinancialAssetsApp\\FinancialAssetsApp.csproj",
         "projectName": "FinancialAssetsApp",
-        "projectPath": "C:\\Users\\ant.krasnov\\Desktop\\study\\3 семестр\\Web Cloud\\Krasnov-A.I.-Web-Programming-cloud\\FinancialAssetsApp\\FinancialAssetsApp\\FinancialAssetsApp.csproj",
+        "projectPath": "C:\\Users\\ant.krasnov\\Desktop\\My projects\\Finance_Assets_Manager\\FinancialAssetsApp\\FinancialAssetsApp\\FinancialAssetsApp.csproj",
         "packagesPath": "C:\\Users\\ant.krasnov\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ant.krasnov\\Desktop\\study\\3 семестр\\Web Cloud\\Krasnov-A.I.-Web-Programming-cloud\\FinancialAssetsApp\\FinancialAssetsApp\\obj\\",
+        "outputPath": "C:\\Users\\ant.krasnov\\Desktop\\My projects\\Finance_Assets_Manager\\FinancialAssetsApp\\FinancialAssetsApp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
