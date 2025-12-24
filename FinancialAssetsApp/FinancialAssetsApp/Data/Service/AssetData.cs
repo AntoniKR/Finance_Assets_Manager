@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols;
 using System.Globalization;
 using System.Net.Http;
@@ -11,8 +12,10 @@ namespace FinancialAssetsApp.Data.Service
     public class AssetData : IAssetData
     {
         private readonly HttpClient _httpClient;
-        public AssetData(HttpClient httpClient)
+        private readonly FinanceDbContext _context; // БД
+        public AssetData(HttpClient httpClient, FinanceDbContext context)
         {
+            _context = context;
             _httpClient = httpClient;
         }
         public async Task<decimal> GetCurrencyRate(string code)    // Получение курса валюты
@@ -190,5 +193,6 @@ namespace FinancialAssetsApp.Data.Service
             }
 
         }
+
     }
 }

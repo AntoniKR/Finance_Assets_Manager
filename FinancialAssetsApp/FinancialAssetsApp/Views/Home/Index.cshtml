@@ -16,24 +16,56 @@
         <canvas style="width: 450px; height: 450px;" id="SummBar"></canvas>
         <h3>Asset distribution (%)</h3>
     </div>
-    <div class="text-center">
+   <!-- <div class="text-center">
         <canvas style="width: 450px; height: 450px;" id="EstateTransportPie"></canvas>
         <h3>Distribution by total amount</h3>
     </div>
     <div class="text-center">
         <canvas style="width: 450px; height: 450px;" id="SumEstateTransport"></canvas>
         <h3>Real estate and transport distribution (%)</h3>
-    </div>
+    </div> -->
 </div>
+
 
 <div class="text-center">
     <h1><b>Total assets value</b></h1>
-    <h2><i><div id="Summ"></div></i></h2>
+</div>
+<div class="d-flex justify-content-center align-items-center mb-4">
+
+    <div class="d-flex gap-3">
+        <div class="card text-center shadow-sm">
+            <div class="card-body p-3">
+                <div class="text-muted small">Current Value</div>
+                <div class="fw-bold fs-5 text-success" id="totalCurrSum">
+                    0 ₽
+                </div>
+            </div>
+        </div>
+        <div class="card text-center shadow-sm">
+            <div class="card-body p-3">
+                <div class="text-muted small">Change</div>
+                <div class="fw-bold fs-5" id="totalChange">
+                    —
+                </div>
+                <div class="small" id="totalChangePercent"></div>
+            </div>
+        </div>
+        <div class="card text-center shadow-sm">
+            <div class="card-body p-3">
+                <div class="text-muted small">Invested Value</div>
+                <div class="fw-bold fs-5 text-primary" id="Summ">
+                     ₽
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="text-center">
+
+
+<!--<div class="text-center">
     <h1><b>Total real estate and transport value</b></h1>
     <h2><i><div id="SummEstTrans"></div></i></h2>
-</div>
+</div> -->
 
 <script src="~/js/site.js" asp-append-version="true"></script>

@@ -47,5 +47,21 @@ namespace FinancialAssetsApp.Controllers
             var data = await _homeService.GetRate();
             return Json(data);
         }
+        public async Task<IActionResult> GetCurrCrypto()
+        {
+            var data = await _homeService.GetCurrentCryptoSUM(CurrentUserId);
+            return Json(data);
+        }
+        public async Task<IActionResult> GetCurrMetals()
+        {
+            var data = await _homeService.GetCurrentMetalSUM(CurrentUserId);
+            return Json(data);
+        }
+        public async Task<IActionResult> GetCurrAssets()
+        {
+            var data = await _homeService.GetCurrentAss(CurrentUserId);
+            return Json(data);
+        }
+
     }
 }

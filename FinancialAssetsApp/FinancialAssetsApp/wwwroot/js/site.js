@@ -92,6 +92,20 @@ fetchJson('/Home/GetAssetsChart').then(data => {
     });
 });
 
+// Total SUM  
+fetchJson('/Home/GetCurrAssets').then(data => {
+    const summEl = document.getElementById("totalCurrSum");
+    if (summEl) {
+        summEl.innerHTML = data.toLocaleString("ru-RU", {
+            style: "currency",
+            currency: "RUB"
+        });
+    }
+});
+
+
+
+
 // Pie chart with real estate and transport
 fetchJson('/Home/GetETrChart').then(data => {
     if (!data) return;
@@ -304,6 +318,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const chartDataCurrent = [];    // For chart building
     const rows = document.querySelectorAll("tr[data-currency]");  // for chart
     let count = 0;  // Counter for chart building
+
+    let totalCurrSum = 0;
+    const el = document.getElementById("totalCurrSum");
+    const investedSum = parseFloat(
+        document.getElementById("investedSum").dataset.value
+    ) || 0;
+
     document.querySelectorAll("tr[data-currency]").forEach(row => {
 
         const symbol = row.getAttribute("data-currency");    // this block declares variables
@@ -339,7 +360,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 changeSumRUBCell.textContent = changeFormatSum;
                 changeSumRUBCell.style.color = changePercent >= 0 ? "green" : "red";   // Change sum color
-
+                totalCurrSum += currentSum;
                 chartDataCurrent.push({ label: nameCurrency.textContent, value: currentSum });
             })
             .catch(() => {  // Catch error
@@ -348,6 +369,25 @@ document.addEventListener("DOMContentLoaded", () => {
             .finally(() => {    // When row processed, check if we can build chart
                 count++;
                 if (count === rows.length) {
+
+                    const changeValue = totalCurrSum - investedSum; // For show 
+                    const changePercent = investedSum !== 0 //change Total Sum
+                        ? (changeValue / investedSum) * 100
+                        : 0;
+                    const changeEl = document.getElementById("totalChange");
+                    const percentEl = document.getElementById("totalChangePercent");
+                    // Форматирование
+                    const arrow = changeValue >= 0 ? "▲" : "▼";
+                    const colorClass = changeValue >= 0 ? "text-success" : "text-danger";
+
+                    changeEl.textContent = arrow + " " + changeValue.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+                    percentEl.textContent = `(${changePercent.toFixed(2)} %)`;
+
+                    changeEl.classList.add(colorClass);
+                    percentEl.classList.add(colorClass);
+
+                    el.innerHTML = totalCurrSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+
                     createChart('CurrentCurrencyPie', {
                         type: 'pie',
                         data: {
@@ -394,6 +434,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const rows = document.querySelectorAll("tr[data-stocksUSD]");  // for chart
     let count = 0;  // Counter for chart building
 
+    let totalCurrSum = 0;
+    const el = document.getElementById("totalCurrSum");
+    const investedSum = parseFloat(
+        document.getElementById("investedSum").dataset.value
+    ) || 0;
+
     rows.forEach(row => {
         const tickerStock = row.getAttribute("data-stocksUSD");
         const changeSumRUBCell = row.querySelector(".change-sumRUB");   // Variables for 
@@ -412,9 +458,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         changeSumRUBCell.style.color = changePercentSumRUB >= 0 ? "green" : "red";   // Change sum color      
 
         chartDataCurrent.push({ label: tickerStock, value: currentSumRUB });    // Add data for chart
-
+        totalCurrSum += currentSumRUB;
         count++;
+
         if (count === rows.length) {    // if all stocks processed, build chart
+
+            const changeValue = totalCurrSum - investedSum; // For show 
+            const changePercent = investedSum !== 0 //change Total Sum
+                ? (changeValue / investedSum) * 100
+                : 0;
+            const changeEl = document.getElementById("totalChange");
+            const percentEl = document.getElementById("totalChangePercent");
+            // Форматирование
+            const arrow = changeValue >= 0 ? "▲" : "▼";
+            const colorClass = changeValue >= 0 ? "text-success" : "text-danger";
+
+            changeEl.textContent = arrow + " " + changeValue.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+            percentEl.textContent = `(${changePercent.toFixed(2)} %)`;
+
+            changeEl.classList.add(colorClass);
+            percentEl.classList.add(colorClass);
+
+            el.innerHTML = totalCurrSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+
             createChart('CurrentStocksUSDPie', {
                 type: 'pie',
                 data: {
@@ -459,6 +525,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const rows = document.querySelectorAll("tr[data-cryptos]");  // for chart
     let count = 0;  // Counter for chart building
 
+    let totalCurrSum = 0;
+    const el = document.getElementById("totalCurrSum");
+    const investedSum = parseFloat(
+        document.getElementById("investedSum").dataset.value
+    ) || 0;
+
     document.querySelectorAll("tr[data-cryptos]").forEach(row => {
 
         const symbol = row.getAttribute("data-cryptos");              // this block declares variables
@@ -500,7 +572,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                     const changePercentSumRUB = ((currentSumRUB - sumRUB) / sumRUB) * 100;  // Change in percent
                     const changeFormatSumRUB = (currentSumRUB - sumRUB).toFixed(2) + " ₽" + " (" + changePercentSumRUB.toFixed(2) + " %)";
                     changeSumRUBCell.textContent = changeFormatSumRUB;
-                    changeSumRUBCell.style.color = changePercentSumRUB >= 0 ? "green" : "red";   // Change sum color      
+                    changeSumRUBCell.style.color = changePercentSumRUB >= 0 ? "green" : "red";   // Change sum color 
+                    totalCurrSum += currentSumRUB;
                     chartDataCurrent.push({ label: symbol, value: currentSumRUB });
                 }
                 else {
@@ -539,6 +612,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 count++;
                 if (count === rows.length) {
+
+                    const changeValue = totalCurrSum - investedSum; // For show 
+                    const changePercent = investedSum !== 0 //change Total Sum
+                        ? (changeValue / investedSum) * 100
+                        : 0;
+                    const changeEl = document.getElementById("totalChange");
+                    const percentEl = document.getElementById("totalChangePercent");
+                    // Форматирование
+                    const arrow = changeValue >= 0 ? "▲" : "▼";
+                    const colorClass = changeValue >= 0 ? "text-success" : "text-danger";
+
+                    changeEl.textContent = arrow + " " + changeValue.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+                    percentEl.textContent = `(${changePercent.toFixed(2)} %)`;
+
+                    changeEl.classList.add(colorClass);
+                    percentEl.classList.add(colorClass);
+
+                    el.innerHTML = totalCurrSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+
                     createChart('CurrentCryptoPie', {
                         type: 'pie',
                         data: {
@@ -560,6 +652,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const chartDataCurrent = [];    // For chart building
     const rows = document.querySelectorAll("tr[data-metals]");  // for chart
     let count = 0;  // Counter for chart building
+    let totalCurrSum = 0;
+    const el = document.getElementById("totalCurrSum");
+    const investedSum = parseFloat(
+        document.getElementById("investedSum").dataset.value
+    ) || 0;
     document.querySelectorAll("tr[data-metals]").forEach(row => {
 
         const symbol = row.getAttribute("data-metals");             // this block declares variables
@@ -589,7 +686,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const changeFormatSum = (currentSum - sumMetal).toFixed(2) + " ₽" + " (" + changePercent.toFixed(2) + " %)";
                 changeSumCell.textContent = changeFormatSum;
                 changeSumCell.style.color = changePercent >= 0 ? "green" : "red";   // Change sum color
-
+                totalCurrSum += currentSum;
                 chartDataCurrent.push({ label: symbol, value: currentSum });
             })
             .catch(() => {  // Catch error
@@ -598,6 +695,24 @@ document.addEventListener("DOMContentLoaded", () => {
             .finally(() => {    // When row processed, check if we can build chart
                 count++;
                 if (count === rows.length) {
+                    const changeValue = totalCurrSum - investedSum; // For show 
+                    const changePercent = investedSum !== 0 //change Total Sum
+                        ? (changeValue / investedSum) * 100
+                        : 0;
+                    const changeEl = document.getElementById("totalChange");
+                    const percentEl = document.getElementById("totalChangePercent");
+                    // Форматирование
+                    const arrow = changeValue >= 0 ? "▲" : "▼";
+                    const colorClass = changeValue >= 0 ? "text-success" : "text-danger";
+
+                    changeEl.textContent = arrow + " " + changeValue.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+                    percentEl.textContent =`(${changePercent.toFixed(2)} %)`;
+
+                    changeEl.classList.add(colorClass);
+                    percentEl.classList.add(colorClass);
+
+                    el.innerHTML = totalCurrSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+
                     createChart('CurrentPricePie', {
                         type: 'pie',
                         data: {
@@ -608,8 +723,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
                 }
             });
-    });
+        
 
+    });
+    
 });                 // Metals 
 // Metals purchase pie chart         //
 fetchJson('/Metals/GetChartT').then(data => {
