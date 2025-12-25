@@ -84,6 +84,34 @@ namespace FinancialAssetsApp.Data.Service
                 .ToListAsync();
             return data;
         }
+        public async Task<decimal> GetCurrentUSStocksSUM(int userId)    // Получение текущего курса US Stocks
+        {
+            var usStocks = await _context.StocksUSD
+                .Where(s => s.UserId == userId)
+                .ToListAsync();
+
+            decimal totalCurrSum = 0;
+            foreach (var stock in usStocks)
+            {
+                totalCurrSum += stock.SumStocks;
+            }
+            var usdRate = await _assetdata.GetCurrencyRate("USD");
+            totalCurrSum *= usdRate;
+            return totalCurrSum;
+        }
+        public async Task<decimal> GetPurchaseUSStocksSUM(int userId)    // Получение суммы покупки US Stocks
+        {
+            var usStocks = await _context.StocksUSD
+                .Where(s => s.UserId == userId)
+                .ToListAsync();
+
+            decimal totalPurchaseSum = 0;
+            foreach (var stock in usStocks)
+            {
+                totalPurchaseSum += stock.SumStocksToRuble;
+            }
+            return totalPurchaseSum;
+        }
         /*public async Task<IEnumerable<ForChart>> GetChartCountry(int userId)    //График по странам
         {
             var data = await _context.Stocks

@@ -18,6 +18,10 @@ namespace FinancialAssetsApp.Data.Service
     public interface IStocksUSDService : IAssetCommonService<StockUSD> // Построение графиков по тикерам иностранных акций
     {
         Task<IEnumerable<ForChart>> GetChartTicker(int userId);
+        Task<decimal> GetCurrentUSStocksSUM(int userId);
+        Task<decimal> GetPurchaseUSStocksSUM(int userId);
+
+
     }
     public interface ICryptosService : IAssetCommonService<Crypto>    // График по тикерам крипты
     {

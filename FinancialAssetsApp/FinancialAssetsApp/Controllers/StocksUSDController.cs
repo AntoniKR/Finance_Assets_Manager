@@ -66,7 +66,25 @@ namespace FinancialAssetsApp.Controllers
             var data = await _stocksService.GetChartTicker(CurrentUserId);
             return Json(data);
         }
-
+        public async Task<IActionResult> GetChangeSUM()
+        {
+            var current = await _stocksService.GetCurrentUSStocksSUM(CurrentUserId);
+            var purchase = await _stocksService.GetPurchaseUSStocksSUM(CurrentUserId);
+            var change = current - purchase;
+            return Json(change);
+        }
+        public async Task<IActionResult> GetChangePercentageSUM()
+        {
+            var current = await _stocksService.GetCurrentUSStocksSUM(CurrentUserId);
+            var purchase = await _stocksService.GetPurchaseUSStocksSUM(CurrentUserId);
+            var changePercent = (((current - purchase) / purchase) * 100);
+            return Json(changePercent);
+        }
+        public async Task<IActionResult> GetCurrentSUM()
+        {
+            var current = await _stocksService.GetCurrentUSStocksSUM(CurrentUserId);
+            return Json(current);
+        }
 
 
 

@@ -8,12 +8,10 @@ namespace FinancialAssetsApp.Data.Service
     public class PlatformStartupsService : IPlatformStartupService
     {
         private readonly FinanceDbContext _context; // БД
-        private readonly IAssetData _assetdata; // Для парсинга различных курсов
 
-        public PlatformStartupsService(FinanceDbContext context,IAssetData assetdata)  // Конструктор
+        public PlatformStartupsService(FinanceDbContext context)  // Конструктор
         {
             _context = context;
-            _assetdata = assetdata;
         }
         public async Task Add(PlatformStartup platformStartup)  // Добавление платформы в БД
         {

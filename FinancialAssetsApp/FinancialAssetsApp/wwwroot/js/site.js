@@ -104,6 +104,45 @@ fetchJson('/Home/GetCurrAssets').then(data => {
 });
 
 
+// View current, invested and change sum USD Stocks
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        // Current sum
+        const currentEl = document.getElementById("currentStocksUSD");
+        const currentSum = await fetchJson('/StocksUSD/GetCurrentSUM');
+
+        if (currentEl) {
+            currentEl.innerHTML = currentSum.toLocaleString("ru-RU", {
+                style: "currency",
+                currency: "RUB"
+            });
+        }
+        //
+
+        // Change sum percent 
+        const changeSumPercentEl = document.getElementById("changeStocksUSDPercent");
+        const changeSumPercent = await fetchJson('/StocksUSD/GetChangePercentageSUM');
+
+        const colorClass = changeSumPercent >= 0 ? "text-success" : "text-danger";
+
+        changeSumPercentEl.textContent = `(${changeSumPercent.toFixed(2)} %)`;
+        changeSumPercentEl.classList.add(colorClass);
+        //
+
+        // Change Sum
+        const changeSumEl = document.getElementById("changeStocksUSD");
+        const changeSum = await fetchJson('/StocksUSD/GetChangeSUM');
+        const arrow = changeSum >= 0 ? "▲" : "▼";
+
+        changeSumEl.textContent = arrow + " " + changeSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+
+        changeSumEl.classList.add(colorClass);
+        //
+    }
+    catch (err) {
+        console.log("Error loading summ", err);
+    }
+});
 
 
 // Pie chart with real estate and transport
@@ -432,13 +471,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const rateUSD = await getUsdRate(); // For USD exchange rate and current stock value
     const chartDataCurrent = [];    // For chart building
     const rows = document.querySelectorAll("tr[data-stocksUSD]");  // for chart
-    let count = 0;  // Counter for chart building
-
-    let totalCurrSum = 0;
-    const el = document.getElementById("totalCurrSum");
-    const investedSum = parseFloat(
-        document.getElementById("investedSum").dataset.value
-    ) || 0;
+    let count = 0;  // Counter for chart building    
 
     rows.forEach(row => {
         const tickerStock = row.getAttribute("data-stocksUSD");
@@ -458,28 +491,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         changeSumRUBCell.style.color = changePercentSumRUB >= 0 ? "green" : "red";   // Change sum color      
 
         chartDataCurrent.push({ label: tickerStock, value: currentSumRUB });    // Add data for chart
-        totalCurrSum += currentSumRUB;
         count++;
 
-        if (count === rows.length) {    // if all stocks processed, build chart
-
-            const changeValue = totalCurrSum - investedSum; // For show 
-            const changePercent = investedSum !== 0 //change Total Sum
-                ? (changeValue / investedSum) * 100
-                : 0;
-            const changeEl = document.getElementById("totalChange");
-            const percentEl = document.getElementById("totalChangePercent");
-            // Форматирование
-            const arrow = changeValue >= 0 ? "▲" : "▼";
-            const colorClass = changeValue >= 0 ? "text-success" : "text-danger";
-
-            changeEl.textContent = arrow + " " + changeValue.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
-            percentEl.textContent = `(${changePercent.toFixed(2)} %)`;
-
-            changeEl.classList.add(colorClass);
-            percentEl.classList.add(colorClass);
-
-            el.innerHTML = totalCurrSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+        if (count === rows.length) {    // if all stocks processed, build chart          
 
             createChart('CurrentStocksUSDPie', {
                 type: 'pie',

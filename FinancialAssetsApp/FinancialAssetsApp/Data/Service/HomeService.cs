@@ -10,11 +10,13 @@ namespace FinancialAssetsApp.Data.Service
     {
         private readonly FinanceDbContext _context; // БД
         private readonly IAssetData _assetdata; // Для парсинга различных курсов
+        private readonly IStocksUSDService _stockUSD;
 
-        public HomeService(FinanceDbContext context, IAssetData assetdata)  // Конструктор
+        public HomeService(FinanceDbContext context, IAssetData assetdata, IStocksUSDService stockUSD)  // Конструктор
         {
             _context = context;
             _assetdata = assetdata;
+            _stockUSD = stockUSD;
         }
         public async Task<IEnumerable<ForChart>> GetAssetsSumm (int userId)
         {
@@ -103,14 +105,14 @@ namespace FinancialAssetsApp.Data.Service
             }
             return totalCurrSum;
         }
-        public async Task<decimal> GetCurrentUSStocksSUM(int userId)    // Получение текущего курса US Stocks
+        public async Task<decimal> Get(int userId)    // Получение текущего курса RUSStocks
         {
-            var usStocks = await _context.StocksUSD
+            var ruStocks = await _context.Stocks
                 .Where(s => s.UserId == userId)
                 .ToListAsync();
 
             decimal totalCurrSum = 0;
-            foreach (var stock in usStocks)
+            foreach (var stock in ruStocks)
             {
                 totalCurrSum += stock.SumStocks;
             }
@@ -138,11 +140,11 @@ namespace FinancialAssetsApp.Data.Service
             var startups = stps.Value;
             var metals = await GetCurrentMetalSUM(userId);
             var ruStocks = await GetCurrentRUSStocksSUM(userId);
-            var usStocks = await GetCurrentUSStocksSUM(userId);
+            //var usStocks = await GetCurrentUSStocksSUM(userId);
             //var currencies = await GetCurrentCurrenciesSUM(userId);
-            Console.WriteLine($"QQQQQQQQQQQQQQQQQQQQQQQQQQQQQ {cryptos}, {metals}, {startups}, {ruStocks}, {usStocks}, ");
+            Console.WriteLine($"QQQQQQQQQQQQQQQQQQQQQQQQQQQQQ {cryptos}, {metals}, {startups}, {ruStocks} ");
             decimal totalCurrSum = 0;
-            totalCurrSum += (cryptos + startups + metals + ruStocks + usStocks);
+            totalCurrSum += (cryptos + startups + metals + ruStocks);
             //var usdRate = await _assetdata.GetCurrencyRate("USD");
 
             return totalCurrSum;
