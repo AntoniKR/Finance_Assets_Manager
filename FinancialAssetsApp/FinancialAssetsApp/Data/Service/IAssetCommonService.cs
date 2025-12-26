@@ -10,35 +10,45 @@ namespace FinancialAssetsApp.Data.Service
         Task<T?> GetAssetById(int userId);
         Task Add(T asset);
         Task Delete(int id);
+
     }
     public interface IStocksService : IAssetCommonService<Stock> // Построение графиков по тикерам рос. акций
     {
         Task<IEnumerable<ForChart>> GetChartTicker(int userId);
+        Task<decimal> GetPurchaseStocksSUM(int userId);
     }
     public interface IStocksUSDService : IAssetCommonService<StockUSD> // Построение графиков по тикерам иностранных акций
     {
         Task<IEnumerable<ForChart>> GetChartTicker(int userId);
         Task<decimal> GetCurrentUSStocksSUM(int userId);
         Task<decimal> GetPurchaseUSStocksSUM(int userId);
-
-
     }
     public interface ICryptosService : IAssetCommonService<Crypto>    // График по тикерам крипты
     {
         Task<IEnumerable<ForChart>> GetChartTicker(int userId);
+        Task<decimal> GetCurrentCryptoSUM(int userId);
+        Task<decimal> GetPurchaseCryptoSUM(int userId);
+
+
     }
     public interface IMetalsService : IAssetCommonService<Metal>    // График по металлам
     {
         Task<IEnumerable<ForChart>> GetChartTicker(int userId);
+        //Task<decimal> GetPurchaseMetalsSUM(int userId);
+
     }
     public interface ICurrenciesService : IAssetCommonService<Currency>    // График по валютам
     {
         Task<IEnumerable<ForChart>> GetChartTicker(int userId);
+        //Task<decimal> GetPurchaseCurrenciesSUM(int userId);
+
     }
     public interface IPlatformStartupService : IAssetCommonService<PlatformStartup>
     {
         Task<IEnumerable<ForChart>> GetChartTicker(int userId);
         Task<IEnumerable<ForChart>> GetChartCount(int userId);
+        //Task<decimal> GetPurchasePlStartupsSUM(int userId);
+
     }
     public interface IStartupService : IAssetCommonService<Startup>
     {

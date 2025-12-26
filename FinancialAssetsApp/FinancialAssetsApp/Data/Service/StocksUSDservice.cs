@@ -1,6 +1,7 @@
 ﻿using FinancialAssetsApp.Models;
 using FinancialAssetsApp.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
@@ -10,11 +11,13 @@ namespace FinancialAssetsApp.Data.Service
     {
         private readonly FinanceDbContext _context; // БД
         private readonly IAssetData _assetdata; // Для парсинга различных курсов
+        private readonly IMemoryCache _cache; // For cache
 
-        public StocksUSDservice(FinanceDbContext context,IAssetData assetdata)  // Конструктор
+        public StocksUSDservice(FinanceDbContext context,IAssetData assetdata, IMemoryCache memoryCache)  // Конструктор
         {
             _context = context;
             _assetdata = assetdata;
+            _cache = memoryCache;
         }
         public async Task Add(StockUSD stock)  // Добавление акции в БД
         {
@@ -42,6 +45,7 @@ namespace FinancialAssetsApp.Data.Service
                 await _context.StocksUSD.AddAsync(stock);
             }
             await _context.SaveChangesAsync();  // Асинхронно сохраняем изменения в БД
+            ClearUSStocksCache(stock.UserId);   // Update cache
         }
         public async Task Delete(int id)    //Удаление акции
         {
@@ -50,6 +54,7 @@ namespace FinancialAssetsApp.Data.Service
             {
                 _context.StocksUSD.Remove(stock);
                 await _context.SaveChangesAsync();
+                ClearUSStocksCache(stock.UserId);   // Update cache
             }
         }
         public async Task<StockUSD?> GetAssetById(int id)  //получение акции для удаления
@@ -86,6 +91,10 @@ namespace FinancialAssetsApp.Data.Service
         }
         public async Task<decimal> GetCurrentUSStocksSUM(int userId)    // Получение текущего курса US Stocks
         {
+            var cacheKey = $"StocksUSD:current:{userId}";
+            if(_cache.TryGetValue(cacheKey, out decimal cachedSum))
+                return cachedSum;
+
             var usStocks = await _context.StocksUSD
                 .Where(s => s.UserId == userId)
                 .ToListAsync();
@@ -97,10 +106,21 @@ namespace FinancialAssetsApp.Data.Service
             }
             var usdRate = await _assetdata.GetCurrencyRate("USD");
             totalCurrSum *= usdRate;
+
+            _cache.Set(
+                cacheKey,
+                totalCurrSum,
+                TimeSpan.FromHours(1)
+            );
+
             return totalCurrSum;
         }
         public async Task<decimal> GetPurchaseUSStocksSUM(int userId)    // Получение суммы покупки US Stocks
         {
+            var cacheKey = $"StocksUSD:purchase:{userId}";
+            if (_cache.TryGetValue(cacheKey, out decimal cachedSum))
+                return cachedSum;
+
             var usStocks = await _context.StocksUSD
                 .Where(s => s.UserId == userId)
                 .ToListAsync();
@@ -110,21 +130,25 @@ namespace FinancialAssetsApp.Data.Service
             {
                 totalPurchaseSum += stock.SumStocksToRuble;
             }
+            _cache.Set(
+                cacheKey,
+                totalPurchaseSum,
+                TimeSpan.FromHours(1)
+            );
             return totalPurchaseSum;
         }
-        /*public async Task<IEnumerable<ForChart>> GetChartCountry(int userId)    //График по странам
+        private void ClearUSStocksCache(int userId)
         {
-            var data = await _context.Stocks
-                .Where(s => s.UserId == userId)
-                .GroupBy(e => e.Country)
-                .Select(g => new ForChart
-                {
-                    Label = g.Key ?? "не указано",
-                    Total = g.Sum(e => e.SumStocksToRuble).GetValueOrDefault()
-                })
-                .ToListAsync();
-            return data;
-        }*/
+            _cache.Remove($"StocksUSD:current:{userId}");
+            _cache.Remove($"StocksUSD:purchase:{userId}");
+        }
+
+
+
+
+
+
+
 
 
 

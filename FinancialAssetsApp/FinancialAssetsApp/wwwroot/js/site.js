@@ -1,6 +1,5 @@
 ﻿// Function for safe Chart creation
 const charts = {}; // Global object for storing charts
-
 // Creating charts
 function createChart(canvasId, config) {
     const ctx = document.getElementById(canvasId);
@@ -46,6 +45,41 @@ fetchJson('/Stocks/GetChartT').then(data => {
         options: { responsive: false, maintainAspectRatio: false }
     });
 });
+
+
+// View current, invested and change sum USD Stocks
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        // Current sum
+        const currentEl = document.getElementById("stocksUSDTotalCurrent");
+        const currentSum = await fetchJson('/StocksUSD/GetCurrentSUM');
+
+        currentEl.textContent = currentSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+        //
+
+        // Change sum percent 
+        const changeSumPercentEl = document.getElementById("stocksUSDChangePercent");
+        const changeSumPercent = await fetchJson('/StocksUSD/GetChangePercentageSUM');
+        const colorClass = changeSumPercent >= 0 ? "text-success" : "text-danger";
+
+        changeSumPercentEl.classList.add(colorClass);
+        changeSumPercentEl.textContent = `(${changeSumPercent.toFixed(2)} %)`;
+        //
+
+        // Change Sum
+        const changeSumEl = document.getElementById("stocksUSDTotalChange");
+        const changeSum = await fetchJson('/StocksUSD/GetChangeSUM');
+        const arrow = changeSum >= 0 ? "▲" : "▼";
+
+        changeSumEl.textContent = arrow + " " + changeSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+        changeSumEl.classList.add(colorClass);
+        //
+    }
+    catch (err) {
+        console.log("Error loading summ", err);
+    }
+});
+
 
 // Pie chart with total assets sum
 fetchJson('/Home/GetAssetsChart').then(data => {
@@ -104,45 +138,6 @@ fetchJson('/Home/GetCurrAssets').then(data => {
 });
 
 
-// View current, invested and change sum USD Stocks
-document.addEventListener("DOMContentLoaded", async () => {
-    try {
-        // Current sum
-        const currentEl = document.getElementById("currentStocksUSD");
-        const currentSum = await fetchJson('/StocksUSD/GetCurrentSUM');
-
-        if (currentEl) {
-            currentEl.innerHTML = currentSum.toLocaleString("ru-RU", {
-                style: "currency",
-                currency: "RUB"
-            });
-        }
-        //
-
-        // Change sum percent 
-        const changeSumPercentEl = document.getElementById("changeStocksUSDPercent");
-        const changeSumPercent = await fetchJson('/StocksUSD/GetChangePercentageSUM');
-
-        const colorClass = changeSumPercent >= 0 ? "text-success" : "text-danger";
-
-        changeSumPercentEl.textContent = `(${changeSumPercent.toFixed(2)} %)`;
-        changeSumPercentEl.classList.add(colorClass);
-        //
-
-        // Change Sum
-        const changeSumEl = document.getElementById("changeStocksUSD");
-        const changeSum = await fetchJson('/StocksUSD/GetChangeSUM');
-        const arrow = changeSum >= 0 ? "▲" : "▼";
-
-        changeSumEl.textContent = arrow + " " + changeSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
-
-        changeSumEl.classList.add(colorClass);
-        //
-    }
-    catch (err) {
-        console.log("Error loading summ", err);
-    }
-});
 
 
 // Pie chart with real estate and transport
@@ -507,30 +502,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 });                  //
 
-
-// Crypto pie chart
-fetchJson('/Crypto/GetChartTicker').then(data => {
-    if (!data) return;
-    createChart('CryptoPie', {
-        type: 'pie',
-        data: {
-            labels: data.map(d => d.label),
-            datasets: [{ data: data.map(d => d.total) }]
-        },
-        options: { responsive: false, maintainAspectRatio: false }
-    });
-});    //
-// Cryptocurrency tickers list                    //
-document.addEventListener("DOMContentLoaded", async () => {
-    const tickerInput = document.getElementById("TickerInput");
-    if (!tickerInput) return;
-
-    const json = await fetchJson("https://api.bybit.com/v5/market/tickers?category=spot");
-    if (json && json.retCode === 0 && json.result?.list) {
-        const tickers = json.result.list.map(x => x.symbol);
-        $(tickerInput).autocomplete({ source: tickers, minLength: 1 });
-    }
-});                   // Cryptocurrency
 // Current cryptocurrency prices                          //
 document.addEventListener("DOMContentLoaded", async () => {
 
@@ -658,6 +629,62 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     });
 });                  //
+// View current, invested and change sum Crypto
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        // Current sum
+        const currentEl = document.getElementById("cryptoTotalCurrent");
+        const currentSum = await fetchJson('/Crypto/GetCurrentSUM');
+
+        currentEl.textContent = currentSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+        //
+
+        // Change sum percent 
+        const changeSumPercentEl = document.getElementById("cryptoChangePercent");
+        const changeSumPercent = await fetchJson('/Crypto/GetChangePercentageSUM');
+        const colorClass = changeSumPercent >= 0 ? "text-success" : "text-danger";
+
+        changeSumPercentEl.classList.add(colorClass);
+        changeSumPercentEl.textContent = `(${changeSumPercent.toFixed(2)} %)`;
+        //
+
+        // Change Sum
+        const changeSumEl = document.getElementById("cryptoTotalChange");
+        const changeSum = await fetchJson('/Crypto/GetChangeSUM');
+        const arrow = changeSum >= 0 ? "▲" : "▼";
+
+        changeSumEl.textContent = arrow + " " + changeSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+        changeSumEl.classList.add(colorClass);
+        //
+    }
+    catch (err) {
+        console.log("Error loading summ", err);
+    }
+});
+// Crypto pie chart
+fetchJson('/Crypto/GetChartTicker').then(data => {
+    if (!data) return;
+    createChart('CryptoPie', {
+        type: 'pie',
+        data: {
+            labels: data.map(d => d.label),
+            datasets: [{ data: data.map(d => d.total) }]
+        },
+        options: { responsive: false, maintainAspectRatio: false }
+    });
+});    //
+// Cryptocurrency tickers list                    //
+document.addEventListener("DOMContentLoaded", async () => {
+    const tickerInput = document.getElementById("TickerInput");
+    if (!tickerInput) return;
+
+    const json = await fetchJson("https://api.bybit.com/v5/market/tickers?category=spot");
+    if (json && json.retCode === 0 && json.result?.list) {
+        const tickers = json.result.list.map(x => x.symbol);
+        $(tickerInput).autocomplete({ source: tickers, minLength: 1 });
+    }
+});                   // Cryptocurrency
+
 
 
 // Current prices and metals chart            //

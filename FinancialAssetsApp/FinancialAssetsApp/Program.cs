@@ -40,7 +40,8 @@ namespace FinancialAssetsApp
                         _ => "Enter your data!");
                 });
 
-            builder.Services.AddDistributedMemoryCache();
+            //builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddMemoryCache();
             builder.Services.AddSession(options =>  // If the session was inactive for 30 minutes, then exit
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);

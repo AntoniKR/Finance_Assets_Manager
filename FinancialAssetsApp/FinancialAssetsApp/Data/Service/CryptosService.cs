@@ -2,6 +2,7 @@
 using FinancialAssetsApp.Models;
 using FinancialAssetsApp.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FinancialAssetsApp.Data.Service
@@ -10,11 +11,14 @@ namespace FinancialAssetsApp.Data.Service
     {
         private readonly FinanceDbContext _context; // БД
         private readonly IAssetData _assetdata; // Для парсинга различных данных
+        private readonly IMemoryCache _cache; // For cache
 
-        public CryptosService(FinanceDbContext context,IAssetData assetdata)  // Конструктор
+
+        public CryptosService(FinanceDbContext context,IAssetData assetdata, IMemoryCache memoryCache)  // Конструктор
         {
             _context = context;
             _assetdata = assetdata;
+            _cache = memoryCache;
         }
         public async Task Add(Crypto crypto)  // Добавление крипты в БД с учетом повторения
         {
@@ -25,8 +29,6 @@ namespace FinancialAssetsApp.Data.Service
 
             crypto.SumCrypto = Math.Round(crypto.Price * crypto.AmountCrypto, 4);
             crypto.SumCryptoToRuble = Math.Round(crypto.SumCrypto * rate, 2);
-
-
 
             if (oldTicker != null)   // если уже есть такой тикер в БД, то цену ставим среднюю
             {
@@ -46,6 +48,8 @@ namespace FinancialAssetsApp.Data.Service
             }
             
             await _context.SaveChangesAsync();  // Асинхронно сохраняем изменения в БД
+            ClearCryptoCache(crypto.UserId);
+
         }
         public async Task Delete(int id)    //Удаление криптовалюты
         {
@@ -54,6 +58,8 @@ namespace FinancialAssetsApp.Data.Service
             {
                 _context.Cryptos.Remove(crypto);
                 await _context.SaveChangesAsync();
+                ClearCryptoCache(crypto.UserId);     // Update cache
+
             }
         }
         public async Task<Crypto?> GetAssetById(int id)  //получение криптовалюты для удаления
@@ -81,6 +87,74 @@ namespace FinancialAssetsApp.Data.Service
                 .ToListAsync();
             return data;
         }
+        public async Task<decimal> GetCurrentCryptoSUM(int userId)    // Получение текущего курса US Stocks
+        {
+            var cacheKey = $"Crypto:current:{userId}";
+            if (_cache.TryGetValue(cacheKey, out decimal cachedSum))
+                return cachedSum;
+
+            var cryptos = await _context.Cryptos
+                .Where(s => s.UserId == userId)
+                .ToListAsync();
+
+            decimal totalCurrSum = 0;
+            foreach (var crypto in cryptos)
+            {
+                totalCurrSum += crypto.SumCrypto;
+            }
+            var usdRate = await _assetdata.GetCurrencyRate("USD");
+            totalCurrSum *= usdRate;
+
+            _cache.Set(
+                cacheKey,
+                totalCurrSum,
+                TimeSpan.FromHours(1)
+            );
+
+            return totalCurrSum;
+        }
+        public async Task<decimal> GetPurchaseCryptoSUM(int userId)    // Получение суммы покупки US Stocks
+        {
+            var cacheKey = $"Crypto:purchase:{userId}";
+            if (_cache.TryGetValue(cacheKey, out decimal cachedSum))
+                return cachedSum;
+
+            var cryptos = await _context.Cryptos
+                .Where(s => s.UserId == userId)
+                .ToListAsync();
+
+            decimal totalPurchaseSum = 0;
+            foreach (var crypto in cryptos)
+            {
+                totalPurchaseSum += crypto.SumCryptoToRuble;
+            }
+            _cache.Set(
+                cacheKey,
+                totalPurchaseSum,
+                TimeSpan.FromHours(1)
+            );
+            return totalPurchaseSum;
+        }
+        private void ClearCryptoCache(int userId)
+        {
+            _cache.Remove($"Crypto:current:{userId}");
+            _cache.Remove($"Crypto:purchase:{userId}");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public async Task FixOldCryptos()   // Для правок в БД
         {
             var cryptos = await _context.Cryptos.ToListAsync();
@@ -94,9 +168,6 @@ namespace FinancialAssetsApp.Data.Service
 
             await _context.SaveChangesAsync();
         }
-
-
-
         public async Task<IEnumerable<Crypto>> GetAll()
         {
             var crypto = await _context.Cryptos.ToListAsync();  // Перечисление всех данных из БД

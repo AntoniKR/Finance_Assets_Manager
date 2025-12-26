@@ -78,6 +78,31 @@ namespace FinancialAssetsApp.Controllers
             var data = await _cryptosService.GetChartTicker(CurrentUserId);
             return Json(data);
         }
+        public async Task<IActionResult> GetChangeSUM() // Get difference between the current and invested sum
+        {
+            var current = await _cryptosService.GetCurrentCryptoSUM(CurrentUserId);
+            var purchase = await _cryptosService.GetPurchaseCryptoSUM(CurrentUserId);
+            var change = current - purchase;
+            return Json(change);
+        }
+        public async Task<IActionResult> GetChangePercentageSUM()   // Get difference in percentage
+        {
+            var current = await _cryptosService.GetCurrentCryptoSUM(CurrentUserId);
+            var purchase = await _cryptosService.GetPurchaseCryptoSUM(CurrentUserId);
+            var changePercent = (((current - purchase) / purchase) * 100);
+            return Json(changePercent);
+        }
+        public async Task<IActionResult> GetCurrentSUM()    // Get current sum
+        {
+            var current = await _cryptosService.GetCurrentCryptoSUM(CurrentUserId);
+            return Json(current);
+        }
+
+
+
+
+
+
         /*public async Task<IActionResult> FixCrypto()
         {
             await _cryptosService.FixOldCryptos();

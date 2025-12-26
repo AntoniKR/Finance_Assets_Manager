@@ -135,7 +135,9 @@ namespace FinancialAssetsApp.Data.Service
         }
         public async Task<decimal> GetCurrentAss(int userId)    // Получение текущего курса всего
         {
-            var cryptos = await GetCurrentCryptoSUM(userId);
+            decimal totalCurrSum = 0;
+
+            /*var cryptos = await GetCurrentCryptoSUM(userId);
             var stps = await GetCurrentStartupsSUM(userId);
             var startups = stps.Value;
             var metals = await GetCurrentMetalSUM(userId);
@@ -143,13 +145,13 @@ namespace FinancialAssetsApp.Data.Service
             //var usStocks = await GetCurrentUSStocksSUM(userId);
             //var currencies = await GetCurrentCurrenciesSUM(userId);
             Console.WriteLine($"QQQQQQQQQQQQQQQQQQQQQQQQQQQQQ {cryptos}, {metals}, {startups}, {ruStocks} ");
-            decimal totalCurrSum = 0;
-            totalCurrSum += (cryptos + startups + metals + ruStocks);
+            totalCurrSum += (cryptos + startups + metals + ruStocks);*/
             //var usdRate = await _assetdata.GetCurrencyRate("USD");
-
+            totalCurrSum += await _stockUSD.GetCurrentUSStocksSUM(userId);
             return totalCurrSum;
-        }
-        
+        }        
+
+
 
         public async Task<IEnumerable<ForChart>> GetEstateTransSumm(int userId)
         {
@@ -166,7 +168,6 @@ namespace FinancialAssetsApp.Data.Service
                 new ForChart{Label = "Транспорт", Total = totalTrans}
             };
         }
-
         public async Task<decimal> GetRate()
         {
             return await _assetdata.GetCurrencyRate("USD");

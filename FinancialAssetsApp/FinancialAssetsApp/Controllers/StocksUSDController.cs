@@ -61,26 +61,26 @@ namespace FinancialAssetsApp.Controllers
             await _stocksService.Delete(id);
             return RedirectToAction("IndexStocks");
         }
-        public async Task<IActionResult> GetChartT()
+        public async Task<IActionResult> GetChartT()    // Chart for stocks
         {
             var data = await _stocksService.GetChartTicker(CurrentUserId);
             return Json(data);
         }
-        public async Task<IActionResult> GetChangeSUM()
+        public async Task<IActionResult> GetChangeSUM() // Get difference between the current and invested sum
         {
             var current = await _stocksService.GetCurrentUSStocksSUM(CurrentUserId);
             var purchase = await _stocksService.GetPurchaseUSStocksSUM(CurrentUserId);
             var change = current - purchase;
             return Json(change);
         }
-        public async Task<IActionResult> GetChangePercentageSUM()
+        public async Task<IActionResult> GetChangePercentageSUM()   // Get difference in percentage
         {
             var current = await _stocksService.GetCurrentUSStocksSUM(CurrentUserId);
             var purchase = await _stocksService.GetPurchaseUSStocksSUM(CurrentUserId);
             var changePercent = (((current - purchase) / purchase) * 100);
             return Json(changePercent);
         }
-        public async Task<IActionResult> GetCurrentSUM()
+        public async Task<IActionResult> GetCurrentSUM()    // Get current sum
         {
             var current = await _stocksService.GetCurrentUSStocksSUM(CurrentUserId);
             return Json(current);
