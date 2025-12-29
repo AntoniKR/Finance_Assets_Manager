@@ -84,6 +84,25 @@ namespace FinancialAssetsApp.Controllers
             var price = await _assetdata.GetMetalPrice(nameMetal);
             return Json(price);
         }
+        public async Task<IActionResult> GetChangeSUM() // Get difference between the current and invested sum
+        {
+            var current = await _metalService.GetCurrentMetalsSUM(CurrentUserId);
+            var purchase = await _metalService.GetPurchaseMetalsSUM(CurrentUserId);
+            var change = current - purchase;
+            return Json(change);
+        }
+        public async Task<IActionResult> GetChangePercentageSUM()   // Get difference in percentage
+        {
+            var current = await _metalService.GetCurrentMetalsSUM(CurrentUserId);
+            var purchase = await _metalService.GetPurchaseMetalsSUM(CurrentUserId);
+            var changePercent = (((current - purchase) / purchase) * 100);
+            return Json(changePercent);
+        }
+        public async Task<IActionResult> GetCurrentSUM()    // Get current sum
+        {
+            var current = await _metalService.GetCurrentMetalsSUM(CurrentUserId);
+            return Json(current);
+        }
 
 
         /*public async Task<IActionResult> FixSums()

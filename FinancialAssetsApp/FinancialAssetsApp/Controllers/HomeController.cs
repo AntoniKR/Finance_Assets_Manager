@@ -34,34 +34,34 @@ namespace FinancialAssetsApp.Controllers
         }
         public async Task<IActionResult> GetAssetsChart()   //получение общей суммы активов
         {
-            var data = await _homeService.GetAssetsSumm(CurrentUserId);
+            var data = await _homeService.GetAssetsSumInvested(CurrentUserId);
             return Json(data);
         }
+        public async Task<IActionResult> GetPurchaseAssets()
+        {
+            var data = await _homeService.GetCurrentAss(CurrentUserId);
+            return Json(data);
+        }
+        public async Task<IActionResult> GetCurrentAssets()
+        {
+            var data = await _homeService.GetCurrentAss(CurrentUserId);
+            return Json(data);
+        }
+
+
+
         public async Task<IActionResult> GetETrChart()   //получение общей суммы активов
         {
             var data = await _homeService.GetEstateTransSumm(CurrentUserId);
             return Json(data);
         }
-        public async Task<IActionResult> GetRateContr()
+        public async Task<IActionResult> GetRateContr() // Rate USD
         {
             var data = await _homeService.GetRate();
             return Json(data);
         }
-        public async Task<IActionResult> GetCurrCrypto()
-        {
-            var data = await _homeService.GetCurrentCryptoSUM(CurrentUserId);
-            return Json(data);
-        }
-        public async Task<IActionResult> GetCurrMetals()
-        {
-            var data = await _homeService.GetCurrentMetalSUM(CurrentUserId);
-            return Json(data);
-        }
-        public async Task<IActionResult> GetCurrAssets()
-        {
-            var data = await _homeService.GetCurrentAss(CurrentUserId);
-            return Json(data);
-        }
+
+
 
     }
 }

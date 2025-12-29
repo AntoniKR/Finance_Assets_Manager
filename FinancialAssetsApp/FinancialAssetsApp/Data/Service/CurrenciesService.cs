@@ -2,6 +2,7 @@
 using FinancialAssetsApp.Models;
 using FinancialAssetsApp.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FinancialAssetsApp.Data.Service
@@ -10,11 +11,14 @@ namespace FinancialAssetsApp.Data.Service
     {
         private readonly FinanceDbContext _context; // БД
         private readonly IAssetData _assetdata; // Для парсинга различных данных
+        private readonly IMemoryCache _cache; // For cache
 
-        public CurrenciesService(FinanceDbContext context,IAssetData assetdata)  // Конструктор
+        public CurrenciesService(FinanceDbContext context,IAssetData assetdata, IMemoryCache memoryCache)  // Конструктор
         {
             _context = context;
             _assetdata = assetdata;
+            _cache = memoryCache;
+
         }
         public async Task Add(Currency currency)  // Добавление валюты в БД с учетом повторения
         {          
@@ -43,6 +47,7 @@ namespace FinancialAssetsApp.Data.Service
             }
             
             await _context.SaveChangesAsync();  // Асинхронно сохраняем изменения в БД
+            ClearCurrenciesCache(currency.UserId);  // For clear cache
         }
         public async Task Delete(int id)    //Удаление криптовалюты
         {
@@ -52,6 +57,7 @@ namespace FinancialAssetsApp.Data.Service
                 _context.Currencies.Remove(currency);
                 await _context.SaveChangesAsync();
             }
+            ClearCurrenciesCache(currency.UserId);  // For clear cache
         }
         public async Task<Currency?> GetAssetById(int id)  //получение криптовалюты для удаления
         {
@@ -78,6 +84,74 @@ namespace FinancialAssetsApp.Data.Service
                 .ToListAsync();
             return data;
         }
+        public async Task<decimal> GetCurrentCurrenciesSUM(int userId)    // Получение текущего курса Metals
+        {
+            var cacheKey = $"Currencies:current:{userId}";
+            if (_cache.TryGetValue(cacheKey, out decimal cachedSum))
+                return cachedSum;
+
+            var currencies = await _context.Currencies
+                .Where(s => s.UserId == userId)
+                .ToListAsync();
+
+            decimal totalCurrSum = 0;
+            foreach (var currency in currencies)
+            {
+                var currPrice = await _assetdata.GetCurrencyRate(currency.CharCode);
+                totalCurrSum += (currPrice * currency.AmountCurrency);
+            }
+
+            _cache.Set(
+                cacheKey,
+                totalCurrSum,
+                TimeSpan.FromHours(1)
+            );
+
+            return totalCurrSum;
+        }
+        public async Task<decimal> GetPurchaseCurrenciesSUM(int userId)    // Получение суммы покупки US Stocks
+        {
+            var cacheKey = $"Currencies:purchase:{userId}";
+            if (_cache.TryGetValue(cacheKey, out decimal cachedSum))
+                return cachedSum;
+
+            var currencies = await _context.Currencies
+                .Where(s => s.UserId == userId)
+                .ToListAsync();
+
+            decimal totalPurchaseSum = 0;
+            foreach (var currency in currencies)
+            {
+                totalPurchaseSum += currency.SumCurrencyToRuble;
+            }
+            _cache.Set(
+                cacheKey,
+                totalPurchaseSum,
+                TimeSpan.FromHours(1)
+            );
+            return totalPurchaseSum;
+        }
+        private void ClearCurrenciesCache(int userId)
+        {
+            _cache.Remove($"Currencies:current:{userId}");
+            _cache.Remove($"Currencies:purchase:{userId}");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

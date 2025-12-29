@@ -1,6 +1,7 @@
 ﻿ using FinancialAssetsApp.Models;
 using FinancialAssetsApp.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FinancialAssetsApp.Data.Service
@@ -8,12 +9,15 @@ namespace FinancialAssetsApp.Data.Service
     public class MetalsService : IMetalsService
     {
         private readonly FinanceDbContext _context; // БД
-        private readonly IAssetData _assetdata; // Для парсинга различных курсов
+        private readonly IAssetData _assetdata; // For parse different data
+        private readonly IMemoryCache _cache; // For cache
 
-        public MetalsService(FinanceDbContext context,IAssetData assetdata)  // Конструктор
+
+        public MetalsService(FinanceDbContext context,IAssetData assetdata, IMemoryCache memoryCache)  // Конструктор
         {
             _context = context;
             _assetdata = assetdata;
+            _cache = memoryCache;
         }
         public async Task Add(Metal metal)  // Добавление металла в БД
         {
@@ -36,6 +40,7 @@ namespace FinancialAssetsApp.Data.Service
                 await _context.Metals.AddAsync(metal);
             }
             await _context.SaveChangesAsync();  // Асинхронно сохраняем изменения в БД
+            ClearMetalsCache(metal.UserId);   // Update cache
         }
         public async Task Delete(int id)    //Удаление акции
         {
@@ -45,6 +50,7 @@ namespace FinancialAssetsApp.Data.Service
                 _context.Metals.Remove(metal);
                 await _context.SaveChangesAsync();
             }
+            ClearMetalsCache(metal.UserId);   // Update cache
         }
         public async Task<Metal?> GetAssetById(int id)  //получение акции для удаления
         {
@@ -77,6 +83,72 @@ namespace FinancialAssetsApp.Data.Service
                 .ToListAsync();
             return data;
         }
+
+        public async Task<decimal> GetCurrentMetalsSUM(int userId)    // Получение текущего курса Metals
+        {
+            var cacheKey = $"Metals:current:{userId}";
+            if (_cache.TryGetValue(cacheKey, out decimal cachedSum))
+                return cachedSum;
+
+            var metals = await _context.Metals
+                .Where(s => s.UserId == userId)
+                .ToListAsync();
+
+            decimal totalCurrSum = 0;
+            foreach (var metal in metals)
+            {
+                var currPrice = await _assetdata.GetMetalPrice(metal.NameMetal);
+                totalCurrSum += (currPrice * metal.AmountMetal);
+            }
+
+            _cache.Set(
+                cacheKey,
+                totalCurrSum,
+                TimeSpan.FromHours(1)
+            );
+
+            return totalCurrSum;
+        }
+        public async Task<decimal> GetPurchaseMetalsSUM(int userId)    // Получение суммы покупки US Stocks
+        {
+            var cacheKey = $"Metals:purchase:{userId}";
+            if (_cache.TryGetValue(cacheKey, out decimal cachedSum))
+                return cachedSum;
+
+            var metals = await _context.Metals
+                .Where(s => s.UserId == userId)
+                .ToListAsync();
+
+            decimal totalPurchaseSum = 0;
+            foreach (var metal in metals)
+            {
+                totalPurchaseSum += metal.SumMetals;
+            }
+            _cache.Set(
+                cacheKey,
+                totalPurchaseSum,
+                TimeSpan.FromHours(1)
+            );
+            return totalPurchaseSum;
+        }
+        private void ClearMetalsCache(int userId)
+        {
+            _cache.Remove($"Metals:current:{userId}");
+            _cache.Remove($"Metals:purchase:{userId}");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
         /*public async Task FixOldStocks()
         {
             var stocks = await _context.Stocks

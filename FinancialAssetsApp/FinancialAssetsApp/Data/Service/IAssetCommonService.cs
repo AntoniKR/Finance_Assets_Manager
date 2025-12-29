@@ -28,26 +28,25 @@ namespace FinancialAssetsApp.Data.Service
         Task<IEnumerable<ForChart>> GetChartTicker(int userId);
         Task<decimal> GetCurrentCryptoSUM(int userId);
         Task<decimal> GetPurchaseCryptoSUM(int userId);
-
-
     }
     public interface IMetalsService : IAssetCommonService<Metal>    // График по металлам
     {
         Task<IEnumerable<ForChart>> GetChartTicker(int userId);
-        //Task<decimal> GetPurchaseMetalsSUM(int userId);
-
+        Task<decimal> GetCurrentMetalsSUM(int userId);
+        Task<decimal> GetPurchaseMetalsSUM(int userId);
     }
     public interface ICurrenciesService : IAssetCommonService<Currency>    // График по валютам
     {
         Task<IEnumerable<ForChart>> GetChartTicker(int userId);
-        //Task<decimal> GetPurchaseCurrenciesSUM(int userId);
+        Task<decimal> GetCurrentCurrenciesSUM(int userId);
+        Task<decimal> GetPurchaseCurrenciesSUM(int userId);
 
     }
     public interface IPlatformStartupService : IAssetCommonService<PlatformStartup>
     {
         Task<IEnumerable<ForChart>> GetChartTicker(int userId);
         Task<IEnumerable<ForChart>> GetChartCount(int userId);
-        //Task<decimal> GetPurchasePlStartupsSUM(int userId);
+        Task<decimal?> GetPurchasePlStartupsSUM(int userId);
 
     }
     public interface IStartupService : IAssetCommonService<Startup>

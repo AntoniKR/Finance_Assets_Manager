@@ -1,6 +1,7 @@
 ﻿ using FinancialAssetsApp.Models;
 using FinancialAssetsApp.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FinancialAssetsApp.Data.Service
@@ -8,10 +9,12 @@ namespace FinancialAssetsApp.Data.Service
     public class PlatformStartupsService : IPlatformStartupService
     {
         private readonly FinanceDbContext _context; // БД
+        private readonly IMemoryCache _cache; // For cache
 
-        public PlatformStartupsService(FinanceDbContext context)  // Конструктор
+        public PlatformStartupsService(FinanceDbContext context, IMemoryCache memoryCache)  // Конструктор
         {
             _context = context;
+            _cache = memoryCache;
         }
         public async Task Add(PlatformStartup platformStartup)  // Добавление платформы в БД
         {
@@ -37,6 +40,7 @@ namespace FinancialAssetsApp.Data.Service
                 await _context.PlatformStartups.AddAsync(platformStartup);
             }
             await _context.SaveChangesAsync();  // Асинхронно сохраняем изменения в БД
+            ClearStartupsCache(platformStartup.UserId);
         }
         public async Task Delete(int id)    //Удаление акции
         {
@@ -46,6 +50,8 @@ namespace FinancialAssetsApp.Data.Service
                 _context.PlatformStartups.Remove(platform);
                 await _context.SaveChangesAsync();
             }
+            ClearStartupsCache(platform.UserId);
+
         }
         public async Task<PlatformStartup?> GetAssetById(int id)  //получение акции для удаления
         {
@@ -91,6 +97,54 @@ namespace FinancialAssetsApp.Data.Service
                 .ToListAsync();
             return data;
         }
+        public async Task<decimal?> GetPurchasePlStartupsSUM(int userId)    // Получение суммы покупки US Stocks
+        {
+            var cacheKey = $"Startups:purchase:{userId}";
+            if (_cache.TryGetValue(cacheKey, out decimal cachedSum))
+                return cachedSum;
+
+            var startups = await _context.PlatformStartups
+                .Where(s => s.UserId == userId)
+                .ToListAsync();
+
+            decimal? totalPurchaseSum = 0;
+            foreach (var startup in startups)
+            {
+                totalPurchaseSum += startup.SumOfStartups;
+            }
+            _cache.Set(
+                cacheKey,
+                totalPurchaseSum,
+                TimeSpan.FromHours(1)
+            );
+            return totalPurchaseSum;
+        }
+        private void ClearStartupsCache(int userId)
+        {
+            _cache.Remove($"Metals:purchase:{userId}");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         /*public async Task FixOldStocks()
         {
             var stocks = await _context.Stocks

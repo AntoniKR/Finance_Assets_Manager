@@ -87,6 +87,13 @@ namespace FinancialAssetsApp.Controllers
             var data = await _platformService.GetChartCount(CurrentUserId);
             return Json(data);
         }
+        public async Task<IActionResult> GetPurchaseSUM()    // Get current sum
+        {
+            var current = await _platformService.GetPurchasePlStartupsSUM(CurrentUserId);
+            return Json(current);
+        }
+
+
 
         /*public async Task<IActionResult> FixSums()
         {

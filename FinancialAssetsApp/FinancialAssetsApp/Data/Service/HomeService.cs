@@ -10,34 +10,44 @@ namespace FinancialAssetsApp.Data.Service
     {
         private readonly FinanceDbContext _context; // БД
         private readonly IAssetData _assetdata; // Для парсинга различных курсов
-        private readonly IStocksUSDService _stockUSD;
+        private readonly IStocksService _stocks;
+        private readonly IStocksUSDService _stocksUSD;
+        private readonly ICryptosService _cryptos;
+        private readonly IMetalsService _metals;
+        private readonly ICurrenciesService _currencies;
+        private readonly IPlatformStartupService _startups;
 
-        public HomeService(FinanceDbContext context, IAssetData assetdata, IStocksUSDService stockUSD)  // Конструктор
+        public HomeService(FinanceDbContext context, IAssetData assetdata, IStocksService stocksService,IStocksUSDService stockUSD, ICryptosService cryptosService, IMetalsService metalsService, ICurrenciesService currenciesService, IPlatformStartupService startupService)  // Конструктор
         {
             _context = context;
             _assetdata = assetdata;
-            _stockUSD = stockUSD;
+            _stocks = stocksService;
+            _stocksUSD = stockUSD;
+            _cryptos = cryptosService;
+            _metals = metalsService;
+            _currencies = currenciesService;
+            _startups = startupService;
         }
-        public async Task<IEnumerable<ForChart>> GetAssetsSumm (int userId)
+        public async Task<decimal> GetPurchaseTotal(int userId)    // Get Purchase total sum
         {
-            var totalStocks = await _context.Stocks
-                .Where(s => s.UserId == userId)
-                .SumAsync(e => e.SumStocks);
-            var totalStocksUSD = await _context.StocksUSD
-                .Where(s => s.UserId == userId)
-                .SumAsync(e => e.SumStocksToRuble);
-            var totalCrypto = await _context.Cryptos
-                .Where(s => s.UserId == userId)
-                .SumAsync(e => e.SumCryptoToRuble);
-            var totalMetals = await _context.Metals
-                .Where(s => s.UserId == userId)
-                .SumAsync(e => e.SumMetals);
-            var totalCurrencies = await _context.Currencies
-                .Where(s => s.UserId == userId)
-                .SumAsync(e => e.SumCurrencyToRuble);
-            var totalStartups = await _context.Startups
-                .Where(s => s.UserId == userId)
-                .SumAsync(e => e.SumStocks);
+            decimal totalPurchaseSum = 0;
+            totalPurchaseSum += await _stocks.GetPurchaseStocksSUM(userId);
+            totalPurchaseSum += await _stocksUSD.GetPurchaseUSStocksSUM(userId);
+            totalPurchaseSum += await _cryptos.GetPurchaseCryptoSUM(userId);
+            totalPurchaseSum += await _metals.GetPurchaseMetalsSUM(userId);
+            totalPurchaseSum += await _currencies.GetPurchaseCurrenciesSUM(userId);
+            //totalPurchaseSum += await (decimal)_startups.GetPurchasePlStartupsSUM(userId);
+            
+            return totalPurchaseSum;
+        }
+        public async Task<IEnumerable<ForChart>> GetAssetsSumInvested(int userId)   // For pie chart
+        {
+            var totalStocks = await _stocks.GetPurchaseStocksSUM(userId);
+            var totalStocksUSD = await _stocksUSD.GetPurchaseUSStocksSUM(userId);
+            var totalCrypto = await _cryptos.GetPurchaseCryptoSUM(userId);
+            var totalMetals = await _metals.GetPurchaseMetalsSUM(userId);
+            var totalCurrencies = await _currencies.GetPurchaseCurrenciesSUM(userId);
+            //var totalStartups = await _startups.GetPurchasePlStartupsSUM(userId);
 
             return new List<ForChart>
             {
@@ -46,65 +56,10 @@ namespace FinancialAssetsApp.Data.Service
                 new ForChart{Label = "Криптовалюта", Total = totalCrypto},
                 new ForChart{Label = "Металлы", Total = totalMetals},
                 new ForChart{Label = "Валюта", Total = totalCurrencies},
-                new ForChart{Label = "Стартапы", Total = totalStartups},
+                //new ForChart{Label = "Стартапы", Total = totalStartups},
             };
         }
-        public async Task<decimal> GetCurrentCryptoSUM(int userId)    // Получение текущего курса crypto
-        {
-            var cryptos = await _context.Cryptos
-                .Where(s => s.UserId == userId)
-                .ToListAsync();
-
-            decimal totalCurrSum = 0;
-            var usdRate = await _assetdata.GetCurrencyRate("USD");
-            foreach (var crypto in cryptos)
-            {
-                var price = await _assetdata.GetPriceCrypto(crypto.Ticker);
-                totalCurrSum += (crypto.AmountCrypto * price);                
-            }
-            totalCurrSum *= usdRate;
-            return totalCurrSum;
-        }
-        public async Task<decimal?> GetCurrentStartupsSUM(int userId)    // Получение текущего курса Startups
-        {
-            var platformStps = await _context.PlatformStartups
-                .Where(s => s.UserId == userId)
-                .ToListAsync();
-
-            decimal? totalCurrSum = 0;
-            foreach (var startups in platformStps)
-            {
-                totalCurrSum += startups.SumOfStartups;
-            }
-            return totalCurrSum;
-        }
-        public async Task<decimal> GetCurrentMetalSUM(int userId)    // Получение текущего курса Metals
-        {
-            var metals = await _context.Metals
-                .Where(s => s.UserId == userId)
-                .ToListAsync();
-
-            decimal totalCurrSum = 0;
-            foreach (var metal in metals)
-            {
-                var price = await _assetdata.GetMetalPrice(metal.NameMetal);
-                totalCurrSum += (metal.AmountMetal * price);
-            }
-            return totalCurrSum;
-        }
-        public async Task<decimal> GetCurrentRUSStocksSUM(int userId)    // Получение текущего курса RUSStocks
-        {
-            var ruStocks = await _context.Stocks
-                .Where(s => s.UserId == userId)
-                .ToListAsync();
-
-            decimal totalCurrSum = 0;
-            foreach (var stock in ruStocks)
-            {
-                totalCurrSum += stock.SumStocks;
-            }
-            return totalCurrSum;
-        }
+        
         public async Task<decimal> Get(int userId)    // Получение текущего курса RUSStocks
         {
             var ruStocks = await _context.Stocks
@@ -117,37 +72,17 @@ namespace FinancialAssetsApp.Data.Service
                 totalCurrSum += stock.SumStocks;
             }
             return totalCurrSum;
-        }
-        public async Task<decimal> GetCurrentCurrenciesSUM(int userId)    // Получение текущего курса crypto
-        {
-            var currencies = await _context.Currencies
-                .Where(s => s.UserId == userId)
-                .ToListAsync();
-
-            decimal totalCurrSum = 0;
-            var usdRate = await _assetdata.GetCurrencyRate("USD");
-            foreach (var currency in currencies)
-            {
-                var price = await _assetdata.GetCurrencyRate(currency.CharCode);
-                totalCurrSum += (currency.AmountCurrency * price);
-            }
-            return totalCurrSum;
-        }
-        public async Task<decimal> GetCurrentAss(int userId)    // Получение текущего курса всего
+        }        
+        public async Task<decimal> GetCurrentAss(int userId)    // Get current total sum
         {
             decimal totalCurrSum = 0;
+            totalCurrSum += await _stocks.GetPurchaseStocksSUM(userId);
+            totalCurrSum += await _stocksUSD.GetCurrentUSStocksSUM(userId);
+            totalCurrSum += await _cryptos.GetCurrentCryptoSUM(userId);
+            totalCurrSum += await _metals.GetCurrentMetalsSUM(userId);
+            totalCurrSum += await _currencies.GetCurrentCurrenciesSUM(userId);
+            //totalCurrSum += await _startups.GetPurchasePlStartupsSUM(userId);
 
-            /*var cryptos = await GetCurrentCryptoSUM(userId);
-            var stps = await GetCurrentStartupsSUM(userId);
-            var startups = stps.Value;
-            var metals = await GetCurrentMetalSUM(userId);
-            var ruStocks = await GetCurrentRUSStocksSUM(userId);
-            //var usStocks = await GetCurrentUSStocksSUM(userId);
-            //var currencies = await GetCurrentCurrenciesSUM(userId);
-            Console.WriteLine($"QQQQQQQQQQQQQQQQQQQQQQQQQQQQQ {cryptos}, {metals}, {startups}, {ruStocks} ");
-            totalCurrSum += (cryptos + startups + metals + ruStocks);*/
-            //var usdRate = await _assetdata.GetCurrencyRate("USD");
-            totalCurrSum += await _stockUSD.GetCurrentUSStocksSUM(userId);
             return totalCurrSum;
         }        
 

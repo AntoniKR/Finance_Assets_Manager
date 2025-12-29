@@ -45,42 +45,6 @@ fetchJson('/Stocks/GetChartT').then(data => {
         options: { responsive: false, maintainAspectRatio: false }
     });
 });
-
-
-// View current, invested and change sum USD Stocks
-document.addEventListener("DOMContentLoaded", async () => {
-    try {
-        // Current sum
-        const currentEl = document.getElementById("stocksUSDTotalCurrent");
-        const currentSum = await fetchJson('/StocksUSD/GetCurrentSUM');
-
-        currentEl.textContent = currentSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
-        //
-
-        // Change sum percent 
-        const changeSumPercentEl = document.getElementById("stocksUSDChangePercent");
-        const changeSumPercent = await fetchJson('/StocksUSD/GetChangePercentageSUM');
-        const colorClass = changeSumPercent >= 0 ? "text-success" : "text-danger";
-
-        changeSumPercentEl.classList.add(colorClass);
-        changeSumPercentEl.textContent = `(${changeSumPercent.toFixed(2)} %)`;
-        //
-
-        // Change Sum
-        const changeSumEl = document.getElementById("stocksUSDTotalChange");
-        const changeSum = await fetchJson('/StocksUSD/GetChangeSUM');
-        const arrow = changeSum >= 0 ? "▲" : "▼";
-
-        changeSumEl.textContent = arrow + " " + changeSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
-        changeSumEl.classList.add(colorClass);
-        //
-    }
-    catch (err) {
-        console.log("Error loading summ", err);
-    }
-});
-
-
 // Pie chart with total assets sum
 fetchJson('/Home/GetAssetsChart').then(data => {
     if (!data) return;
@@ -125,9 +89,8 @@ fetchJson('/Home/GetAssetsChart').then(data => {
         style: "currency", currency: "RUB"
     });
 });
-
 // Total SUM  
-fetchJson('/Home/GetCurrAssets').then(data => {
+fetchJson('/Home/GetCurrentAssets').then(data => {
     const summEl = document.getElementById("totalCurrSum");
     if (summEl) {
         summEl.innerHTML = data.toLocaleString("ru-RU", {
@@ -136,7 +99,366 @@ fetchJson('/Home/GetCurrAssets').then(data => {
         });
     }
 });
+fetchJson('/Home/GetPurchaseAssets').then(data => {
+    const summEl = document.getElementById("totalInvestedSum");
+    if (summEl) {
+        summEl.innerHTML = data.toLocaleString("ru-RU", {
+            style: "currency",
+            currency: "RUB"
+        });
+    }
+});
 
+
+
+
+// View current, invested and change sum USD Stocks
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        // Current sum
+        const currentEl = document.getElementById("stocksUSDTotalCurrent");
+        const currentSum = await fetchJson('/StocksUSD/GetCurrentSUM');
+
+        currentEl.textContent = currentSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+        //
+
+        // Change sum percent 
+        const changeSumPercentEl = document.getElementById("stocksUSDChangePercent");
+        const changeSumPercent = await fetchJson('/StocksUSD/GetChangePercentageSUM');
+        const colorClass = changeSumPercent >= 0 ? "text-success" : "text-danger";
+
+        changeSumPercentEl.classList.add(colorClass);
+        changeSumPercentEl.textContent = `(${changeSumPercent.toFixed(2)} %)`;
+        //
+
+        // Change Sum
+        const changeSumEl = document.getElementById("stocksUSDTotalChange");
+        const changeSum = await fetchJson('/StocksUSD/GetChangeSUM');
+        const arrow = changeSum >= 0 ? "▲" : "▼";
+
+        changeSumEl.textContent = arrow + " " + changeSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+        changeSumEl.classList.add(colorClass);
+        //
+    }
+    catch (err) {
+        console.log("Error loading summ", err);
+    }
+});
+// View current, invested and change sum Crypto and current prices for every crypto                          //
+document.addEventListener("DOMContentLoaded", async () => {
+
+    try {           // Total invested, current and change sum
+        // Current sum
+        const currentEl = document.getElementById("cryptoTotalCurrent");
+        const currentSum = await fetchJson('/Crypto/GetCurrentSUM');
+
+        currentEl.textContent = currentSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+        //
+
+        // Change sum percent 
+        const changeSumPercentEl = document.getElementById("cryptoChangePercent");
+        const changeSumPercent = await fetchJson('/Crypto/GetChangePercentageSUM');
+        const colorClass = changeSumPercent >= 0 ? "text-success" : "text-danger";
+
+        changeSumPercentEl.classList.add(colorClass);
+        changeSumPercentEl.textContent = `(${changeSumPercent.toFixed(2)} %)`;
+        //
+
+        // Change Sum
+        const changeSumEl = document.getElementById("cryptoTotalChange");
+        const changeSum = await fetchJson('/Crypto/GetChangeSUM');
+        const arrow = changeSum >= 0 ? "▲" : "▼";
+
+        changeSumEl.textContent = arrow + " " + changeSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+        changeSumEl.classList.add(colorClass);
+        //
+    }
+    catch (err) {
+        console.log("Error loading summ", err);
+    }
+
+    const rateUSD = await getUsdRate(); // For USD exchange rate and current cryptocurrency value
+    const chartDataCurrent = [];    // For chart building
+    const rows = document.querySelectorAll("tr[data-cryptos]");  // for chart
+    let count = 0;  // Counter for chart building   
+
+    document.querySelectorAll("tr[data-cryptos]").forEach(row => {
+
+        const symbol = row.getAttribute("data-cryptos");              // this block declares variables
+        const currPriceCell = row.querySelector(".current-price");    // for calculating changes
+        const changeSumCell = row.querySelector(".change-sum");       // in portfolio
+        const currentSumCell = row.querySelector(".current-sum");
+        const changePriceCell = row.querySelector(".change-price");
+        const changeSumRUBCell = row.querySelector(".change-sumRUB");
+        const currentSumRUBCell = row.querySelector(".current-sumRUB");
+
+        if (!symbol || !currPriceCell || !changePriceCell) return;
+
+        const purchasePrice = parseFloat(row.cells[2].textContent.replace("$", "")
+            .replace(",", ".").trim()); // extract purchase price and replace comma with dot
+        const amountCrypto = parseFloat(row.cells[5].textContent.replace("$", "").replace(",", ".").trim()); // extract quantity for calculating sum change
+        const sumRUB = parseFloat(row.cells[9].textContent.replace("₽", "").replace(",", ".").trim()); // extract quantity for calculating sum change
+
+        let decimals;   // For number precision
+        if (purchasePrice >= 1) decimals = 2;
+        else if (purchasePrice >= 0.01) decimals = 3;
+        else decimals = 7;
+
+        fetch(`/Crypto/PriceCrypto?symbol=${encodeURIComponent(symbol)}`)
+            .then(res => res.json())
+            .then(price => {
+                const sumCrypto = parseFloat(row.cells[6].textContent.replace("$", "").replace(",", ".").trim()); // Extract purchase sum and replace comma with dot
+                row.cells[2].textContent = purchasePrice.toFixed(decimals) + " $";
+                if (!price || isNaN(price)) {   // If cryptocurrency ticker not found on Bybit, show data below
+                    currPriceCell.textContent = "no data";
+                    changePriceCell.textContent = "-";
+                    changeSumCell.textContent = "-";
+                    currentSumCell.textContent = sumCrypto.toFixed(decimals) + " $";
+                    changeSumRUBCell.textContent = "-";
+
+                    const currentSum = purchasePrice * amountCrypto; // Current cryptocurrency value
+                    const currentSumRUB = currentSum * rateUSD; // Current value in rubles
+                    currentSumRUBCell.textContent = currentSumRUB.toFixed(2) + " ₽";
+
+                    const changePercentSumRUB = ((currentSumRUB - sumRUB) / sumRUB) * 100;  // Change in percent
+                    const changeFormatSumRUB = (currentSumRUB - sumRUB).toFixed(2) + " ₽" + " (" + changePercentSumRUB.toFixed(2) + " %)";
+                    changeSumRUBCell.textContent = changeFormatSumRUB;
+                    changeSumRUBCell.style.color = changePercentSumRUB >= 0 ? "green" : "red";   // Change sum color                     
+                    chartDataCurrent.push({ label: symbol, value: currentSumRUB });
+                }
+                else {
+                    const currentPrice = parseFloat(price);
+                    currPriceCell.textContent = parseFloat(price).toFixed(2) + " $";     // Current cryptocurrency price  
+
+                    const changePercent = ((currentPrice - purchasePrice) / purchasePrice) * 100;  // Change in percent
+                    const changeFormatPrice = (currentPrice - purchasePrice).toFixed(decimals) + " $" + " (" + changePercent.toFixed(2) + " %)";   // For displaying price change and percentage
+                    changePriceCell.textContent = changeFormatPrice;    // Change in dollars
+                    changePriceCell.style.color = changePercent >= 0 ? "green" : "red"; // Percentage color              
+
+                    // Change in value 
+                    const currentSum = currentPrice * amountCrypto; // Current cryptocurrency value
+                    currentSumCell.textContent = currentSum.toFixed(decimals) + " $";
+                    const changeFormatSum = (currentSum - sumCrypto).toFixed(2) + " $" + " (" + changePercent.toFixed(2) + " %)";
+                    changeSumCell.textContent = changeFormatSum;
+                    changeSumCell.style.color = changePercent >= 0 ? "green" : "red";   // Change sum color
+
+                    // Change in value in rubles
+                    const currentSumRUB = currentSum * rateUSD; // Current value in rubles
+                    currentSumRUBCell.textContent = currentSumRUB.toFixed(2) + " ₽";
+
+                    const changePercentSumRUB = ((currentSumRUB - sumRUB) / sumRUB) * 100;  // Change in percent
+                    const changeFormatSumRUB = (currentSumRUB - sumRUB).toFixed(2) + " ₽" + " (" + changePercentSumRUB.toFixed(2) + " %)";
+                    changeSumRUBCell.textContent = changeFormatSumRUB;
+                    changeSumRUBCell.style.color = changePercentSumRUB >= 0 ? "green" : "red";   // Change sum color
+
+                    chartDataCurrent.push({ label: symbol, value: currentSumRUB });
+                }
+            })
+            .catch(() => {
+                currPriceCell.textContent = "error";
+                changePriceCell.textContent = "-";
+            })
+            .finally(() => {    // When row processed, check if we can build chart
+
+                count++;
+                if (count === rows.length) {
+                    createChart('CurrentCryptoPie', {
+                        type: 'pie',
+                        data: {
+                            labels: chartDataCurrent.map(d => d.label),
+                            datasets: [{ data: chartDataCurrent.map(d => d.value) }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false }
+                    });
+                }
+            });
+
+    });
+});                  //
+// Current prices and metals chart            //
+document.addEventListener("DOMContentLoaded", async () => {
+    try {           // Total invested, current and change sum
+        // Current sum
+        const currentEl = document.getElementById("metalsTotalCurrent");
+        const currentSum = await fetchJson('/Metals/GetCurrentSUM');
+
+        currentEl.textContent = currentSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+        //
+
+        // Change sum percent 
+        const changeSumPercentEl = document.getElementById("metalsChangePercent");
+        const changeSumPercent = await fetchJson('/Metals/GetChangePercentageSUM');
+        const colorClass = changeSumPercent >= 0 ? "text-success" : "text-danger";
+
+        changeSumPercentEl.classList.add(colorClass);
+        changeSumPercentEl.textContent = `(${changeSumPercent.toFixed(2)} %)`;
+        //
+
+        // Change Sum
+        const changeSumEl = document.getElementById("metalsTotalChange");
+        const changeSum = await fetchJson('/Metals/GetChangeSUM');
+        const arrow = changeSum >= 0 ? "▲" : "▼";
+
+        changeSumEl.textContent = arrow + " " + changeSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+        changeSumEl.classList.add(colorClass);
+        //
+    }
+    catch (err) {
+        console.log("Error loading summ", err);
+    }
+    const chartDataCurrent = [];    // For chart building
+    const rows = document.querySelectorAll("tr[data-metals]");  // for chart
+    let count = 0;  // Counter for chart building
+    let totalCurrSum = 0;
+
+    document.querySelectorAll("tr[data-metals]").forEach(row => {
+
+        const symbol = row.getAttribute("data-metals");             // this block declares variables
+        const currPriceCell = row.querySelector(".current-price");  // for calculating changes
+        const changeSumCell = row.querySelector(".change-sum");     // in portfolio
+        const currentSumCell = row.querySelector(".current-sum");
+
+        if (!symbol || !currPriceCell) return;
+
+
+        const amountMetal = parseFloat(row.cells[3].textContent.replace(",", ".").trim()); // extract quantity for calculating sum change
+        let decimals = 2;   // For number precision
+
+        fetch(`/Metals/PriceMetal?nameMetal=${encodeURIComponent(symbol)}`)
+            .then(res => res.text())    // Get current price of specific metal
+            .then(price => {
+                //console.log(price);
+                const sumMetal = parseFloat(row.cells[4].textContent.replace("₽", "").replace(",", ".").trim()); // Extract purchase sum and replace comma with dot
+
+                const currentPrice = parseFloat(price.replace(",", "."));
+                currPriceCell.textContent = parseFloat(currentPrice).toFixed(decimals) + " ₽"; // Current metal price             
+
+                // Change in value 
+                const currentSum = currentPrice * amountMetal; // Current metal value
+                currentSumCell.textContent = currentSum.toFixed(decimals) + " ₽";
+                const changePercent = ((currentSum - sumMetal) / sumMetal) * 100;  // Change in percent
+                const changeFormatSum = (currentSum - sumMetal).toFixed(2) + " ₽" + " (" + changePercent.toFixed(2) + " %)";
+                changeSumCell.textContent = changeFormatSum;
+                changeSumCell.style.color = changePercent >= 0 ? "green" : "red";   // Change sum color
+                chartDataCurrent.push({ label: symbol, value: currentSum });
+            })
+            .catch(() => {  // Catch error
+                currPriceCell.textContent = "error";
+            })
+            .finally(() => {    // When row processed, check if we can build chart
+                count++;
+                if (count === rows.length) {
+                    
+                    createChart('CurrentPricePie', {
+                        type: 'pie',
+                        data: {
+                            labels: chartDataCurrent.map(d => d.label),
+                            datasets: [{ data: chartDataCurrent.map(d => d.value) }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false }
+                    });
+                }
+            });
+
+
+    });
+
+});                 // Metals 
+
+// Current prices and currency chart           //
+document.addEventListener("DOMContentLoaded", async () => {
+    try {           // Total invested, current and change sum
+        // Current sum
+        const currentEl = document.getElementById("currencyTotalCurrent");
+        const currentSum = await fetchJson('/Currency/GetCurrentSUM');
+
+        currentEl.textContent = currentSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+        //
+
+        // Change sum percent 
+        const changeSumPercentEl = document.getElementById("currencyChangePercent");
+        const changeSumPercent = await fetchJson('/Currency/GetChangePercentageSUM');
+        const colorClass = changeSumPercent >= 0 ? "text-success" : "text-danger";
+
+        changeSumPercentEl.classList.add(colorClass);
+        changeSumPercentEl.textContent = `(${changeSumPercent.toFixed(2)} %)`;
+        //
+
+        // Change Sum
+        const changeSumEl = document.getElementById("currencyTotalChange");
+        const changeSum = await fetchJson('/Currency/GetChangeSUM');
+        const arrow = changeSum >= 0 ? "▲" : "▼";
+
+        changeSumEl.textContent = arrow + " " + changeSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+        changeSumEl.classList.add(colorClass);
+        //
+    }
+    catch (err) {
+        console.log("Error loading summ", err);
+    }
+    const chartDataCurrent = [];    // For chart building
+    const rows = document.querySelectorAll("tr[data-currency]");  // for chart
+    let count = 0;  // Counter for chart building
+
+    let totalCurrSum = 0;
+    const el = document.getElementById("totalCurrSum");
+
+    document.querySelectorAll("tr[data-currency]").forEach(row => {
+
+        const symbol = row.getAttribute("data-currency");    // this block declares variables
+        const currPriceCell = row.querySelector(".current-price");  // for calculating changes
+        const changePriceCell = row.querySelector(".change-price");     // in portfolio
+        const changeSumRUBCell = row.querySelector(".change-sumRUB");
+        const currentSumRUBCell = row.querySelector(".current-sumRUB");
+        const nameCurrency = row.querySelector(".nameCurrency");    // for current currency price chart
+        if (!symbol || !currPriceCell) return;
+
+
+        const amountCurrency = parseFloat(row.cells[5].textContent.replace(",", ".").trim()); // extract quantity for calculating sum change
+        const purchaseCurrency = parseFloat(row.cells[2].textContent.replace(",", ".").trim()); // Currency purchase price
+        const sumPurchase = parseFloat(row.cells[6].textContent.replace(",", ".").trim()); // Currency purchase sum
+        let decimals = 2;   // For number precision
+        fetch(`/Currency/PriceCurrency?symbol=${encodeURIComponent(symbol)}`)
+            .then(res => res.text())    // Get current price of specific currency
+            .then(price => {
+
+                const currentPrice = parseFloat(price);
+                currPriceCell.textContent = parseFloat(currentPrice).toFixed(decimals) + " ₽"; // Current currency price                
+                const changePercent = ((currentPrice - purchaseCurrency) / purchaseCurrency) * 100;  // Change in percent
+                const changeFormatPrice = (currentPrice - purchaseCurrency).toFixed(2) + " ₽" + " (" + changePercent.toFixed(2) + " %)";
+                // Price change
+                changePriceCell.textContent = changeFormatPrice;
+                changePriceCell.style.color = changePercent >= 0 ? "green" : "red";   // Change sum color
+
+                const currentSum = currentPrice * amountCurrency; // Current currency value
+                currentSumRUBCell.textContent = currentSum.toFixed(decimals) + " ₽";
+
+                const changeFormatSum = (currentSum - sumPurchase).toFixed(2) + " ₽" + " (" + changePercent.toFixed(2) + " %)";
+                // Price change
+
+                changeSumRUBCell.textContent = changeFormatSum;
+                changeSumRUBCell.style.color = changePercent >= 0 ? "green" : "red";   // Change sum color
+                chartDataCurrent.push({ label: nameCurrency.textContent, value: currentSum });
+            })
+            .catch(() => {  // Catch error
+                currPriceCell.textContent = "error";
+            })
+            .finally(() => {    // When row processed, check if we can build chart
+                count++;
+                if (count === rows.length) {                  
+                    createChart('CurrentCurrencyPie', {
+                        type: 'pie',
+                        data: {
+                            labels: chartDataCurrent.map(d => d.label),
+                            datasets: [{ data: chartDataCurrent.map(d => d.value) }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false }
+                    });
+                }
+            });
+    });
+
+});                 //
 
 
 
@@ -346,95 +668,7 @@ fetchJson('/RealEstate/GetChartT').then(data => {
 });
 
 
-// Current prices and currency chart           //
-document.addEventListener("DOMContentLoaded", () => {
 
-    const chartDataCurrent = [];    // For chart building
-    const rows = document.querySelectorAll("tr[data-currency]");  // for chart
-    let count = 0;  // Counter for chart building
-
-    let totalCurrSum = 0;
-    const el = document.getElementById("totalCurrSum");
-    const investedSum = parseFloat(
-        document.getElementById("investedSum").dataset.value
-    ) || 0;
-
-    document.querySelectorAll("tr[data-currency]").forEach(row => {
-
-        const symbol = row.getAttribute("data-currency");    // this block declares variables
-        const currPriceCell = row.querySelector(".current-price");  // for calculating changes
-        const changePriceCell = row.querySelector(".change-price");     // in portfolio
-        const changeSumRUBCell = row.querySelector(".change-sumRUB");
-        const currentSumRUBCell = row.querySelector(".current-sumRUB");
-        const nameCurrency = row.querySelector(".nameCurrency");    // for current currency price chart
-        if (!symbol || !currPriceCell) return;
-
-
-        const amountCurrency = parseFloat(row.cells[5].textContent.replace(",", ".").trim()); // extract quantity for calculating sum change
-        const purchaseCurrency = parseFloat(row.cells[2].textContent.replace(",", ".").trim()); // Currency purchase price
-        const sumPurchase = parseFloat(row.cells[6].textContent.replace(",", ".").trim()); // Currency purchase sum
-        let decimals = 2;   // For number precision
-        fetch(`/Currency/PriceCurrency?symbol=${encodeURIComponent(symbol)}`)
-            .then(res => res.text())    // Get current price of specific currency
-            .then(price => {
-
-                const currentPrice = parseFloat(price);
-                currPriceCell.textContent = parseFloat(currentPrice).toFixed(decimals) + " ₽"; // Current currency price                
-                const changePercent = ((currentPrice - purchaseCurrency) / purchaseCurrency) * 100;  // Change in percent
-                const changeFormatPrice = (currentPrice - purchaseCurrency).toFixed(2) + " ₽" + " (" + changePercent.toFixed(2) + " %)";
-                // Price change
-                changePriceCell.textContent = changeFormatPrice;
-                changePriceCell.style.color = changePercent >= 0 ? "green" : "red";   // Change sum color
-
-                const currentSum = currentPrice * amountCurrency; // Current currency value
-                currentSumRUBCell.textContent = currentSum.toFixed(decimals) + " ₽";
-
-                const changeFormatSum = (currentSum - sumPurchase).toFixed(2) + " ₽" + " (" + changePercent.toFixed(2) + " %)";
-                // Price change
-
-                changeSumRUBCell.textContent = changeFormatSum;
-                changeSumRUBCell.style.color = changePercent >= 0 ? "green" : "red";   // Change sum color
-                totalCurrSum += currentSum;
-                chartDataCurrent.push({ label: nameCurrency.textContent, value: currentSum });
-            })
-            .catch(() => {  // Catch error
-                currPriceCell.textContent = "error";
-            })
-            .finally(() => {    // When row processed, check if we can build chart
-                count++;
-                if (count === rows.length) {
-
-                    const changeValue = totalCurrSum - investedSum; // For show 
-                    const changePercent = investedSum !== 0 //change Total Sum
-                        ? (changeValue / investedSum) * 100
-                        : 0;
-                    const changeEl = document.getElementById("totalChange");
-                    const percentEl = document.getElementById("totalChangePercent");
-                    // Форматирование
-                    const arrow = changeValue >= 0 ? "▲" : "▼";
-                    const colorClass = changeValue >= 0 ? "text-success" : "text-danger";
-
-                    changeEl.textContent = arrow + " " + changeValue.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
-                    percentEl.textContent = `(${changePercent.toFixed(2)} %)`;
-
-                    changeEl.classList.add(colorClass);
-                    percentEl.classList.add(colorClass);
-
-                    el.innerHTML = totalCurrSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
-
-                    createChart('CurrentCurrencyPie', {
-                        type: 'pie',
-                        data: {
-                            labels: chartDataCurrent.map(d => d.label),
-                            datasets: [{ data: chartDataCurrent.map(d => d.value) }]
-                        },
-                        options: { responsive: true, maintainAspectRatio: false }
-                    });
-                }
-            });
-    });
-
-});                 //
 // Currency pie chart                //
 fetchJson('/Currency/GetChartTicker').then(data => {
     if (!data) return;
@@ -502,165 +736,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 });                  //
 
-// Current cryptocurrency prices                          //
-document.addEventListener("DOMContentLoaded", async () => {
 
-    const rateUSD = await getUsdRate(); // For USD exchange rate and current cryptocurrency value
-    const chartDataCurrent = [];    // For chart building
-    const rows = document.querySelectorAll("tr[data-cryptos]");  // for chart
-    let count = 0;  // Counter for chart building
-
-    let totalCurrSum = 0;
-    const el = document.getElementById("totalCurrSum");
-    const investedSum = parseFloat(
-        document.getElementById("investedSum").dataset.value
-    ) || 0;
-
-    document.querySelectorAll("tr[data-cryptos]").forEach(row => {
-
-        const symbol = row.getAttribute("data-cryptos");              // this block declares variables
-        const currPriceCell = row.querySelector(".current-price");    // for calculating changes
-        const changeSumCell = row.querySelector(".change-sum");       // in portfolio
-        const currentSumCell = row.querySelector(".current-sum");
-        const changePriceCell = row.querySelector(".change-price");
-        const changeSumRUBCell = row.querySelector(".change-sumRUB");
-        const currentSumRUBCell = row.querySelector(".current-sumRUB");
-
-        if (!symbol || !currPriceCell || !changePriceCell) return;
-
-        const purchasePrice = parseFloat(row.cells[2].textContent.replace("$", "")
-            .replace(",", ".").trim()); // extract purchase price and replace comma with dot
-        const amountCrypto = parseFloat(row.cells[5].textContent.replace("$", "").replace(",", ".").trim()); // extract quantity for calculating sum change
-        const sumRUB = parseFloat(row.cells[9].textContent.replace("₽", "").replace(",", ".").trim()); // extract quantity for calculating sum change
-
-        let decimals;   // For number precision
-        if (purchasePrice >= 1) decimals = 2;
-        else if (purchasePrice >= 0.01) decimals = 3;
-        else decimals = 7;
-
-        fetch(`/Crypto/PriceCrypto?symbol=${encodeURIComponent(symbol)}`)
-            .then(res => res.json())
-            .then(price => {
-                const sumCrypto = parseFloat(row.cells[6].textContent.replace("$", "").replace(",", ".").trim()); // Extract purchase sum and replace comma with dot
-                row.cells[2].textContent = purchasePrice.toFixed(decimals) + " $";
-                if (!price || isNaN(price)) {   // If cryptocurrency ticker not found on Bybit, show data below
-                    currPriceCell.textContent = "no data";
-                    changePriceCell.textContent = "-";
-                    changeSumCell.textContent = "-";
-                    currentSumCell.textContent = sumCrypto.toFixed(decimals) + " $";
-                    changeSumRUBCell.textContent = "-";
-
-                    const currentSum = purchasePrice * amountCrypto; // Current cryptocurrency value
-                    const currentSumRUB = currentSum * rateUSD; // Current value in rubles
-                    currentSumRUBCell.textContent = currentSumRUB.toFixed(2) + " ₽";
-
-                    const changePercentSumRUB = ((currentSumRUB - sumRUB) / sumRUB) * 100;  // Change in percent
-                    const changeFormatSumRUB = (currentSumRUB - sumRUB).toFixed(2) + " ₽" + " (" + changePercentSumRUB.toFixed(2) + " %)";
-                    changeSumRUBCell.textContent = changeFormatSumRUB;
-                    changeSumRUBCell.style.color = changePercentSumRUB >= 0 ? "green" : "red";   // Change sum color 
-                    totalCurrSum += currentSumRUB;
-                    chartDataCurrent.push({ label: symbol, value: currentSumRUB });
-                }
-                else {
-                    const currentPrice = parseFloat(price);
-                    currPriceCell.textContent = parseFloat(price).toFixed(2) + " $";     // Current cryptocurrency price  
-
-                    const changePercent = ((currentPrice - purchasePrice) / purchasePrice) * 100;  // Change in percent
-                    const changeFormatPrice = (currentPrice - purchasePrice).toFixed(decimals) + " $" + " (" + changePercent.toFixed(2) + " %)";   // For displaying price change and percentage
-                    changePriceCell.textContent = changeFormatPrice;    // Change in dollars
-                    changePriceCell.style.color = changePercent >= 0 ? "green" : "red"; // Percentage color              
-
-                    // Change in value 
-                    const currentSum = currentPrice * amountCrypto; // Current cryptocurrency value
-                    currentSumCell.textContent = currentSum.toFixed(decimals) + " $";
-                    const changeFormatSum = (currentSum - sumCrypto).toFixed(2) + " $" + " (" + changePercent.toFixed(2) + " %)";
-                    changeSumCell.textContent = changeFormatSum;
-                    changeSumCell.style.color = changePercent >= 0 ? "green" : "red";   // Change sum color
-
-                    // Change in value in rubles
-                    const currentSumRUB = currentSum * rateUSD; // Current value in rubles
-                    currentSumRUBCell.textContent = currentSumRUB.toFixed(2) + " ₽";
-
-                    const changePercentSumRUB = ((currentSumRUB - sumRUB) / sumRUB) * 100;  // Change in percent
-                    const changeFormatSumRUB = (currentSumRUB - sumRUB).toFixed(2) + " ₽" + " (" + changePercentSumRUB.toFixed(2) + " %)";
-                    changeSumRUBCell.textContent = changeFormatSumRUB;
-                    changeSumRUBCell.style.color = changePercentSumRUB >= 0 ? "green" : "red";   // Change sum color
-
-                    chartDataCurrent.push({ label: symbol, value: currentSumRUB });
-                }
-            })
-            .catch(() => {
-                currPriceCell.textContent = "error";
-                changePriceCell.textContent = "-";
-            })
-            .finally(() => {    // When row processed, check if we can build chart
-
-                count++;
-                if (count === rows.length) {
-
-                    const changeValue = totalCurrSum - investedSum; // For show 
-                    const changePercent = investedSum !== 0 //change Total Sum
-                        ? (changeValue / investedSum) * 100
-                        : 0;
-                    const changeEl = document.getElementById("totalChange");
-                    const percentEl = document.getElementById("totalChangePercent");
-                    // Форматирование
-                    const arrow = changeValue >= 0 ? "▲" : "▼";
-                    const colorClass = changeValue >= 0 ? "text-success" : "text-danger";
-
-                    changeEl.textContent = arrow + " " + changeValue.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
-                    percentEl.textContent = `(${changePercent.toFixed(2)} %)`;
-
-                    changeEl.classList.add(colorClass);
-                    percentEl.classList.add(colorClass);
-
-                    el.innerHTML = totalCurrSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
-
-                    createChart('CurrentCryptoPie', {
-                        type: 'pie',
-                        data: {
-                            labels: chartDataCurrent.map(d => d.label),
-                            datasets: [{ data: chartDataCurrent.map(d => d.value) }]
-                        },
-                        options: { responsive: true, maintainAspectRatio: false }
-                    });
-                }
-            });
-
-    });
-});                  //
-// View current, invested and change sum Crypto
-document.addEventListener("DOMContentLoaded", async () => {
-    try {
-        // Current sum
-        const currentEl = document.getElementById("cryptoTotalCurrent");
-        const currentSum = await fetchJson('/Crypto/GetCurrentSUM');
-
-        currentEl.textContent = currentSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
-        //
-
-        // Change sum percent 
-        const changeSumPercentEl = document.getElementById("cryptoChangePercent");
-        const changeSumPercent = await fetchJson('/Crypto/GetChangePercentageSUM');
-        const colorClass = changeSumPercent >= 0 ? "text-success" : "text-danger";
-
-        changeSumPercentEl.classList.add(colorClass);
-        changeSumPercentEl.textContent = `(${changeSumPercent.toFixed(2)} %)`;
-        //
-
-        // Change Sum
-        const changeSumEl = document.getElementById("cryptoTotalChange");
-        const changeSum = await fetchJson('/Crypto/GetChangeSUM');
-        const arrow = changeSum >= 0 ? "▲" : "▼";
-
-        changeSumEl.textContent = arrow + " " + changeSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
-        changeSumEl.classList.add(colorClass);
-        //
-    }
-    catch (err) {
-        console.log("Error loading summ", err);
-    }
-});
 // Crypto pie chart
 fetchJson('/Crypto/GetChartTicker').then(data => {
     if (!data) return;
@@ -687,88 +763,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
 
-// Current prices and metals chart            //
-document.addEventListener("DOMContentLoaded", () => {
 
-    const chartDataCurrent = [];    // For chart building
-    const rows = document.querySelectorAll("tr[data-metals]");  // for chart
-    let count = 0;  // Counter for chart building
-    let totalCurrSum = 0;
-    const el = document.getElementById("totalCurrSum");
-    const investedSum = parseFloat(
-        document.getElementById("investedSum").dataset.value
-    ) || 0;
-    document.querySelectorAll("tr[data-metals]").forEach(row => {
-
-        const symbol = row.getAttribute("data-metals");             // this block declares variables
-        const currPriceCell = row.querySelector(".current-price");  // for calculating changes
-        const changeSumCell = row.querySelector(".change-sum");     // in portfolio
-        const currentSumCell = row.querySelector(".current-sum");
-
-        if (!symbol || !currPriceCell) return;
-
-
-        const amountMetal = parseFloat(row.cells[3].textContent.replace(",", ".").trim()); // extract quantity for calculating sum change
-        let decimals = 2;   // For number precision
-
-        fetch(`/Metals/PriceMetal?nameMetal=${encodeURIComponent(symbol)}`)
-            .then(res => res.text())    // Get current price of specific metal
-            .then(price => {
-                //console.log(price);
-                const sumMetal = parseFloat(row.cells[4].textContent.replace("₽", "").replace(",", ".").trim()); // Extract purchase sum and replace comma with dot
-
-                const currentPrice = parseFloat(price.replace(",", "."));
-                currPriceCell.textContent = parseFloat(currentPrice).toFixed(decimals) + " ₽"; // Current metal price             
-
-                // Change in value 
-                const currentSum = currentPrice * amountMetal; // Current metal value
-                currentSumCell.textContent = currentSum.toFixed(decimals) + " ₽";
-                const changePercent = ((currentSum - sumMetal) / sumMetal) * 100;  // Change in percent
-                const changeFormatSum = (currentSum - sumMetal).toFixed(2) + " ₽" + " (" + changePercent.toFixed(2) + " %)";
-                changeSumCell.textContent = changeFormatSum;
-                changeSumCell.style.color = changePercent >= 0 ? "green" : "red";   // Change sum color
-                totalCurrSum += currentSum;
-                chartDataCurrent.push({ label: symbol, value: currentSum });
-            })
-            .catch(() => {  // Catch error
-                currPriceCell.textContent = "error";
-            })
-            .finally(() => {    // When row processed, check if we can build chart
-                count++;
-                if (count === rows.length) {
-                    const changeValue = totalCurrSum - investedSum; // For show 
-                    const changePercent = investedSum !== 0 //change Total Sum
-                        ? (changeValue / investedSum) * 100
-                        : 0;
-                    const changeEl = document.getElementById("totalChange");
-                    const percentEl = document.getElementById("totalChangePercent");
-                    // Форматирование
-                    const arrow = changeValue >= 0 ? "▲" : "▼";
-                    const colorClass = changeValue >= 0 ? "text-success" : "text-danger";
-
-                    changeEl.textContent = arrow + " " + changeValue.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
-                    percentEl.textContent =`(${changePercent.toFixed(2)} %)`;
-
-                    changeEl.classList.add(colorClass);
-                    percentEl.classList.add(colorClass);
-
-                    el.innerHTML = totalCurrSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
-
-                    createChart('CurrentPricePie', {
-                        type: 'pie',
-                        data: {
-                            labels: chartDataCurrent.map(d => d.label),
-                            datasets: [{ data: chartDataCurrent.map(d => d.value) }]
-                        },
-                        options: { responsive: true, maintainAspectRatio: false }
-                    });
-                }
-            });
-        
-
-    });
-    
-});                 // Metals 
 // Metals purchase pie chart         //
 fetchJson('/Metals/GetChartT').then(data => {
     if (!data) return;
