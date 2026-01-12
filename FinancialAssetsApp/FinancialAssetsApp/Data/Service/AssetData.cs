@@ -145,14 +145,23 @@ namespace FinancialAssetsApp.Data.Service
                         int temp = int.Parse(day) - 1;
                         day = temp.ToString();
                     }
+                    else if (int.Parse(month) == 1)
+                    {
+                        int temp = 12;
+                        month = temp.ToString();
+                        temp = 31;
+                        day = temp.ToString();
+                        temp = 1;
+                        year = (int.Parse(year) - temp).ToString();
+                    }
                     else
                     {
-                        int temp = int.Parse(month) - 1;
-                        month = temp.ToString();
+                        int temp = 1;
+                        month = (int.Parse(month) - temp).ToString();
                         temp = 28;
                         day = temp.ToString();
                     }
-                    continue;
+                        continue;
                 }
                 else
                 {                 
