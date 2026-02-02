@@ -77,7 +77,7 @@ namespace FinancialAssetsApp
             app.UseStaticFiles();
             app.UseSession();
 
-            app.Use(async (context, next) =>    //Autologin admin, comment if we want see Login page
+            /*app.Use(async (context, next) =>    //Autologin admin, comment if we want see Login page
             {
                 // If the session is not yet established
                 if (!context.Session.Keys.Contains("User"))
@@ -95,14 +95,14 @@ namespace FinancialAssetsApp
                 }
 
                 await next.Invoke();
-            });
+            });*/
 
             app.UseRouting();
             app.UseAuthorization(); // Authorization
             app.MapControllerRoute(
                 name: "default",
-                //pattern: "{controller=Account}/{action=Login}/{id?}");    // Uncomment and the page will load under the admin
-                pattern: "{controller=Home}/{action=Index}/{id?}");         // Comment
+                pattern: "{controller=Account}/{action=Login}/{id?}");    // Uncomment and the page will load under the admin
+                //pattern: "{controller=Home}/{action=Index}/{id?}");         // Comment
             app.Run();
         }
     }
