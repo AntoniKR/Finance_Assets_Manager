@@ -45,69 +45,93 @@ fetchJson('/Stocks/GetChartT').then(data => {
         options: { responsive: false, maintainAspectRatio: false }
     });
 });
-// Pie chart with total assets sum
-fetchJson('/Home/GetAssetsChart').then(data => {
-    if (!data) return;
-    const totalSum = data.reduce((sum, item) => sum + item.total, 0);
 
-    createChart('SummPie', {
-        type: 'pie',
-        data: {
-            labels: data.map(d => d.label),
-            datasets: [{ data: data.map(d => d.total) }]
-        },
-        options: { responsive: false, maintainAspectRatio: false }
-    });
+document.addEventListener("DOMContentLoaded", async () => {
+    // Pie chart with total assets sum
+    fetchJson('/Home/GetAssetsChart').then(data => {
+        if (!data) return;
+        const totalSum = data.reduce((sum, item) => sum + item.total, 0);
 
-    createChart('SummBar', {
-        type: 'bar',
-        data: {
-            labels: data.map(d => d.label),
-            datasets: [{
-                label: "Portfolio Share %",
-                data: data.map(d => ((d.total / totalSum) * 100).toFixed(2)),
-            }]
-        },
-        options: {
-            responsive: false,
-            maintainAspectRatio: false,
-            plugins: {
-                datalabels: {
-                    anchor: 'end',
-                    align: 'top',
-                    offset: -2,
-                    formatter: v => v + "%",
-                    font: { weight: 'bold' },
-                    color: '#000'
+        createChart('SummPie', {
+            type: 'pie',
+            data: {
+                labels: data.map(d => d.label),
+                datasets: [{ data: data.map(d => d.total) }]
+            },
+            options: { responsive: false, maintainAspectRatio: false }
+        });
+
+        createChart('SummBar', {
+            type: 'bar',
+            data: {
+                labels: data.map(d => d.label),
+                datasets: [{
+                    label: "Portfolio Share %",
+                    data: data.map(d => ((d.total / totalSum) * 100).toFixed(2)),
+                }]
+            },
+            options: {
+                responsive: false,
+                maintainAspectRatio: false,
+                plugins: {
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        offset: -2,
+                        formatter: v => v + "%",
+                        font: { weight: 'bold' },
+                        color: '#000'
+                    }
                 }
             }
+        });
+
+        const summEl = document.getElementById("Summ");
+        if (summEl) summEl.innerHTML = totalSum.toLocaleString("ru-RU", {
+            style: "currency", currency: "RUB"
+        });
+    });
+    // Total current SUM  
+    fetchJson('/Home/GetCurrentAssets').then(data => {
+        const summEl = document.getElementById("totalCurrSum");
+        if (summEl) {
+            summEl.innerHTML = data.toLocaleString("ru-RU", {
+                style: "currency",
+                currency: "RUB"
+            });
         }
     });
-
-    const summEl = document.getElementById("Summ");
-    if (summEl) summEl.innerHTML = totalSum.toLocaleString("ru-RU", {
-        style: "currency", currency: "RUB"
+    // Total Purchase SUM
+    fetchJson('/Home/GetPurchaseAssets').then(data => {
+        const summEl = document.getElementById("totalInvestedSum");
+        if (summEl) {
+            summEl.innerHTML = data.toLocaleString("ru-RU", {
+                style: "currency",
+                currency: "RUB"
+            });
+        }
     });
-});
-// Total SUM  
-fetchJson('/Home/GetCurrentAssets').then(data => {
-    const summEl = document.getElementById("totalCurrSum");
-    if (summEl) {
-        summEl.innerHTML = data.toLocaleString("ru-RU", {
-            style: "currency",
-            currency: "RUB"
-        });
-    }
-});
-fetchJson('/Home/GetPurchaseAssets').then(data => {
-    const summEl = document.getElementById("totalInvestedSum");
-    if (summEl) {
-        summEl.innerHTML = data.toLocaleString("ru-RU", {
-            style: "currency",
-            currency: "RUB"
-        });
-    }
-});
+    // Change sum percent 
+    const changeSumPercentEl = document.getElementById("totalChangePercent");
+    const changeSumPercent = await fetchJson('/Home/GetPercentageChangeSum');
+    const colorClass = changeSumPercent >= 0 ? "text-success" : "text-danger";
+
+    changeSumPercentEl.classList.add(colorClass);
+    changeSumPercentEl.textContent = `(${changeSumPercent.toFixed(2)} %)`;
+    //
+
+    // Change Sum
+    const changeSumEl = document.getElementById("totalChange");
+    const changeSum = await fetchJson('/Home/GetChangeSum');
+    const arrow = changeSum >= 0 ? "▲" : "▼";
+
+    changeSumEl.textContent = arrow + " " + changeSum.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ₽";
+    changeSumEl.classList.add(colorClass);
+    //
+});               
+
+
+
 
 
 

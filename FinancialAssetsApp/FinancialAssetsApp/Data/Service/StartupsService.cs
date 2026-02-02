@@ -88,8 +88,6 @@ namespace FinancialAssetsApp.Data.Service
                 .ToListAsync();
             return platforms;
         }
-
-
         public async Task<IEnumerable<Startup>> GetAll()
         { 
             var startup = await _context.Startups.ToListAsync();  // Перечисление всех данных из БД
@@ -121,7 +119,52 @@ namespace FinancialAssetsApp.Data.Service
                 })
                 .ToListAsync();
             return data;
-        }
+        }        
+        /*public async Task<decimal> GetPurchaseStartupsSUM(int userId)    // Получение суммы покупки US Stocks
+        {
+            var cacheKey = $"Metals:purchase:{userId}";
+            if (_cache.TryGetValue(cacheKey, out decimal cachedSum))
+                return cachedSum;
+
+            var metals = await _context.Metals
+                .Where(s => s.UserId == userId)
+                .ToListAsync();
+
+            decimal totalPurchaseSum = 0;
+            foreach (var metal in metals)
+            {
+                totalPurchaseSum += metal.SumMetals;
+            }
+            _cache.Set(
+                cacheKey,
+                totalPurchaseSum,
+                TimeSpan.FromHours(1)
+            );
+            return totalPurchaseSum;
+        }*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         /*public async Task FixOldStocks()
         {
             var stocks = await _context.Stocks

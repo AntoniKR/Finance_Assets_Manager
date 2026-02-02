@@ -84,7 +84,7 @@ namespace FinancialAssetsApp.Data.Service
                 .ToListAsync();
             return data;
         }
-        public async Task<decimal> GetCurrentCurrenciesSUM(int userId)    // Получение текущего курса Metals
+        public async Task<decimal> GetCurrentCurrenciesSUM(int userId)    // Получение текущего курса Currencies
         {
             var cacheKey = $"Currencies:current:{userId}";
             if (_cache.TryGetValue(cacheKey, out decimal cachedSum))

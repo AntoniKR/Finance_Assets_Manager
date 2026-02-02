@@ -16,17 +16,14 @@ namespace FinancialAssetsApp.Controllers
             _logger = logger;
             _homeService = homeService;
         }
-
         public IActionResult Index()
         {
             return View();
         }
-
         public IActionResult Privacy()
         {
             return View();
         }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
@@ -39,7 +36,7 @@ namespace FinancialAssetsApp.Controllers
         }
         public async Task<IActionResult> GetPurchaseAssets()
         {
-            var data = await _homeService.GetCurrentAss(CurrentUserId);
+            var data = await _homeService.GetPurchaseTotal(CurrentUserId);
             return Json(data);
         }
         public async Task<IActionResult> GetCurrentAssets()
@@ -47,6 +44,21 @@ namespace FinancialAssetsApp.Controllers
             var data = await _homeService.GetCurrentAss(CurrentUserId);
             return Json(data);
         }
+        public async Task<IActionResult> GetChangeSum()
+        {
+            var currSum = await _homeService.GetCurrentAss(CurrentUserId);
+            var purchSum = await _homeService.GetPurchaseTotal(CurrentUserId);
+            var changeSum = currSum - purchSum;
+            return Json(changeSum);
+        }
+        public async Task<IActionResult> GetPercentageChangeSum()
+        {
+            var currSum = await _homeService.GetCurrentAss(CurrentUserId);
+            var purchSum = await _homeService.GetPurchaseTotal(CurrentUserId);
+            var changePercentSum = (((currSum - purchSum) / purchSum) * 100);
+            return Json(changePercentSum);
+        }
+
 
 
 

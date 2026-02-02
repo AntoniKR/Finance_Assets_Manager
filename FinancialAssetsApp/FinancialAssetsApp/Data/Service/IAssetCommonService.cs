@@ -46,7 +46,7 @@ namespace FinancialAssetsApp.Data.Service
     {
         Task<IEnumerable<ForChart>> GetChartTicker(int userId);
         Task<IEnumerable<ForChart>> GetChartCount(int userId);
-        Task<decimal?> GetPurchasePlStartupsSUM(int userId);
+        Task<decimal> GetPurchasePlStartupsSUM(int userId);
 
     }
     public interface IStartupService : IAssetCommonService<Startup>

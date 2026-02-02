@@ -35,9 +35,9 @@ namespace FinancialAssetsApp.Data.Service
             totalPurchaseSum += await _stocksUSD.GetPurchaseUSStocksSUM(userId);
             totalPurchaseSum += await _cryptos.GetPurchaseCryptoSUM(userId);
             totalPurchaseSum += await _metals.GetPurchaseMetalsSUM(userId);
-            totalPurchaseSum += await _currencies.GetPurchaseCurrenciesSUM(userId);
-            //totalPurchaseSum += await (decimal)_startups.GetPurchasePlStartupsSUM(userId);
-            
+            totalPurchaseSum += await _currencies.GetPurchaseCurrenciesSUM(userId);            
+            totalPurchaseSum += await _startups.GetPurchasePlStartupsSUM(userId);
+
             return totalPurchaseSum;
         }
         public async Task<IEnumerable<ForChart>> GetAssetsSumInvested(int userId)   // For pie chart
@@ -58,31 +58,17 @@ namespace FinancialAssetsApp.Data.Service
                 new ForChart{Label = "Валюта", Total = totalCurrencies},
                 //new ForChart{Label = "Стартапы", Total = totalStartups},
             };
-        }
-        
-        public async Task<decimal> Get(int userId)    // Получение текущего курса RUSStocks
-        {
-            var ruStocks = await _context.Stocks
-                .Where(s => s.UserId == userId)
-                .ToListAsync();
-
-            decimal totalCurrSum = 0;
-            foreach (var stock in ruStocks)
-            {
-                totalCurrSum += stock.SumStocks;
-            }
-            return totalCurrSum;
-        }        
+        }         
         public async Task<decimal> GetCurrentAss(int userId)    // Get current total sum
         {
             decimal totalCurrSum = 0;
             totalCurrSum += await _stocks.GetPurchaseStocksSUM(userId);
+
             totalCurrSum += await _stocksUSD.GetCurrentUSStocksSUM(userId);
             totalCurrSum += await _cryptos.GetCurrentCryptoSUM(userId);
             totalCurrSum += await _metals.GetCurrentMetalsSUM(userId);
             totalCurrSum += await _currencies.GetCurrentCurrenciesSUM(userId);
-            //totalCurrSum += await _startups.GetPurchasePlStartupsSUM(userId);
-
+            totalCurrSum += await _startups.GetPurchasePlStartupsSUM(userId);
             return totalCurrSum;
         }        
 
@@ -102,6 +88,19 @@ namespace FinancialAssetsApp.Data.Service
                 new ForChart{Label = "Недвижимость", Total = totalEstate},
                 new ForChart{Label = "Транспорт", Total = totalTrans}
             };
+        }
+        public async Task<decimal> Get(int userId)    // Получение текущего курса RUSStocks
+        {
+            var ruStocks = await _context.Stocks
+                .Where(s => s.UserId == userId)
+                .ToListAsync();
+
+            decimal totalCurrSum = 0;
+            foreach (var stock in ruStocks)
+            {
+                totalCurrSum += stock.SumStocks;
+            }
+            return totalCurrSum;
         }
         public async Task<decimal> GetRate()
         {

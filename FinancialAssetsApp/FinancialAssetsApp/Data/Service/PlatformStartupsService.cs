@@ -97,7 +97,7 @@ namespace FinancialAssetsApp.Data.Service
                 .ToListAsync();
             return data;
         }
-        public async Task<decimal?> GetPurchasePlStartupsSUM(int userId)    // Получение суммы покупки US Stocks
+        public async Task<decimal> GetPurchasePlStartupsSUM(int userId)    // Получение суммы покупки Startups
         {
             var cacheKey = $"Startups:purchase:{userId}";
             if (_cache.TryGetValue(cacheKey, out decimal cachedSum))
@@ -117,7 +117,7 @@ namespace FinancialAssetsApp.Data.Service
                 totalPurchaseSum,
                 TimeSpan.FromHours(1)
             );
-            return totalPurchaseSum;
+            return totalPurchaseSum ?? 0;
         }
         private void ClearStartupsCache(int userId)
         {
