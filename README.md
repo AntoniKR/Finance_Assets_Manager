@@ -35,7 +35,7 @@ You can view your assets in ine place, even if they were purchased in different 
 ## Screenshots
 
 ![Portfolio](docs/images/Main_page.png)
-![Metals](docs/images/Metals_page.png)
+![Metals](docs/images/Metals_Page.png)
 
 --- 
 
