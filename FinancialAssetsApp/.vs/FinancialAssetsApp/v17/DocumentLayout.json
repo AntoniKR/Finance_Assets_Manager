@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\ant.krasnov\\Desktop\\My projects\\Finance_Assets_Manager\\FinancialAssetsApp\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5BE42407-7391-4E61-B123-8A5C395D948E}|FinancialAssetsApp\\FinancialAssetsApp.csproj|c:\\users\\ant.krasnov\\desktop\\my projects\\finance_assets_manager\\financialassetsapp\\financialassetsapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5BE42407-7391-4E61-B123-8A5C395D948E}|FinancialAssetsApp\\FinancialAssetsApp.csproj|solutionrelative:financialassetsapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5BE42407-7391-4E61-B123-8A5C395D948E}|FinancialAssetsApp\\FinancialAssetsApp.csproj|c:\\users\\ant.krasnov\\desktop\\my projects\\finance_assets_manager\\financialassetsapp\\financialassetsapp\\data\\service\\iassetcommonservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5BE42407-7391-4E61-B123-8A5C395D948E}|FinancialAssetsApp\\FinancialAssetsApp.csproj|solutionrelative:financialassetsapp\\data\\service\\iassetcommonservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5BE42407-7391-4E61-B123-8A5C395D948E}|FinancialAssetsApp\\FinancialAssetsApp.csproj|c:\\users\\ant.krasnov\\desktop\\my projects\\finance_assets_manager\\financialassetsapp\\financialassetsapp\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{5BE42407-7391-4E61-B123-8A5C395D948E}|FinancialAssetsApp\\FinancialAssetsApp.csproj|solutionrelative:financialassetsapp\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5BE42407-7391-4E61-B123-8A5C395D948E}|FinancialAssetsApp\\FinancialAssetsApp.csproj|c:\\users\\ant.krasnov\\desktop\\my projects\\finance_assets_manager\\financialassetsapp\\financialassetsapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5BE42407-7391-4E61-B123-8A5C395D948E}|FinancialAssetsApp\\FinancialAssetsApp.csproj|solutionrelative:financialassetsapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5BE42407-7391-4E61-B123-8A5C395D948E}|FinancialAssetsApp\\FinancialAssetsApp.csproj|c:\\users\\ant.krasnov\\desktop\\my projects\\finance_assets_manager\\financialassetsapp\\financialassetsapp\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -17,10 +21,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{5BE42407-7391-4E61-B123-8A5C395D948E}|FinancialAssetsApp\\FinancialAssetsApp.csproj|c:\\users\\ant.krasnov\\desktop\\my projects\\finance_assets_manager\\financialassetsapp\\financialassetsapp\\data\\service\\homeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5BE42407-7391-4E61-B123-8A5C395D948E}|FinancialAssetsApp\\FinancialAssetsApp.csproj|solutionrelative:financialassetsapp\\data\\service\\homeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5BE42407-7391-4E61-B123-8A5C395D948E}|FinancialAssetsApp\\FinancialAssetsApp.csproj|c:\\users\\ant.krasnov\\desktop\\my projects\\finance_assets_manager\\financialassetsapp\\financialassetsapp\\data\\service\\iassetcommonservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5BE42407-7391-4E61-B123-8A5C395D948E}|FinancialAssetsApp\\FinancialAssetsApp.csproj|solutionrelative:financialassetsapp\\data\\service\\iassetcommonservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5BE42407-7391-4E61-B123-8A5C395D948E}|FinancialAssetsApp\\FinancialAssetsApp.csproj|c:\\users\\ant.krasnov\\desktop\\my projects\\finance_assets_manager\\financialassetsapp\\financialassetsapp\\data\\service\\platformstartupsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -70,11 +70,15 @@
       "DocumentGroups": [
         {
           "DockedWidth": 63,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\ant.krasnov\\Desktop\\My projects\\Finance_Assets_Manager\\FinancialAssetsApp\\FinancialAssetsApp\\Program.cs",
               "RelativeDocumentMoniker": "FinancialAssetsApp\\Program.cs",
@@ -82,8 +86,7 @@
               "RelativeToolTip": "FinancialAssetsApp\\Program.cs",
               "ViewState": "AgIAAFUAAAAAAAAAAAAgwGEAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-02T12:49:21.849Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-02T12:49:21.849Z"
             },
             {
               "$type": "Document",
@@ -93,14 +96,14 @@
               "RelativeDocumentMoniker": "FinancialAssetsApp\\appsettings.json",
               "ToolTip": "C:\\Users\\ant.krasnov\\Desktop\\My projects\\Finance_Assets_Manager\\FinancialAssetsApp\\FinancialAssetsApp\\appsettings.json",
               "RelativeToolTip": "FinancialAssetsApp\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2026-02-02T12:49:14.503Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "C:\\Users\\ant.krasnov\\Desktop\\My projects\\Finance_Assets_Manager\\FinancialAssetsApp\\FinancialAssetsApp\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "FinancialAssetsApp\\Views\\Shared\\_Layout.cshtml",
@@ -108,8 +111,7 @@
               "RelativeToolTip": "FinancialAssetsApp\\Views\\Shared\\_Layout.cshtml",
               "ViewState": "AgIAAEIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-02-02T12:49:08.359Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-02T12:49:08.359Z"
             },
             {
               "$type": "Document",
@@ -121,8 +123,7 @@
               "RelativeToolTip": "FinancialAssetsApp\\Data\\Service\\MetalsService.cs",
               "ViewState": "AgIAAGUAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-02T12:12:01.181Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-02T12:12:01.181Z"
             },
             {
               "$type": "Document",
@@ -134,8 +135,7 @@
               "RelativeToolTip": "FinancialAssetsApp\\Controllers\\MetalsController.cs",
               "ViewState": "AgIAABEAAAAAAAAAAAAQwGEAAABKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-02T11:45:18.028Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-02T11:45:18.028Z"
             },
             {
               "$type": "Document",
@@ -147,8 +147,7 @@
               "RelativeToolTip": "FinancialAssetsApp\\Controllers\\HomeController.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAADQAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-02T11:42:30.599Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-02T11:42:30.599Z"
             },
             {
               "$type": "Document",
@@ -160,12 +159,11 @@
               "RelativeToolTip": "FinancialAssetsApp\\Data\\Service\\AssetData.cs",
               "ViewState": "AgIAAAgAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-12T08:43:26.729Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-12T08:43:26.729Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "HomeService.cs",
               "DocumentMoniker": "C:\\Users\\ant.krasnov\\Desktop\\My projects\\Finance_Assets_Manager\\FinancialAssetsApp\\FinancialAssetsApp\\Data\\Service\\HomeService.cs",
               "RelativeDocumentMoniker": "FinancialAssetsApp\\Data\\Service\\HomeService.cs",
@@ -173,8 +171,7 @@
               "RelativeToolTip": "FinancialAssetsApp\\Data\\Service\\HomeService.cs",
               "ViewState": "AgIAACgAAAAAAAAAAAAowEEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-29T12:31:43.517Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-29T12:31:43.517Z"
             }
           ]
         },
@@ -184,13 +181,13 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "IAssetCommonService.cs",
               "DocumentMoniker": "C:\\Users\\ant.krasnov\\Desktop\\My projects\\Finance_Assets_Manager\\FinancialAssetsApp\\FinancialAssetsApp\\Data\\Service\\IAssetCommonService.cs",
               "RelativeDocumentMoniker": "FinancialAssetsApp\\Data\\Service\\IAssetCommonService.cs",
               "ToolTip": "C:\\Users\\ant.krasnov\\Desktop\\My projects\\Finance_Assets_Manager\\FinancialAssetsApp\\FinancialAssetsApp\\Data\\Service\\IAssetCommonService.cs",
               "RelativeToolTip": "FinancialAssetsApp\\Data\\Service\\IAssetCommonService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACwAAAAtAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-02T12:13:45.707Z",
               "EditorCaption": ""
@@ -205,8 +202,7 @@
               "RelativeToolTip": "FinancialAssetsApp\\Controllers\\PlatformStupController.cs",
               "ViewState": "AgIAAEkAAAAAAAAAAAAAwFkAAAA3AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-02T12:11:03.782Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-02T12:11:03.782Z"
             },
             {
               "$type": "Document",
@@ -218,8 +214,7 @@
               "RelativeToolTip": "FinancialAssetsApp\\Data\\Service\\PlatformStartupsService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAABCAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-02T12:08:02.356Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-02T12:08:02.356Z"
             },
             {
               "$type": "Document",
@@ -231,8 +226,7 @@
               "RelativeToolTip": "FinancialAssetsApp\\Data\\Service\\StartupsService.cs",
               "ViewState": "AgIAAHAAAAAAAAAAAAAQwHoAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-02T12:06:07.591Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-02T12:06:07.591Z"
             },
             {
               "$type": "Document",
@@ -244,8 +238,7 @@
               "RelativeToolTip": "FinancialAssetsApp\\Controllers\\StartupsController.cs",
               "ViewState": "AgIAAEUAAAAAAAAAAAAuwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-02T12:05:32.465Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-02T12:05:32.465Z"
             },
             {
               "$type": "Document",
@@ -257,8 +250,7 @@
               "RelativeToolTip": "FinancialAssetsApp\\Data\\Service\\CurrenciesService.cs",
               "ViewState": "AgIAADgAAAAAAAAAAAAwwEEAAAB2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-02T11:33:17.28Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-02T11:33:17.28Z"
             },
             {
               "$type": "Document",
@@ -270,8 +262,7 @@
               "RelativeToolTip": "FinancialAssetsApp\\wwwroot\\js\\site.js",
               "ViewState": "AgIAAB4AAAAAAAAAAAAQwHMAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-12-25T05:18:57.421Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-25T05:18:57.421Z"
             }
           ]
         }
