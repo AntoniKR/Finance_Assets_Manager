@@ -28,7 +28,7 @@ async function fetchJson(url) {
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('input[name="Price"], input[name="AmountCrypto"]').forEach(input => {
         input.addEventListener("input", () => {
-            input.value = input.value.replace(",", ".");
+            input.value = input.value.replace(".", ",");
         });
     });
 });               //
@@ -117,6 +117,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const colorClass = changeSumPercent >= 0 ? "text-success" : "text-danger";
 
     changeSumPercentEl.classList.add(colorClass);
+
+    
     changeSumPercentEl.textContent = `(${changeSumPercent.toFixed(2)} %)`;
     //
 
@@ -784,9 +786,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         $(tickerInput).autocomplete({ source: tickers, minLength: 1 });
     }
 });                   // Cryptocurrency
-
-
-
 
 // Metals purchase pie chart         //
 fetchJson('/Metals/GetChartT').then(data => {

@@ -7,19 +7,19 @@ namespace FinancialAssetsApp.Data.Service
 {
     public class StartupsService : IStartupService
     {
-        private readonly FinanceDbContext _context; // БД
-        private readonly IAssetData _assetdata; // Для парсинга различных курсов
+        private readonly FinanceDbContext _context; // Database context
+        private readonly IAssetData _assetdata; // For fetching various exchange rates
 
-        public StartupsService(FinanceDbContext context,IAssetData assetdata)  // Конструктор
+        public StartupsService(FinanceDbContext context, IAssetData assetdata)  // Constructor
         {
             _context = context;
             _assetdata = assetdata;
         }
-        public async Task Add(Startup startup)  // Добавление стартапа в БД
+        public async Task Add(Startup startup)  // Add startup to DB
         {
-            var existstartup = await _context.Startups.FirstOrDefaultAsync(stup => stup.UserId == startup.UserId && stup.PlatformStartupId == startup.PlatformStartupId && stup.NameCompany == startup.NameCompany); //поиск существующего стартапа
+            var existstartup = await _context.Startups.FirstOrDefaultAsync(stup => stup.UserId == startup.UserId && stup.PlatformStartupId == startup.PlatformStartupId && stup.NameCompany == startup.NameCompany); // Search for existing startup
 
-            if (existstartup != null) // если такой стартап существует в БД, то изменяем кол-во акций стартапа и сумму, иначе добавляем в БД
+            if (existstartup != null) // If startup already exists in DB, update share count and total sum; otherwise add new entry
             {
                 var totalAmount = existstartup.AmountStock + startup.AmountStock;
                 existstartup.Price = Math.Round((existstartup.SumStocks + startup.SumStocks) / totalAmount, 2);
@@ -32,30 +32,30 @@ namespace FinancialAssetsApp.Data.Service
             else
             {
                 startup.SumStocks = startup.Price * startup.AmountStock;
-                await _context.Startups.AddAsync(startup);          
+                await _context.Startups.AddAsync(startup);
             }
-            await _context.SaveChangesAsync();  // Асинхронно сохраняем изменения в БД
+            await _context.SaveChangesAsync();  // Save changes to DB asynchronously
 
-            var platform = await _context.PlatformStartups.FirstOrDefaultAsync(plt => plt.UserId == startup.UserId && plt.Id == startup.PlatformStartupId); //Находим платформу, добавленную пользователем
+            var platform = await _context.PlatformStartups.FirstOrDefaultAsync(plt => plt.UserId == startup.UserId && plt.Id == startup.PlatformStartupId); // Find the platform added by the user
             var startups = await _context.Startups
                 .Where(st => st.UserId == startup.UserId && st.PlatformStartupId == startup.PlatformStartupId)
-                .ToListAsync();     // Находим все стартапы у пользователя на платформе
+                .ToListAsync();     // Get all user's startups on this platform
 
-            platform.SumOfStartups = startups.Sum(s => s.SumStocks);    //Обновляем сумму стартапов на платформе
+            platform.SumOfStartups = startups.Sum(s => s.SumStocks);    // Update total sum of startups on the platform
 
             if (existstartup == null)
             {
-                platform.AmountCompanies = startups.Count();    //Обновляем кол-во стартапов на платформе
+                platform.AmountCompanies = startups.Count();    // Update total count of startups on the platform
             }
-            _context.PlatformStartups.Update(platform);           
-            await _context.SaveChangesAsync();  // Асинхронно сохраняем изменения в БД
+            _context.PlatformStartups.Update(platform);
+            await _context.SaveChangesAsync();  // Save changes to DB asynchronously
         }
-        public async Task Delete(int id)    //Удаление стартапа
+        public async Task Delete(int id)    // Delete startup by ID
         {
             var startup = await _context.Startups.FindAsync(id);
-            if(startup != null)
+            if (startup != null)
             {
-                var platform = await _context.PlatformStartups.FirstOrDefaultAsync(plt => plt.UserId == startup.UserId && plt.Id == startup.PlatformStartupId); //Находим платформу, добавленную пользователем
+                var platform = await _context.PlatformStartups.FirstOrDefaultAsync(plt => plt.UserId == startup.UserId && plt.Id == startup.PlatformStartupId); // Find the platform added by the user
 
                 platform.SumOfStartups -= startup.SumStocks;
                 _context.PlatformStartups.Update(platform);
@@ -65,23 +65,23 @@ namespace FinancialAssetsApp.Data.Service
                 await _context.SaveChangesAsync();
             }
         }
-        public async Task<Startup?> GetAssetById(int id)  //получение компании для удаления
+        public async Task<Startup?> GetAssetById(int id)  // Get startup by ID (used for deletion)
         {
             return await _context.Startups.FirstOrDefaultAsync(x => x.Id == id);
         }
-        public async Task<IEnumerable<Startup>> GetAssetsByID(int userId)     //Перечисление всех стартапов, которые добавлены пользователем
+        public async Task<IEnumerable<Startup>> GetAssetsByID(int userId)     // Get all startups added by the user
         {
             var startups = await _context.Startups
                 .Where(s => s.UserId == userId)
                 .ToListAsync();
             return startups;
         }
-        public async Task<int> GetPlatformId(string namePlatform) // Получение Id платформы
+        public async Task<int> GetPlatformId(string namePlatform) // Get platform ID by name
         {
             var platform = await _context.PlatformStartups.FirstOrDefaultAsync(name => name.NamePlatform == namePlatform);
             return platform.Id;
         }
-        public async Task<IEnumerable<PlatformStartup>> GetAllPlatforms(int userId) // Получение списка платформ при создании стартапа
+        public async Task<IEnumerable<PlatformStartup>> GetAllPlatforms(int userId) // Get list of platforms when creating a startup
         {
             var platforms = await _context.PlatformStartups
                 .Where(s => s.UserId == userId)
@@ -89,12 +89,11 @@ namespace FinancialAssetsApp.Data.Service
             return platforms;
         }
         public async Task<IEnumerable<Startup>> GetAll()
-        { 
-            var startup = await _context.Startups.ToListAsync();  // Перечисление всех данных из БД
+        {
+            var startup = await _context.Startups.ToListAsync();  // Fetch all records from DB
             return startup;
         }
-
-        public async Task<IEnumerable<ForChart>> GetChartTicker(int userId) //График по акциям
+        public async Task<IEnumerable<ForChart>> GetChartTicker(int userId) // Chart data grouped by company name
         {
             var data = await _context.Startups
                 .Where(s => s.UserId == userId)
@@ -107,7 +106,7 @@ namespace FinancialAssetsApp.Data.Service
                 .ToListAsync();
             return data;
         }
-        public async Task<IEnumerable<ForChart>> GetChartCount(int userId) //График по акциям
+        public async Task<IEnumerable<ForChart>> GetChartCount(int userId) // Chart data grouped by share count per company
         {
             var data = await _context.Startups
                 .Where(s => s.UserId == userId)
@@ -119,29 +118,30 @@ namespace FinancialAssetsApp.Data.Service
                 })
                 .ToListAsync();
             return data;
-        }        
-        /*public async Task<decimal> GetPurchaseStartupsSUM(int userId)    // Получение суммы покупки US Stocks
-        {
-            var cacheKey = $"Metals:purchase:{userId}";
-            if (_cache.TryGetValue(cacheKey, out decimal cachedSum))
-                return cachedSum;
+        }
 
-            var metals = await _context.Metals
-                .Where(s => s.UserId == userId)
-                .ToListAsync();
-
-            decimal totalPurchaseSum = 0;
-            foreach (var metal in metals)
+        /*public async Task<decimal> GetPurchaseStartupsSUM(int userId)    // Get total purchase sum for startups
             {
-                totalPurchaseSum += metal.SumMetals;
-            }
-            _cache.Set(
-                cacheKey,
-                totalPurchaseSum,
-                TimeSpan.FromHours(1)
-            );
-            return totalPurchaseSum;
-        }*/
+                var cacheKey = $"Metals:purchase:{userId}";
+                if (_cache.TryGetValue(cacheKey, out decimal cachedSum))
+                    return cachedSum;
+
+                var metals = await _context.Metals
+                    .Where(s => s.UserId == userId)
+                    .ToListAsync();
+
+                decimal totalPurchaseSum = 0;
+                foreach (var metal in metals)
+                {
+                    totalPurchaseSum += metal.SumMetals;
+                }
+                _cache.Set(
+                    cacheKey,
+                    totalPurchaseSum,
+                    TimeSpan.FromHours(1)
+                );
+                return totalPurchaseSum;
+            }*/
 
 
 

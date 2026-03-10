@@ -14,40 +14,38 @@ namespace FinancialAssetsApp.Controllers
     public class MetalsController : Controller
     {
         private readonly IMetalsService _metalService;
-        private readonly IAssetData _assetdata; // Для парсинга различных курсов
+        private readonly IAssetData _assetdata; // For fetching various exchange rates
         private int CurrentUserId => HttpContext.Session.GetInt32("UserId") ?? 0;
         public MetalsController(IMetalsService metalService, IAssetData assetdata)
         {
             _metalService = metalService;
             _assetdata = assetdata;
         }
-
-        public async Task<IActionResult> IndexMetals()    // Список всех акций
+        public async Task<IActionResult> IndexMetals()    // List all metal assets
         {
-            var metals = await _metalService.GetAssetsByID(CurrentUserId);  // Перечисление всех данных из БД
+            var metals = await _metalService.GetAssetsByID(CurrentUserId);  // Fetch all records from DB
             return View("IndexMetals", metals);
         }
-        private void FillListMetals()    // Метод для списка металлов 
+        private void FillListMetals()    // Populate the metals dropdown list
         {
-            ViewBag.Metals = new List<SelectListItem>        // Создание списка для выбора металла
-            {
-                new SelectListItem {Value = "Золото", Text = "Золото"},
-                new SelectListItem {Value = "Серебро", Text = "Серебро"},
-                new SelectListItem {Value = "Палладий", Text = "Палладий"},
-                new SelectListItem {Value = "Платина", Text = "Платина"}
-            };
+            ViewBag.Metals = new List<SelectListItem>        // Build selection list for metal types
+        {
+            new SelectListItem {Value = "Золото", Text = "Золото"},
+            new SelectListItem {Value = "Серебро", Text = "Серебро"},
+            new SelectListItem {Value = "Палладий", Text = "Палладий"},
+            new SelectListItem {Value = "Платина", Text = "Платина"}
+        };
         }
-        public IActionResult Create()   // Страница добавления акции
+        public IActionResult Create()   // Show the add metal page
         {
-            
             FillListMetals();
             return View();
         }
         [HttpPost]
         public async Task<IActionResult> Create(Metal metal)
         {
-            metal.UserId = CurrentUserId;  //Привязка к текущему пользователю
-            
+            metal.UserId = CurrentUserId;  // Bind asset to the current user
+
             if (!ModelState.IsValid)
             {
                 FillListMetals();
@@ -60,7 +58,7 @@ namespace FinancialAssetsApp.Controllers
         {
             
             var metal = await _metalService.GetAssetById(id);
-            if (metal == null || metal.UserId != CurrentUserId)    //Проверка на акции текущего пользователя
+            if (metal == null || metal.UserId != CurrentUserId)    // Verify asset belongs to current user
                 return NotFound();
             return View("DeleteMetal", metal);
         }
@@ -69,7 +67,7 @@ namespace FinancialAssetsApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var metal = await _metalService.GetAssetById(id);
-            if (metal == null || metal.UserId != CurrentUserId)    //Проверка на акции текущего пользователя
+            if (metal == null || metal.UserId != CurrentUserId)    // Verify asset belongs to current user
                 return NotFound();
             await _metalService.Delete(id);
             return RedirectToAction("IndexMetals");
@@ -79,7 +77,7 @@ namespace FinancialAssetsApp.Controllers
             var data = await _metalService.GetChartTicker(CurrentUserId);
             return Json(data);
         }
-        public async Task<IActionResult> PriceMetal(string nameMetal)   //Получение цены на металлы
+        public async Task<IActionResult> PriceMetal(string nameMetal)   // Get current metal price
         {
             var price = await _assetdata.GetMetalPrice(nameMetal);
             return Json(price);

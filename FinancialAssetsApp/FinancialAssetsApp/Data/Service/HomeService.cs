@@ -8,8 +8,8 @@ namespace FinancialAssetsApp.Data.Service
 {
     public class HomeService
     {
-        private readonly FinanceDbContext _context; // БД
-        private readonly IAssetData _assetdata; // Для парсинга различных курсов
+        private readonly FinanceDbContext _context; // Database context
+        private readonly IAssetData _assetdata; // For fetching various exchange rates
         private readonly IStocksService _stocks;
         private readonly IStocksUSDService _stocksUSD;
         private readonly ICryptosService _cryptos;
@@ -17,7 +17,7 @@ namespace FinancialAssetsApp.Data.Service
         private readonly ICurrenciesService _currencies;
         private readonly IPlatformStartupService _startups;
 
-        public HomeService(FinanceDbContext context, IAssetData assetdata, IStocksService stocksService,IStocksUSDService stockUSD, ICryptosService cryptosService, IMetalsService metalsService, ICurrenciesService currenciesService, IPlatformStartupService startupService)  // Конструктор
+        public HomeService(FinanceDbContext context, IAssetData assetdata, IStocksService stocksService, IStocksUSDService stockUSD, ICryptosService cryptosService, IMetalsService metalsService, ICurrenciesService currenciesService, IPlatformStartupService startupService)  // Constructor
         {
             _context = context;
             _assetdata = assetdata;
@@ -28,14 +28,14 @@ namespace FinancialAssetsApp.Data.Service
             _currencies = currenciesService;
             _startups = startupService;
         }
-        public async Task<decimal> GetPurchaseTotal(int userId)    // Get Purchase total sum
+        public async Task<decimal> GetPurchaseTotal(int userId)    // Get total purchase sum across all asset types
         {
             decimal totalPurchaseSum = 0;
             totalPurchaseSum += await _stocks.GetPurchaseStocksSUM(userId);
             totalPurchaseSum += await _stocksUSD.GetPurchaseUSStocksSUM(userId);
             totalPurchaseSum += await _cryptos.GetPurchaseCryptoSUM(userId);
             totalPurchaseSum += await _metals.GetPurchaseMetalsSUM(userId);
-            totalPurchaseSum += await _currencies.GetPurchaseCurrenciesSUM(userId);            
+            totalPurchaseSum += await _currencies.GetPurchaseCurrenciesSUM(userId);
             totalPurchaseSum += await _startups.GetPurchasePlStartupsSUM(userId);
 
             return totalPurchaseSum;
@@ -50,29 +50,26 @@ namespace FinancialAssetsApp.Data.Service
             //var totalStartups = await _startups.GetPurchasePlStartupsSUM(userId);
 
             return new List<ForChart>
-            {
-                new ForChart{Label = "Акции ₽", Total = totalStocks},
-                new ForChart{Label = "Акции $", Total = totalStocksUSD},
-                new ForChart{Label = "Криптовалюта", Total = totalCrypto},
-                new ForChart{Label = "Металлы", Total = totalMetals},
-                new ForChart{Label = "Валюта", Total = totalCurrencies},
-                //new ForChart{Label = "Стартапы", Total = totalStartups},
-            };
-        }         
-        public async Task<decimal> GetCurrentAss(int userId)    // Get current total sum
+    {
+        new ForChart{Label = "Stocks RUB", Total = totalStocks},
+        new ForChart{Label = "Stocks USD", Total = totalStocksUSD},
+        new ForChart{Label = "Crypto", Total = totalCrypto},
+        new ForChart{Label = "Metals", Total = totalMetals},
+        new ForChart{Label = "Currencies", Total = totalCurrencies},
+        //new ForChart{Label = "Startups", Total = totalStartups},
+    };
+        }
+        public async Task<decimal> GetCurrentAss(int userId)    // Get current total value across all asset types
         {
             decimal totalCurrSum = 0;
             totalCurrSum += await _stocks.GetPurchaseStocksSUM(userId);
-
             totalCurrSum += await _stocksUSD.GetCurrentUSStocksSUM(userId);
             totalCurrSum += await _cryptos.GetCurrentCryptoSUM(userId);
             totalCurrSum += await _metals.GetCurrentMetalsSUM(userId);
             totalCurrSum += await _currencies.GetCurrentCurrenciesSUM(userId);
             totalCurrSum += await _startups.GetPurchasePlStartupsSUM(userId);
             return totalCurrSum;
-        }        
-
-
+        }
 
         public async Task<IEnumerable<ForChart>> GetEstateTransSumm(int userId)
         {
@@ -84,12 +81,12 @@ namespace FinancialAssetsApp.Data.Service
                 .SumAsync(e => e.Price);
 
             return new List<ForChart>
-            {
-                new ForChart{Label = "Недвижимость", Total = totalEstate},
-                new ForChart{Label = "Транспорт", Total = totalTrans}
-            };
+    {
+        new ForChart{Label = "Real Estate", Total = totalEstate},
+        new ForChart{Label = "Transport", Total = totalTrans}
+    };
         }
-        public async Task<decimal> Get(int userId)    // Получение текущего курса RUSStocks
+        public async Task<decimal> Get(int userId)    // Get current total value of RUB stocks
         {
             var ruStocks = await _context.Stocks
                 .Where(s => s.UserId == userId)

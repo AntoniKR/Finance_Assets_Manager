@@ -8,26 +8,25 @@ namespace FinancialAssetsApp.Data.Service
 {
     public class MetalsService : IMetalsService
     {
-        private readonly FinanceDbContext _context; // БД
-        private readonly IAssetData _assetdata; // For parse different data
+        private readonly FinanceDbContext _context; // Database context
+        private readonly IAssetData _assetdata; // For fetching various asset data
         private readonly IMemoryCache _cache; // For cache
 
-
-        public MetalsService(FinanceDbContext context,IAssetData assetdata, IMemoryCache memoryCache)  // Конструктор
+        public MetalsService(FinanceDbContext context, IAssetData assetdata, IMemoryCache memoryCache)  // Constructor
         {
             _context = context;
             _assetdata = assetdata;
             _cache = memoryCache;
         }
-        public async Task Add(Metal metal)  // Добавление металла в БД
+        public async Task Add(Metal metal)  // Add metal to DB
         {
-            var existMetal = await _context.Metals.FirstOrDefaultAsync(mtl => mtl.UserId == metal.UserId && mtl.NameMetal == metal.NameMetal); //поиск существующего
+            var existMetal = await _context.Metals.FirstOrDefaultAsync(mtl => mtl.UserId == metal.UserId && mtl.NameMetal == metal.NameMetal); // Search for existing metal entry
 
             metal.SumMetals = metal.Price * metal.AmountMetal;
 
-            if (existMetal != null) // если такой металл есть, то усредняем, иначе добавляем новый
+            if (existMetal != null) // If metal already exists, calculate average price; otherwise add new entry
             {
-                var totalAmount = existMetal.AmountMetal + metal.AmountMetal;   
+                var totalAmount = existMetal.AmountMetal + metal.AmountMetal;
                 existMetal.Price = Math.Round((existMetal.SumMetals + metal.SumMetals) / totalAmount, 2);
                 existMetal.AmountMetal = totalAmount;
                 existMetal.SumMetals = existMetal.Price * existMetal.AmountMetal;
@@ -39,38 +38,38 @@ namespace FinancialAssetsApp.Data.Service
             {
                 await _context.Metals.AddAsync(metal);
             }
-            await _context.SaveChangesAsync();  // Асинхронно сохраняем изменения в БД
+            await _context.SaveChangesAsync();  // Save changes to DB asynchronously
             ClearMetalsCache(metal.UserId);   // Update cache
         }
-        public async Task Delete(int id)    //Удаление акции
+        public async Task Delete(int id)    // Delete metal asset by ID
         {
             var metal = await _context.Metals.FindAsync(id);
-            if(metal != null)
+            if (metal != null)
             {
                 _context.Metals.Remove(metal);
                 await _context.SaveChangesAsync();
             }
             ClearMetalsCache(metal.UserId);   // Update cache
         }
-        public async Task<Metal?> GetAssetById(int id)  //получение акции для удаления
+        public async Task<Metal?> GetAssetById(int id)  // Get metal asset by ID (used for deletion)
         {
             return await _context.Metals.FirstOrDefaultAsync(x => x.Id == id);
         }
-        public async Task<IEnumerable<Metal>> GetAssetsByID(int userId)     //Перечисление всех акций пользователя
+        public async Task<IEnumerable<Metal>> GetAssetsByID(int userId)     // Get all metal assets for a user
         {
             var metal = await _context.Metals
                 .Where(s => s.UserId == userId)
                 .ToListAsync();
             return metal;
         }
-        
+
         public async Task<IEnumerable<Metal>> GetAll()
-        { 
-            var metal = await _context.Metals.ToListAsync();  // Перечисление всех данных из БД
+        {
+            var metal = await _context.Metals.ToListAsync();  // Fetch all records from DB
             return metal;
         }
 
-        public async Task<IEnumerable<ForChart>> GetChartTicker(int userId) //График по акциям
+        public async Task<IEnumerable<ForChart>> GetChartTicker(int userId) // Chart data grouped by metal name
         {
             var data = await _context.Metals
                 .Where(s => s.UserId == userId)
@@ -84,7 +83,7 @@ namespace FinancialAssetsApp.Data.Service
             return data;
         }
 
-        public async Task<decimal> GetCurrentMetalsSUM(int userId)    // Получение текущего курса Metals
+        public async Task<decimal> GetCurrentMetalsSUM(int userId)    // Get current total value of all metals
         {
             var cacheKey = $"Metals:current:{userId}";
             if (_cache.TryGetValue(cacheKey, out decimal cachedSum))
@@ -109,7 +108,7 @@ namespace FinancialAssetsApp.Data.Service
 
             return totalCurrSum;
         }
-        public async Task<decimal> GetPurchaseMetalsSUM(int userId)    // Получение суммы покупки US Stocks
+        public async Task<decimal> GetPurchaseMetalsSUM(int userId)    // Get total purchase sum for metals
         {
             var cacheKey = $"Metals:purchase:{userId}";
             if (_cache.TryGetValue(cacheKey, out decimal cachedSum))

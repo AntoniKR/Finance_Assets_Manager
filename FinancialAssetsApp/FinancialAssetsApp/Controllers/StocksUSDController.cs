@@ -14,30 +14,27 @@ namespace FinancialAssetsApp.Controllers
     public class StocksUSDController : Controller
     {
         private readonly IStocksUSDService _stocksService;
-        private readonly IAssetData _assetData; // Для парсинга различных курсов
-
+        private readonly IAssetData _assetData; // For fetching various exchange rates
         private int CurrentUserId => HttpContext.Session.GetInt32("UserId") ?? 0;
         public StocksUSDController(IStocksUSDService stocksService, IAssetData assetdata)
         {
             _stocksService = stocksService;
             _assetData = assetdata;
         }
-        public async Task<IActionResult> IndexStocks()    // Список всех акций
+        public async Task<IActionResult> IndexStocks()    // List all USD stock assets
         {
-            var stocks = await _stocksService.GetAssetsByID(CurrentUserId);  // Перечисление всех данных из БД
-
+            var stocks = await _stocksService.GetAssetsByID(CurrentUserId);  // Fetch all records from DB
             return View(stocks);
         }
-        public IActionResult Create()   // Страница добавления акции
+        public IActionResult Create()   // Show the add stock page
         {
             return View("CreateStock");
         }
         [HttpPost]
         public async Task<IActionResult> Create(StockUSD stock)
         {
-            stock.UserId = CurrentUserId;  //Привязка к текущему пользователю
-
-            if (!ModelState.IsValid)    // если модель неверна, то загружаем ту же страницу 
+            stock.UserId = CurrentUserId;  // Bind asset to the current user
+            if (!ModelState.IsValid)    // If model is invalid, reload the same page
             {
                 return View("CreateStock", stock);
             }
@@ -47,16 +44,16 @@ namespace FinancialAssetsApp.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var stock = await _stocksService.GetAssetById(id);
-            if (stock == null || stock.UserId != CurrentUserId)    //Проверка на акции текущего пользователя
+            if (stock == null || stock.UserId != CurrentUserId)    // Verify asset belongs to current user
                 return NotFound();
-            return View("DeleteStock",stock);
+            return View("DeleteStock", stock);
         }
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var stock = await _stocksService.GetAssetById(id);
-            if (stock == null || stock.UserId != CurrentUserId)    //Проверка на акции текущего пользователя
+            if (stock == null || stock.UserId != CurrentUserId)    // Verify asset belongs to current user
                 return NotFound();
             await _stocksService.Delete(id);
             return RedirectToAction("IndexStocks");

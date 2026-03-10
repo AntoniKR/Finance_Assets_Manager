@@ -5,17 +5,14 @@ namespace FinancialAssetsApp.Models
 {
     public class PlatformStartup
     {
-        public int Id { get; set; }                 // Идентификация
-
-        [Required(ErrorMessage = "Введите название платформы")]
-        public string NamePlatform { get; set; } = string.Empty;  // Название платформы
-        public int? AmountCompanies { get; set; }       // Количество проинвестированных компаний
-        public decimal? SumOfStartups { get; set; }      // Стоимость акций
-        public DateTime DateAddStock { get; set; } = DateTime.UtcNow;    // Время обновления
-
+        public int Id { get; set; }                 // Record identifier
+        [Required(ErrorMessage = "Enter the platform name")]
+        public string NamePlatform { get; set; } = string.Empty;  // Platform name
+        public int? AmountCompanies { get; set; }       // Number of invested companies
+        public decimal? SumOfStartups { get; set; }      // Total value of startup shares
+        public DateTime DateAddStock { get; set; } = DateTime.UtcNow;    // Last updated timestamp
         [Required]
         public int UserId { get; set; }
         public User? User { get; set; }
-
     }
 }

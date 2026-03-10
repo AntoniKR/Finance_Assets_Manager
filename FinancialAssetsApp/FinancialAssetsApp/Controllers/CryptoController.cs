@@ -21,23 +21,22 @@ namespace FinancialAssetsApp.Controllers
             _httpClient = httpClient;
             _assetdata = assetdata;
         }
-        public async Task<IActionResult> TickersCrypto(string symbol)   //Получение списка крипта с Bybit
+        public async Task<IActionResult> TickersCrypto(string symbol)   // Fetch crypto ticker list from Bybit
         {
             var tickers = await _assetdata.GetTickersCrypto(symbol);
             return Json(tickers);
         }
 
-        public async Task<IActionResult> PriceCrypto (string symbol)    //Получение текущей цены крипты
+        public async Task<IActionResult> PriceCrypto(string symbol)    // Get current crypto price
         {
             var price = await _assetdata.GetPriceCrypto(symbol);
             return Json(price);
-
         }
 
-        public async Task<IActionResult> IndexCrypto()    // Список всей крипты
-        {          
+        public async Task<IActionResult> IndexCrypto()    // List all crypto assets for current user
+        {
             var cryptos = await _cryptosService.GetAssetsByID(CurrentUserId);
-            //await FixCrypto();    // Для правок в БД
+            //await FixCrypto();    // For manual DB corrections
             return View(cryptos);
         }
         public IActionResult Create()
@@ -59,16 +58,16 @@ namespace FinancialAssetsApp.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var crypto = await _cryptosService.GetAssetById(id);
-            if (crypto == null || crypto.UserId != CurrentUserId)    //Проверка на акции текущего пользователя
+            if (crypto == null || crypto.UserId != CurrentUserId)    // Verify asset belongs to current user
                 return NotFound();
-            return View("DeleteCrypto",crypto);
+            return View("DeleteCrypto", crypto);
         }
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var crypto = await _cryptosService.GetAssetById(id);
-            if (crypto == null || crypto.UserId != CurrentUserId)    //Проверка на акции текущего пользователя
+            if (crypto == null || crypto.UserId != CurrentUserId)    // Verify asset belongs to current user
                 return NotFound();
             await _cryptosService.Delete(id);
             return RedirectToAction("IndexCrypto");

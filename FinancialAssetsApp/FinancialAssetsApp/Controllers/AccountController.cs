@@ -8,23 +8,23 @@ using System.Threading.Tasks;
 
 namespace FinancialAssetsApp.Controllers
 {
-    public class AccountController : Controller //Авторизация пользователя
+    public class AccountController : Controller // User Authorization
     {
         private readonly IAuthService _authService;
-        public AccountController(IAuthService authService)  //Доступ к БД через конструктор
+        public AccountController(IAuthService authService)  // Constructor for DB
         {
             _authService = authService;
         }
         [HttpGet]
         public IActionResult Login()
         {
-            ViewData["NoLayout"] = true;    //Убираем плашку layout
+            ViewData["NoLayout"] = true;    // Remove Layout
             return View();
         }
-        //Возвращает страницу логина
+        // Return Login page
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginModel model)    //Проверка для входа
+        public async Task<IActionResult> Login(LoginModel model)    // Validate user credentials on login
         {
             if (!ModelState.IsValid) return View(model);
 
@@ -37,8 +37,8 @@ namespace FinancialAssetsApp.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            //если не совпадает 
-            ModelState.AddModelError("", "Неверный логин или пароль");
+            // Credentials do not match
+            ModelState.AddModelError("", "Invalid username or password");
             return View(model);
         }
         [HttpGet]
@@ -47,55 +47,46 @@ namespace FinancialAssetsApp.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterModel model)  // Добавление нового пользователя
+        public async Task<IActionResult> Register(RegisterModel model)  // Add new user
         {
             if (!ModelState.IsValid) return View(model);
-
-            if(await _authService.UserExists(model.Username))
-            {   //Проверка на существующего пользователя
-                ModelState.AddModelError("", "Такой пользователь существует");
+            if (await _authService.UserExists(model.Username))
+            {   // Check if user already exists
+                ModelState.AddModelError("", "This username is already taken");
                 return View(model);
             }
-
             var user = await _authService.RegisterUser(model.Username, model.Password);
-
             HttpContext.Session.SetString("User", user.Username);
             HttpContext.Session.SetInt32("UserId", user.Id);
-
             return RedirectToAction("Index", "Home");
         }
-        public IActionResult Logout()   //Выход из сессии
+        public IActionResult Logout()   // End user session
         {
             HttpContext.Session.Remove("User");
             HttpContext.Session.Remove("UserId");
-
             return RedirectToAction("Login", "Account");
         }
-
         [HttpGet]
-        public IActionResult ForgotPassword()   //Замена пароля
+        public IActionResult ForgotPassword()   // Password reset page
         {
             return View();
         }
-        //Возвращает страницу логина
-
+        // Returns the login page
         [HttpPost]
-        public async Task<IActionResult> ForgotPassword(string username, string newPassword)    //Изменение пароля
+        public async Task<IActionResult> ForgotPassword(string username, string newPassword)    // Change user password
         {
-            if(string.IsNullOrEmpty(username) || string.IsNullOrEmpty(newPassword))
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(newPassword))
             {
-                ModelState.AddModelError("", "Введите логин и новый пароль");
+                ModelState.AddModelError("", "Please enter your username and new password");
                 return View();
             }
-
             var newPassCompl = await _authService.ChangePassword(username, newPassword);
-            if(!newPassCompl)
+            if (!newPassCompl)
             {
-                ModelState.AddModelError("", "Пользователь не найден");
+                ModelState.AddModelError("", "User not found");
                 return View();
             }
-
-            ViewBag.Message = "Пароль изменен!";
+            ViewBag.Message = "Password changed successfully!";
             return RedirectToAction("IndexStocks", "Stocks");
         }
     }

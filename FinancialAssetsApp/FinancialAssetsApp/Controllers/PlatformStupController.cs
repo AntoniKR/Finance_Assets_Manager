@@ -77,12 +77,12 @@ namespace FinancialAssetsApp.Controllers
             await _platformService.Delete(id);
             return RedirectToAction("Index");
         }
-        public async Task<IActionResult> GetChartT()
+        public async Task<IActionResult> GetChartT()   // Chart for platforms by investment amount
         {
             var data = await _platformService.GetChartTicker(CurrentUserId);
             return Json(data);
         }
-        public async Task<IActionResult> GetChartCountComp()
+        public async Task<IActionResult> GetChartCountComp()   // Chart for platforms by number of companies
         {
             var data = await _platformService.GetChartCount(CurrentUserId);
             return Json(data);

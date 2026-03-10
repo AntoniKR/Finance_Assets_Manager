@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using FinancialAssetsApp.Models;
 
-
 namespace FinancialAssetsApp.Data
 {
     public class FinanceDbContext : DbContext

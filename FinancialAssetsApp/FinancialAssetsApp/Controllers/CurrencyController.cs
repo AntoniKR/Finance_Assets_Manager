@@ -21,17 +21,17 @@ namespace FinancialAssetsApp.Controllers
             _httpClient = httpClient;
             _assetdata = assetdata;
         }
-      
-        public async Task<IActionResult> PriceCurrency (string symbol)    //Получение текущей цены валюты
+
+        public async Task<IActionResult> PriceCurrency(string symbol)    // Get current currency exchange rate
         {
             var price = await _assetdata.GetCurrencyRate(symbol);
             return Json(price);
         }
-        public async Task<IActionResult> IndexCurrency()    // Список всей валюты
-        {          
-            var currencies = await _currenciesService.GetAssetsByID(CurrentUserId);           
+        public async Task<IActionResult> IndexCurrency()    // List all currency assets for current user
+        {
+            var currencies = await _currenciesService.GetAssetsByID(CurrentUserId);
             return View("IndexCurrency", currencies);
-            //await FixCrypto();    // Для правок в БД
+            //await FixCrypto();    // For manual DB corrections
         }
         public IActionResult CreateCurrency()
         {
@@ -52,7 +52,7 @@ namespace FinancialAssetsApp.Controllers
         public async Task<IActionResult> DeleteCurrency(int id)
         {
             var currency = await _currenciesService.GetAssetById(id);
-            if (currency == null || currency.UserId != CurrentUserId)    //Проверка на акции текущего пользователя
+            if (currency == null || currency.UserId != CurrentUserId)    // Verify asset belongs to current user
                 return NotFound();
             return View("DeleteCurrency", currency);
         }
@@ -61,18 +61,18 @@ namespace FinancialAssetsApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var currency = await _currenciesService.GetAssetById(id);
-            if (currency == null || currency.UserId != CurrentUserId)    //Проверка на акции текущего пользователя
+            if (currency == null || currency.UserId != CurrentUserId)    // Verify asset belongs to current user
                 return NotFound();
             await _currenciesService.Delete(id);
             return RedirectToAction("IndexCurrency");
         }
-        public async Task<IActionResult> GetChartTicker()
+        public async Task<IActionResult> GetChartTicker()   // // Chart for currencies by invested sum
         {
             var data = await _currenciesService.GetChartTicker(CurrentUserId);
             return Json(data);
         }
         [HttpGet]
-        public async Task<IActionResult> GetCurrencies(string nameCurrency)
+        public async Task<IActionResult> GetCurrencies(string nameCurrency)  // List currency 
         {
             var currenciesList = await _assetdata.GetCurrencyCode(nameCurrency);
             return Json(currenciesList);

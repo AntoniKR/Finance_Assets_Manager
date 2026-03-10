@@ -9,69 +9,68 @@ namespace FinancialAssetsApp.Data.Service
 {
     public class CurrenciesService : ICurrenciesService
     {
-        private readonly FinanceDbContext _context; // БД
-        private readonly IAssetData _assetdata; // Для парсинга различных данных
+        private readonly FinanceDbContext _context; // Database context
+        private readonly IAssetData _assetdata; // For fetching various asset data
         private readonly IMemoryCache _cache; // For cache
 
-        public CurrenciesService(FinanceDbContext context,IAssetData assetdata, IMemoryCache memoryCache)  // Конструктор
+        public CurrenciesService(FinanceDbContext context, IAssetData assetdata, IMemoryCache memoryCache)  // Constructor
         {
             _context = context;
             _assetdata = assetdata;
             _cache = memoryCache;
-
         }
-        public async Task Add(Currency currency)  // Добавление валюты в БД с учетом повторения
-        {          
-            currency.CharCode = await _assetdata.GetCurrencyCode(currency.NameCurrency);    //получаем код валюты для вычислений
+        public async Task Add(Currency currency)  // Add currency to DB, merging with existing entry if present
+        {
+            currency.CharCode = await _assetdata.GetCurrencyCode(currency.NameCurrency);    // Get currency code for calculations
 
             var oldCurrency = await _context.Currencies.FirstOrDefaultAsync
-                (c => c.UserId == currency.UserId && c.CharCode == currency.CharCode);  //Ищем такую же валюту в портфеле, если имеется
+                (c => c.UserId == currency.UserId && c.CharCode == currency.CharCode);  // Search for the same currency in the portfolio
 
             currency.SumCurrencyToRuble = currency.Price * currency.AmountCurrency;
 
-            if (oldCurrency != null)   // если уже есть такая валюта в БД, то цену ставим среднюю
+            if (oldCurrency != null)   // If currency already exists in DB, calculate average purchase price
             {
-                var totalAmount = oldCurrency.AmountCurrency + currency.AmountCurrency; //Всего валюты
-                oldCurrency.Price = Math.Round(((oldCurrency.SumCurrencyToRuble + currency.SumCurrencyToRuble) / totalAmount), 2);   //Средняя цена покупки
+                var totalAmount = oldCurrency.AmountCurrency + currency.AmountCurrency; // Total currency amount
+                oldCurrency.Price = Math.Round(((oldCurrency.SumCurrencyToRuble + currency.SumCurrencyToRuble) / totalAmount), 2);   // Average purchase price
                 oldCurrency.AmountCurrency = totalAmount;
-                
-                oldCurrency.SumCurrencyToRuble = Math.Round((oldCurrency.AmountCurrency * oldCurrency.Price), 2); //Обновляем сумму в рублях по сегодняшнему курсу
+
+                oldCurrency.SumCurrencyToRuble = Math.Round((oldCurrency.AmountCurrency * oldCurrency.Price), 2); // Update ruble sum at today's rate
                 oldCurrency.DateAddStock = DateTime.UtcNow;
 
                 _context.Currencies.Update(oldCurrency);
             }
-            //Иначе добавляем новую крипту
+            // Otherwise add as a new currency entry
             else
-            {                           
+            {
                 await _context.Currencies.AddAsync(currency);
             }
-            
-            await _context.SaveChangesAsync();  // Асинхронно сохраняем изменения в БД
-            ClearCurrenciesCache(currency.UserId);  // For clear cache
+
+            await _context.SaveChangesAsync();  // Save changes to DB asynchronously
+            ClearCurrenciesCache(currency.UserId);  // Clear cache
         }
-        public async Task Delete(int id)    //Удаление криптовалюты
+        public async Task Delete(int id)    // Delete currency asset by ID
         {
             var currency = await _context.Currencies.FindAsync(id);
-            if(currency != null)
+            if (currency != null)
             {
                 _context.Currencies.Remove(currency);
                 await _context.SaveChangesAsync();
             }
-            ClearCurrenciesCache(currency.UserId);  // For clear cache
+            ClearCurrenciesCache(currency.UserId);  // Clear cache
         }
-        public async Task<Currency?> GetAssetById(int id)  //получение криптовалюты для удаления
+        public async Task<Currency?> GetAssetById(int id)  // Get currency asset by ID (used for deletion)
         {
             return await _context.Currencies.FirstOrDefaultAsync(x => x.Id == id);
         }
-        public async Task<IEnumerable<Currency>> GetAssetsByID(int userId)     //Перечисление всей крипты пользователя
+        public async Task<IEnumerable<Currency>> GetAssetsByID(int userId)     // Get all currency assets for a user
         {
             var currency = await _context.Currencies
                 .Where(s => s.UserId == userId)
-                .ToListAsync(); // Получение таблицы с криптой пользователя           
+                .ToListAsync(); // Fetch user's currency table from DB
             return currency;
-        }      
+        }
 
-        public async Task<IEnumerable<ForChart>> GetChartTicker(int userId) //График по валюте
+        public async Task<IEnumerable<ForChart>> GetChartTicker(int userId) // Chart data grouped by currency name
         {
             var data = await _context.Currencies
                 .Where(s => s.UserId == userId)
@@ -84,7 +83,7 @@ namespace FinancialAssetsApp.Data.Service
                 .ToListAsync();
             return data;
         }
-        public async Task<decimal> GetCurrentCurrenciesSUM(int userId)    // Получение текущего курса Currencies
+        public async Task<decimal> GetCurrentCurrenciesSUM(int userId)    // Get current total value of all currencies
         {
             var cacheKey = $"Currencies:current:{userId}";
             if (_cache.TryGetValue(cacheKey, out decimal cachedSum))
@@ -109,7 +108,7 @@ namespace FinancialAssetsApp.Data.Service
 
             return totalCurrSum;
         }
-        public async Task<decimal> GetPurchaseCurrenciesSUM(int userId)    // Получение суммы покупки US Stocks
+        public async Task<decimal> GetPurchaseCurrenciesSUM(int userId)    // Get total purchase sum for currencies
         {
             var cacheKey = $"Currencies:purchase:{userId}";
             if (_cache.TryGetValue(cacheKey, out decimal cachedSum))

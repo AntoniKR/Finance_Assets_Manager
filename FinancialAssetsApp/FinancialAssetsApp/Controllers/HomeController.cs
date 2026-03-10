@@ -29,29 +29,29 @@ namespace FinancialAssetsApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        public async Task<IActionResult> GetAssetsChart()   //получение общей суммы активов
+        public async Task<IActionResult> GetAssetsChart()   // Get total invested assets sum for chart
         {
             var data = await _homeService.GetAssetsSumInvested(CurrentUserId);
             return Json(data);
         }
-        public async Task<IActionResult> GetPurchaseAssets()
+        public async Task<IActionResult> GetPurchaseAssets()   // Get total purchase assets sum
         {
             var data = await _homeService.GetPurchaseTotal(CurrentUserId);
             return Json(data);
         }
-        public async Task<IActionResult> GetCurrentAssets()
+        public async Task<IActionResult> GetCurrentAssets()    // Get total current assets sum
         {
             var data = await _homeService.GetCurrentAss(CurrentUserId);
             return Json(data);
         }
-        public async Task<IActionResult> GetChangeSum()
+        public async Task<IActionResult> GetChangeSum()     // Get total change sum
         {
             var currSum = await _homeService.GetCurrentAss(CurrentUserId);
             var purchSum = await _homeService.GetPurchaseTotal(CurrentUserId);
             var changeSum = currSum - purchSum;
             return Json(changeSum);
         }
-        public async Task<IActionResult> GetPercentageChangeSum()
+        public async Task<IActionResult> GetPercentageChangeSum()  // Get total change sum in percentage
         {
             var currSum = await _homeService.GetCurrentAss(CurrentUserId);
             var purchSum = await _homeService.GetPurchaseTotal(CurrentUserId);
@@ -62,7 +62,7 @@ namespace FinancialAssetsApp.Controllers
 
 
 
-        public async Task<IActionResult> GetETrChart()   //получение общей суммы активов
+        public async Task<IActionResult> GetETrChart()   // Get total estate/transaction assets sum for chart (OLD version)
         {
             var data = await _homeService.GetEstateTransSumm(CurrentUserId);
             return Json(data);

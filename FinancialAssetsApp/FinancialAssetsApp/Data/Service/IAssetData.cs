@@ -1,14 +1,13 @@
 ﻿namespace FinancialAssetsApp.Data.Service
 {
-    public interface IAssetData     //Интерфейс для курса различных активов
+    public interface IAssetData     // Interface for fetching live prices of various asset types
     {
-        Task<decimal> GetCurrencyRate(string code);    //курс валют
-        Task<List<string>> GetTickersCrypto(string symbols);    //Список крипты для добавления 
-        Task<decimal> GetPriceCrypto(string symbol);    //Получение текущей цены крипты
-        Task<decimal> GetMetalPrice(string code);    // курс металлов
-        Task<decimal> RUgetStockPrice(string ticker);    // курс металлов
-        Task<string> GetCurrencyCode(string symbol); // Список валюты с ЦБ РФ
-        Task<List<string>> GetCitiesList(string symbol);    // Список городов России
-
+        Task<decimal> GetCurrencyRate(string code);    // Get currency exchange rate
+        Task<List<string>> GetTickersCrypto(string symbols);    // Get crypto ticker list for asset selection
+        Task<decimal> GetPriceCrypto(string symbol);    // Get current crypto price
+        Task<decimal> GetMetalPrice(string code);    // Get metal price
+        Task<decimal> RUgetStockPrice(string ticker);    // Get RUB stock price
+        Task<string> GetCurrencyCode(string symbol); // Get currency code list from CBR
+        Task<List<string>> GetCitiesList(string symbol);    // Get list of Russian cities
     }
 }

@@ -12,13 +12,13 @@ namespace FinancialAssetsApp.Data.Service
     public class AssetData : IAssetData
     {
         private readonly HttpClient _httpClient;
-        private readonly FinanceDbContext _context; // БД
+        private readonly FinanceDbContext _context; // Database context
         public AssetData(HttpClient httpClient, FinanceDbContext context)
         {
             _context = context;
             _httpClient = httpClient;
         }
-        public async Task<decimal> GetCurrencyRate(string code)    // Получение курса валюты
+        public async Task<decimal> GetCurrencyRate(string code)    // Fetch currency exchange rate from CBR
         {
             var dataAsset = await _httpClient.GetStringAsync("https://www.cbr-xml-daily.ru/daily_json.js");
             var doc = JsonDocument.Parse(dataAsset);
@@ -30,7 +30,7 @@ namespace FinancialAssetsApp.Data.Service
 
             throw new Exception($"Валюта {code} не найдена");
         }
-        public async Task<string> GetCurrencyCode(string nameCurrency)   //Получение кода для валюты
+        public async Task<string> GetCurrencyCode(string nameCurrency)   // Get currency code by name
         {
             var dataAsset = await _httpClient.GetStringAsync("https://www.cbr-xml-daily.ru/daily_json.js");
             var doc = JsonDocument.Parse(dataAsset);
@@ -46,7 +46,7 @@ namespace FinancialAssetsApp.Data.Service
             throw new Exception($"Код валюты {nameCurrency} не найден");
 
         }
-        public async Task<List<string>> GetTickersCrypto(string symbol)   //Получение списка крипта с Bybit
+        public async Task<List<string>> GetTickersCrypto(string symbol)   // Fetch crypto ticker list from Bybit
         {
             var urlTickers = "https://api.bybit.com/v5/market/tickers?category=spot";
             var response = await _httpClient.GetStringAsync(urlTickers);
@@ -62,7 +62,7 @@ namespace FinancialAssetsApp.Data.Service
                 .ToList();
             return tickers;
         }
-        public async Task<List<string>> GetCitiesList (string symbol)   // Получение списка городов России
+        public async Task<List<string>> GetCitiesList (string symbol)   // Fetch list of Russian cities
         {
             var urlCities = "https://raw.githubusercontent.com/pensnarik/russian-cities/master/russian-cities.json";
             var response = await _httpClient.GetStringAsync(urlCities);
@@ -78,7 +78,7 @@ namespace FinancialAssetsApp.Data.Service
             return cities;
 
         }
-        public async Task<decimal> GetPriceCrypto(string symbol)    //Получение текущей цены крипты
+        public async Task<decimal> GetPriceCrypto(string symbol)    // Get current crypto price from Bybit
         {
             var urlTickers = "https://api.bybit.com/v5/market/tickers?category=spot";
             var response = await _httpClient.GetStringAsync(urlTickers);
@@ -97,26 +97,26 @@ namespace FinancialAssetsApp.Data.Service
             return decimal.Parse(price, CultureInfo.InvariantCulture);
 
         }
-        public async Task<decimal> GetMetalPrice(string nameMetal)    // Получение курса металла
+        public async Task<decimal> GetMetalPrice(string nameMetal)    // Fetch metal price from CBR
         {
-            DateTime date = DateTime.Today; //Для актуальной даты для парсинга
+            DateTime date = DateTime.Today; // Use today's date for initial request
             string day = date.ToString("dd");
             string month = date.ToString("MM");
-            string year = date.ToString("yyyy");    
+            string year = date.ToString("yyyy");
 
             int flag = 0;
-            while (flag == 0)   // Пока не найдена последняя цена металла, не выходим из цикла
+            while (flag == 0)   // Keep looping until the latest metal price is found
             {
                 string url = $"https://www.cbr.ru/scripts/xml_metall.asp?date_req1={day}/{month}/{year}&date_req2={day}/{month}/{year}";
 
-                // читаем байты, а не строку
+                // Read raw bytes instead of string to handle encoding correctly
                 var response = await _httpClient.GetAsync(url);
-                response.EnsureSuccessStatusCode(); //Проверка на успешный ответ
+                response.EnsureSuccessStatusCode(); // Verify successful response
 
-                var bytes = await response.Content.ReadAsByteArrayAsync();  // Считывание байтов
-                var dataAsset = Encoding.GetEncoding("windows-1251").GetString(bytes);  //Преобразование в строку в нужной кодировке
+                var bytes = await response.Content.ReadAsByteArrayAsync();  // Read response as bytes
+                var dataAsset = Encoding.GetEncoding("windows-1251").GetString(bytes);  // Decode from Windows-1251 encoding
 
-                var doc = XDocument.Parse(dataAsset);   //Парсит XML в объект XDocument, тк данные на сайте ЦБ РФ в xml
+                var doc = XDocument.Parse(dataAsset);   // Parse XML response from CBR into XDocument
                 string code = "0";
                 switch (nameMetal)
                 {
@@ -137,9 +137,9 @@ namespace FinancialAssetsApp.Data.Service
                 }
 
                 var record = doc.Descendants("Record")
-                    .FirstOrDefault(r => r.Attribute("Code")?.Value == code);   //Находим элемент с нужным кодом
-                if (record == null) // если данных нет, берем предыдущий день. 
-                {                   // По воскресеньям и понедельникам цен на металлы нет
+                    .FirstOrDefault(r => r.Attribute("Code")?.Value == code);   // Find the record with the matching metal code
+                if (record == null) // If no data for this date, fall back to the previous day
+                {                   // CBR does not publish metal prices on Sundays and Mondays
                     if (int.Parse(day) != 1)
                     {
                         int temp = int.Parse(day) - 1;
@@ -161,17 +161,17 @@ namespace FinancialAssetsApp.Data.Service
                         temp = 28;
                         day = temp.ToString();
                     }
-                        continue;
+                    continue;
                 }
                 else
-                {                 
-                    var sell = record.Element("Sell")!.Value.Replace(',', '.'); // Берется цена продажи металла и меняется запятая на точку для распознавания числа
+                {
+                    var sell = record.Element("Sell")!.Value.Replace(',', '.'); // Use sell price and replace comma with dot for decimal parsing
                     return decimal.Parse(sell, NumberStyles.Any, CultureInfo.InvariantCulture);
-                }                 
+                }
             }
-            return 0;           
+            return 0;
         }
-        public async Task<decimal> RUgetStockPrice(string ticker)   // Получение курса акции
+        public async Task<decimal> RUgetStockPrice(string ticker)   // Fetch Russian stock price from MOEX (on working)
         {
             try
             {

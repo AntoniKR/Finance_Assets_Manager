@@ -81,11 +81,6 @@ You can view your assets in ine place, even if they were purchased in different 
 ```
    Open your browser at `https://localhost:5001`
 
-### Docker Setup (alternative)
-```bash
-docker-compose up --build
-```
-
 ---
 
 ## Project Structure
@@ -98,7 +93,6 @@ Finance_Assets_Manager/
 │   ├── Services/          # Business logic
 │   ├── Data/              # EF Core DbContext
 │   └── wwwroot/           # Static files (CSS, JS)
-├── docker-compose.yml
 └── README.md
 ```
 

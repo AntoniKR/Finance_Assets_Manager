@@ -2,7 +2,7 @@
 
 namespace FinancialAssetsApp.Models
 {
-    public class LoginModel //Модель для формы логина
+    public class LoginModel // Model for login form
     {
         [Required]
         public string Username {  get; set; }

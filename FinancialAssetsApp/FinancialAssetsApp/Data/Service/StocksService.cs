@@ -8,28 +8,27 @@ namespace FinancialAssetsApp.Data.Service
 {
     public class StocksService : IStocksService
     {
-        private readonly FinanceDbContext _context; // БД
-        private readonly IAssetData _assetdata; // Для парсинга различных курсов
+        private readonly FinanceDbContext _context; // Database context
+        private readonly IAssetData _assetdata; // For fetching various exchange rates
         private readonly IMemoryCache _cache; // For cache
 
-
-        public StocksService(FinanceDbContext context,IAssetData assetdata, IMemoryCache memoryCache)  // Конструктор
+        public StocksService(FinanceDbContext context, IAssetData assetdata, IMemoryCache memoryCache)  // Constructor
         {
             _context = context;
             _assetdata = assetdata;
             _cache = memoryCache;
         }
-        public async Task Add(Stock stock)  // Добавление акции в БД
+        public async Task Add(Stock stock)  // Add stock to DB
         {
-            var temp = stock.Ticker.ToUpper();  //Перевод в верхний регистр
+            var temp = stock.Ticker.ToUpper();  // Normalize ticker to uppercase
             stock.Ticker = temp;
             stock.SumStocks = Math.Round(stock.Price * stock.AmountStock, 2);
 
-            var existStock = await _context.Stocks.FirstOrDefaultAsync(stck => stck.UserId == stock.UserId && stck.Ticker == stock.Ticker); //поиск существующего
+            var existStock = await _context.Stocks.FirstOrDefaultAsync(stck => stck.UserId == stock.UserId && stck.Ticker == stock.Ticker); // Search for existing stock entry
 
             stock.SumStocks = stock.Price * stock.AmountStock;
 
-            if (existStock != null) // если такой металл есть, то усредняем, иначе добавляем новый
+            if (existStock != null) // If stock already exists, calculate average price; otherwise add new entry
             {
                 var totalAmount = existStock.AmountStock + stock.AmountStock;
                 existStock.Price = Math.Round((existStock.SumStocks + stock.SumStocks) / totalAmount, 2);
@@ -43,38 +42,38 @@ namespace FinancialAssetsApp.Data.Service
             {
                 await _context.Stocks.AddAsync(stock);
             }
-            await _context.SaveChangesAsync();  // Асинхронно сохраняем изменения в БД
+            await _context.SaveChangesAsync();  // Save changes to DB asynchronously
             ClearStocksCache(stock.UserId);   // Update cache
         }
-        public async Task Delete(int id)    //Удаление акции
+        public async Task Delete(int id)    // Delete stock asset by ID
         {
             var stock = await _context.Stocks.FindAsync(id);
-            if(stock != null)
+            if (stock != null)
             {
                 _context.Stocks.Remove(stock);
                 await _context.SaveChangesAsync();
                 ClearStocksCache(stock.UserId);   // Update cache
             }
         }
-        public async Task<Stock?> GetAssetById(int id)  //получение акции для удаления
+        public async Task<Stock?> GetAssetById(int id)  // Get stock by ID (used for deletion)
         {
             return await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
         }
-        public async Task<IEnumerable<Stock>> GetAssetsByID(int userId)     //Перечисление всех акций пользователя
+        public async Task<IEnumerable<Stock>> GetAssetsByID(int userId)     // Get all stocks for a user
         {
             var stocks = await _context.Stocks
                 .Where(s => s.UserId == userId)
                 .ToListAsync();
             return stocks;
         }
-        
+
         public async Task<IEnumerable<Stock>> GetAll()
-        { 
-            var stocks = await _context.Stocks.ToListAsync();  // Перечисление всех данных из БД
+        {
+            var stocks = await _context.Stocks.ToListAsync();  // Fetch all records from DB
             return stocks;
         }
 
-        public async Task<IEnumerable<ForChart>> GetChartTicker(int userId) //График по акциям
+        public async Task<IEnumerable<ForChart>> GetChartTicker(int userId) // Chart data grouped by stock ticker
         {
             var data = await _context.Stocks
                 .Where(s => s.UserId == userId)
@@ -87,7 +86,7 @@ namespace FinancialAssetsApp.Data.Service
                 .ToListAsync();
             return data;
         }
-        public async Task<decimal> GetPurchaseStocksSUM(int userId)    // Get sum of purchase Stocks
+        public async Task<decimal> GetPurchaseStocksSUM(int userId)    // Get total purchase sum for RUB stocks
         {
             var cacheKey = $"Stocks:purchase:{userId}";
             if (_cache.TryGetValue(cacheKey, out decimal cachedSum))

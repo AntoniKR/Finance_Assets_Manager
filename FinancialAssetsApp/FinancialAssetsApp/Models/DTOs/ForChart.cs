@@ -2,7 +2,7 @@
 {
     public class ForChart
     {
-        public string Label { get; set; }   //Название для графика
-        public decimal Total { get; set; }  //Сумма для графика
+        public string Label { get; set; }   // Name for chart
+        public decimal Total { get; set; }  // Sum for Chart
     }
 }

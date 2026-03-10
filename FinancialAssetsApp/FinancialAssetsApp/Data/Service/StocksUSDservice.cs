@@ -9,28 +9,28 @@ namespace FinancialAssetsApp.Data.Service
 {
     public class StocksUSDservice : IStocksUSDService
     {
-        private readonly FinanceDbContext _context; // БД
-        private readonly IAssetData _assetdata; // Для парсинга различных курсов
+        private readonly FinanceDbContext _context; // Database context
+        private readonly IAssetData _assetdata; // For fetching various exchange rates
         private readonly IMemoryCache _cache; // For cache
 
-        public StocksUSDservice(FinanceDbContext context,IAssetData assetdata, IMemoryCache memoryCache)  // Конструктор
+        public StocksUSDservice(FinanceDbContext context, IAssetData assetdata, IMemoryCache memoryCache)  // Constructor
         {
             _context = context;
             _assetdata = assetdata;
             _cache = memoryCache;
         }
-        public async Task Add(StockUSD stock)  // Добавление акции в БД
+        public async Task Add(StockUSD stock)  // Add USD stock to DB
         {
-            decimal rate = await _assetdata.GetCurrencyRate("USD");   // Для расчета акций в рублях
-            var temp = stock.Ticker.ToUpper();  //Перевод в верхний регистр
+            decimal rate = await _assetdata.GetCurrencyRate("USD");   // Get USD rate for converting to rubles
+            var temp = stock.Ticker.ToUpper();  // Normalize ticker to uppercase
             stock.Ticker = temp;
-            stock.SumStocks = Math.Round((stock.Price * stock.AmountStock),2);
+            stock.SumStocks = Math.Round((stock.Price * stock.AmountStock), 2);
             stock.SumStocksToRuble = Math.Round((stock.SumStocks * rate), 2);
 
-            var existStock = await _context.StocksUSD.FirstOrDefaultAsync(stck => stck.UserId == stock.UserId && stck.Ticker == stock.Ticker); //поиск существующего          
+            var existStock = await _context.StocksUSD.FirstOrDefaultAsync(stck => stck.UserId == stock.UserId && stck.Ticker == stock.Ticker); // Search for existing stock entry
 
-            if (existStock != null) // если такая акция есть, то усредняем, иначе добавляем новый
-            {                   
+            if (existStock != null) // If stock already exists, calculate average price; otherwise add new entry
+            {
                 var totalAmount = existStock.AmountStock + stock.AmountStock;
                 existStock.Price = Math.Round(((existStock.SumStocks + stock.SumStocks) / totalAmount), 2);
                 existStock.AmountStock = totalAmount;
@@ -38,45 +38,44 @@ namespace FinancialAssetsApp.Data.Service
                 existStock.SumStocksToRuble = Math.Round((existStock.SumStocks * rate), 2);
                 existStock.DateAddStock = DateTime.UtcNow;
 
-                _context.StocksUSD.Update(existStock);  //Обновляем строку в БД
+                _context.StocksUSD.Update(existStock);  // Update existing row in DB
             }
             else
-            {   //Иначе добавляем новую акцию
+            {   // Otherwise add as a new stock entry
                 await _context.StocksUSD.AddAsync(stock);
             }
-            await _context.SaveChangesAsync();  // Асинхронно сохраняем изменения в БД
+            await _context.SaveChangesAsync();  // Save changes to DB asynchronously
             ClearUSStocksCache(stock.UserId);   // Update cache
         }
-        public async Task Delete(int id)    //Удаление акции
+        public async Task Delete(int id)    // Delete USD stock by ID
         {
             var stock = await _context.StocksUSD.FindAsync(id);
-            if(stock != null)
+            if (stock != null)
             {
                 _context.StocksUSD.Remove(stock);
                 await _context.SaveChangesAsync();
                 ClearUSStocksCache(stock.UserId);   // Update cache
             }
         }
-        public async Task<StockUSD?> GetAssetById(int id)  //получение акции для удаления
+        public async Task<StockUSD?> GetAssetById(int id)  // Get USD stock by ID (used for deletion)
         {
             return await _context.StocksUSD.FirstOrDefaultAsync(x => x.Id == id);
         }
-        public async Task<IEnumerable<StockUSD>> GetAssetsByID(int userId)     //Перечисление всех акций пользователя
+        public async Task<IEnumerable<StockUSD>> GetAssetsByID(int userId)     // Get all USD stocks for a user
         {
             var stocks = await _context.StocksUSD
                 .Where(s => s.UserId == userId)
                 .ToListAsync();
-
             return stocks;
         }
-        
+
         public async Task<IEnumerable<StockUSD>> GetAll()
-        { 
-            var stocks = await _context.StocksUSD.ToListAsync();  // Перечисление всех данных из БД
+        {
+            var stocks = await _context.StocksUSD.ToListAsync();  // Fetch all records from DB
             return stocks;
         }
 
-        public async Task<IEnumerable<ForChart>> GetChartTicker(int userId) //График по акциям
+        public async Task<IEnumerable<ForChart>> GetChartTicker(int userId) // Chart data grouped by USD stock ticker
         {
             var data = await _context.StocksUSD
                 .Where(s => s.UserId == userId)
@@ -89,10 +88,10 @@ namespace FinancialAssetsApp.Data.Service
                 .ToListAsync();
             return data;
         }
-        public async Task<decimal> GetCurrentUSStocksSUM(int userId)    // Получение текущего курса US Stocks
+        public async Task<decimal> GetCurrentUSStocksSUM(int userId)    // Get current total value of USD stocks
         {
             var cacheKey = $"StocksUSD:current:{userId}";
-            if(_cache.TryGetValue(cacheKey, out decimal cachedSum))
+            if (_cache.TryGetValue(cacheKey, out decimal cachedSum))
                 return cachedSum;
 
             var usStocks = await _context.StocksUSD
@@ -115,7 +114,7 @@ namespace FinancialAssetsApp.Data.Service
 
             return totalCurrSum;
         }
-        public async Task<decimal> GetPurchaseUSStocksSUM(int userId)    // Получение суммы покупки US Stocks
+        public async Task<decimal> GetPurchaseUSStocksSUM(int userId)    // Get total purchase sum for USD stocks
         {
             var cacheKey = $"StocksUSD:purchase:{userId}";
             if (_cache.TryGetValue(cacheKey, out decimal cachedSum))

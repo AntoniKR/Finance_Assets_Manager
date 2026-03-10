@@ -9,31 +9,29 @@ namespace FinancialAssetsApp.Data.Service
 {
     public class CryptosService : ICryptosService
     {
-        private readonly FinanceDbContext _context; // БД
-        private readonly IAssetData _assetdata; // Для парсинга различных данных
+        private readonly FinanceDbContext _context; // Database context
+        private readonly IAssetData _assetdata; // For fetching external asset data
         private readonly IMemoryCache _cache; // For cache
-
-
-        public CryptosService(FinanceDbContext context,IAssetData assetdata, IMemoryCache memoryCache)  // Конструктор
+        public CryptosService(FinanceDbContext context, IAssetData assetdata, IMemoryCache memoryCache)  // Constructor
         {
             _context = context;
             _assetdata = assetdata;
             _cache = memoryCache;
         }
-        public async Task Add(Crypto crypto)  // Добавление крипты в БД с учетом повторения
+        public async Task Add(Crypto crypto)  // Add crypto to DB, merging with existing ticker if present
         {
-            decimal rate = await _assetdata.GetCurrencyRate("USD"); ;   // Курс доллара
-            var temp = crypto.Ticker.ToUpper();  //Перевод в верхний регистр
+            decimal rate = await _assetdata.GetCurrencyRate("USD");   // Get current USD exchange rate
+            var temp = crypto.Ticker.ToUpper();  // Normalize ticker to uppercase
             var oldTicker = await _context.Cryptos.FirstOrDefaultAsync
                 (c => c.UserId == crypto.UserId && c.Ticker == crypto.Ticker);
 
             crypto.SumCrypto = Math.Round(crypto.Price * crypto.AmountCrypto, 4);
             crypto.SumCryptoToRuble = Math.Round(crypto.SumCrypto * rate, 2);
 
-            if (oldTicker != null)   // если уже есть такой тикер в БД, то цену ставим среднюю
+            if (oldTicker != null)   // If ticker already exists in DB, calculate average purchase price
             {
-                var totalAmount = Math.Round((oldTicker.AmountCrypto + crypto.AmountCrypto), 4); //Всего крипты
-                oldTicker.Price = Math.Round(((oldTicker.SumCryptoToRuble + crypto.SumCryptoToRuble) / totalAmount), 4);    //Средняя цена покупки
+                var totalAmount = Math.Round((oldTicker.AmountCrypto + crypto.AmountCrypto), 4); // Total crypto amount
+                oldTicker.Price = Math.Round(((oldTicker.SumCryptoToRuble + crypto.SumCryptoToRuble) / totalAmount), 4);    // Average purchase price
                 oldTicker.AmountCrypto = totalAmount;
                 oldTicker.SumCrypto = oldTicker.Price * oldTicker.AmountCrypto;
                 oldTicker.SumCryptoToRuble = oldTicker.SumCrypto * rate;
@@ -41,40 +39,38 @@ namespace FinancialAssetsApp.Data.Service
 
                 _context.Cryptos.Update(oldTicker);
             }
-            //Иначе добавляем новую крипту
+            // Otherwise add as a new crypto entry
             else
-            {                           
+            {
                 await _context.Cryptos.AddAsync(crypto);
             }
-            
-            await _context.SaveChangesAsync();  // Асинхронно сохраняем изменения в БД
-            ClearCryptoCache(crypto.UserId);
 
+            await _context.SaveChangesAsync();  // Save changes to DB asynchronously
+            ClearCryptoCache(crypto.UserId);
         }
-        public async Task Delete(int id)    //Удаление криптовалюты
+        public async Task Delete(int id)    // Delete crypto asset by ID
         {
             var crypto = await _context.Cryptos.FindAsync(id);
-            if(crypto != null)
+            if (crypto != null)
             {
                 _context.Cryptos.Remove(crypto);
                 await _context.SaveChangesAsync();
                 ClearCryptoCache(crypto.UserId);     // Update cache
-
             }
         }
-        public async Task<Crypto?> GetAssetById(int id)  //получение криптовалюты для удаления
+        public async Task<Crypto?> GetAssetById(int id)  // Get crypto asset by ID (used for deletion)
         {
             return await _context.Cryptos.FirstOrDefaultAsync(x => x.Id == id);
         }
-        public async Task<IEnumerable<Crypto>> GetAssetsByID(int userId)     //Перечисление всей крипты пользователя
+        public async Task<IEnumerable<Crypto>> GetAssetsByID(int userId)     // Get all crypto assets for a user
         {
             var crypto = await _context.Cryptos
                 .Where(s => s.UserId == userId)
-                .ToListAsync(); // Получение таблицы с криптой пользователя           
+                .ToListAsync(); // Fetch user's crypto table from DB
             return crypto;
-        }      
+        }
 
-        public async Task<IEnumerable<ForChart>> GetChartTicker(int userId) //График по криптовалюте
+        public async Task<IEnumerable<ForChart>> GetChartTicker(int userId) // Get chart data grouped by crypto ticker
         {
             var data = await _context.Cryptos
                 .Where(s => s.UserId == userId)
@@ -87,7 +83,7 @@ namespace FinancialAssetsApp.Data.Service
                 .ToListAsync();
             return data;
         }
-        public async Task<decimal> GetCurrentCryptoSUM(int userId)    // Получение текущего курса US Stocks
+        public async Task<decimal> GetCurrentCryptoSUM(int userId)    // Get current total crypto value in rubles
         {
             var cacheKey = $"Crypto:current:{userId}";
             if (_cache.TryGetValue(cacheKey, out decimal cachedSum))
@@ -113,7 +109,7 @@ namespace FinancialAssetsApp.Data.Service
 
             return totalCurrSum;
         }
-        public async Task<decimal> GetPurchaseCryptoSUM(int userId)    // Получение суммы покупки US Stocks
+        public async Task<decimal> GetPurchaseCryptoSUM(int userId)    // Get total purchase sum for crypto
         {
             var cacheKey = $"Crypto:purchase:{userId}";
             if (_cache.TryGetValue(cacheKey, out decimal cachedSum))
@@ -155,7 +151,7 @@ namespace FinancialAssetsApp.Data.Service
 
 
 
-        public async Task FixOldCryptos()   // Для правок в БД
+        public async Task FixOldCryptos()   // Utility method for manual DB corrections
         {
             var cryptos = await _context.Cryptos.ToListAsync();
             decimal rate = await _assetdata.GetCurrencyRate("USD");
@@ -170,7 +166,7 @@ namespace FinancialAssetsApp.Data.Service
         }
         public async Task<IEnumerable<Crypto>> GetAll()
         {
-            var crypto = await _context.Cryptos.ToListAsync();  // Перечисление всех данных из БД
+            var crypto = await _context.Cryptos.ToListAsync();  // Fetch all records from DB
             return crypto;
         }
     }
